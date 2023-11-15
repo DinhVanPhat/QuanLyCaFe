@@ -4,6 +4,12 @@
  */
 package com.cafe.form;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 /**
  *
  * @author ADMIN
@@ -16,6 +22,14 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
     public GiaoDienChaoJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        this.setSize(screenWidth, screenHeight - 50);
+        init();
     }
 
     /**
@@ -31,9 +45,10 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        pgbLoading = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(230, 213, 193));
         jPanel1.setPreferredSize(new java.awt.Dimension(1536, 864));
@@ -50,8 +65,9 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("BROTHER’S COFFEE SHOP");
 
-        jProgressBar1.setBackground(new java.awt.Color(191, 158, 117));
-        jProgressBar1.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        pgbLoading.setBackground(new java.awt.Color(191, 158, 117));
+        pgbLoading.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
+        pgbLoading.setStringPainted(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -70,7 +86,7 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
                         .addGap(650, 650, 650))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(262, Short.MAX_VALUE)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pgbLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(258, 258, 258))
         );
         jPanel1Layout.setVerticalGroup(
@@ -83,7 +99,7 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pgbLoading, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(264, Short.MAX_VALUE))
         );
 
@@ -153,6 +169,20 @@ public class GiaoDienChaoJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JProgressBar pgbLoading;
     // End of variables declaration//GEN-END:variables
+    void init(){ 
+        setLocationRelativeTo(null);
+        new Timer(20, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int value = pgbLoading.getValue();
+                if(value < 100){ 
+                    pgbLoading.setValue(value + 1);
+                } else {                  
+                    GiaoDienChaoJDialog.this.dispose();
+                }
+            }
+        }).start();
+    }
 }

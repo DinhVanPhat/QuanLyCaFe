@@ -6,6 +6,7 @@ package com.cafe.main;
 
 import com.cafe.component.Menu;
 import com.cafe.event.EventMenuSelected;
+import com.cafe.form.NhanVienJPanel;
 import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.TrangChuJPanel;
 import com.cafe.model.ModelMenu;
@@ -75,16 +76,18 @@ public class MainJFrame extends javax.swing.JFrame {
                 if(index == 1){
                     showForm(new SanPhamJPanel());
                 }
+                if(index == 2){
+                    showForm(new NhanVienJPanel());
+                }
             }
             
         });
         menu.addMenu(new ModelMenu("Trang chủ",new ImageIcon(getClass().getResource("/com/cafe/icon/home.png"))));
-        menu.addMenu(new ModelMenu("Sản phẩm",new ImageIcon(getClass().getResource("/com/cafe/icon/staff.png"))));
-        menu.addMenu(new ModelMenu("Nhân viên",new ImageIcon(getClass().getResource("/com/cafe/icon/staff.png"))));
+        menu.addMenu(new ModelMenu("Sản phẩm",new ImageIcon(getClass().getResource("/com/cafe/icon/sanpham.png"))));
+        menu.addMenu(new ModelMenu("Nhân viên",new ImageIcon(getClass().getResource("/com/cafe/icon/nhanvien.png"))));
         menu.addMenu(new ModelMenu("Khách hàng",new ImageIcon(getClass().getResource("/com/cafe/icon/customer.png"))));
         menu.addMenu(new ModelMenu("Bàn",new ImageIcon(getClass().getResource("/com/cafe/icon/table.png"))));
-        menu.addMenu(new ModelMenu("Khu vực",new ImageIcon(getClass().getResource("/com/cafe/icon/bill.png"))));
-        menu.addMenu(new ModelMenu("Hóa đơn",new ImageIcon(getClass().getResource("/com/cafe/icon/bill.png"))));
+        menu.addMenu(new ModelMenu("Khu vực",new ImageIcon(getClass().getResource("/com/cafe/icon/khuvuc.png"))));
         menu.addMenu(new ModelMenu("Thông kê và báo cáo",new ImageIcon(getClass().getResource("/com/cafe/icon/analytics.png"))));
         menu.addMenu(new ModelMenu("Đổi mật khẩu",new ImageIcon(getClass().getResource("/com/cafe/icon/refresh.png"))));
         menu.addMenu(new ModelMenu("Đăng xuất",new ImageIcon(getClass().getResource("/com/cafe/icon/logout.png"))));
@@ -139,7 +142,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        body.setBackground(new java.awt.Color(255, 204, 153));
+        body.setBackground(new java.awt.Color(230, 213, 193));
 
         javax.swing.GroupLayout bodyLayout = new javax.swing.GroupLayout(body);
         body.setLayout(bodyLayout);

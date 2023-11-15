@@ -3,6 +3,7 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="undecorated" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -69,7 +70,7 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace pref="262" max="32767" attributes="0"/>
-                  <Component id="jProgressBar1" min="-2" pref="1016" max="-2" attributes="0"/>
+                  <Component id="pgbLoading" min="-2" pref="1016" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="258" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -84,7 +85,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jProgressBar1" min="-2" pref="55" max="-2" attributes="0"/>
+                  <Component id="pgbLoading" min="-2" pref="55" max="-2" attributes="0"/>
                   <EmptySpace pref="264" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -122,7 +123,7 @@
             <Property name="text" type="java.lang.String" value="BROTHER&#x2019;S COFFEE SHOP"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JProgressBar" name="jProgressBar1">
+        <Component class="javax.swing.JProgressBar" name="pgbLoading">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="75" green="9e" red="bf" type="rgb"/>
@@ -130,6 +131,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="30" style="1"/>
             </Property>
+            <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
         </Component>
       </SubComponents>
