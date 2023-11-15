@@ -63,7 +63,7 @@
                           <Component id="txtTimKiem" min="-2" pref="325" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnTimKiem" min="-2" pref="180" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="413" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -112,7 +112,7 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="436" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
