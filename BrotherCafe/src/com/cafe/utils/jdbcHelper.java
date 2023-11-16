@@ -18,7 +18,7 @@ public class jdbcHelper {
     private static String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     static String connectionUrl = "jdbc:sqlserver://localhost:1433;"
                  + "databaseName=QuanLyCafe;"
-                 + "user=sa;password=nghia;"
+                 + "user=sa;password=123;"
                  + "encrypt=true;trustServerCertificate=true;";
     
     //nạp driver
