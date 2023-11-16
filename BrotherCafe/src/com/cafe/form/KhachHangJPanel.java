@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author ADMIN
+ * @author ASUS
  */
 public class KhachHangJPanel extends javax.swing.JPanel {
 
