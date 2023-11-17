@@ -93,5 +93,8 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
         }
         return true;
     }
-  
+   public void updateMK(NhanVien e){
+       String UPDATE_MK_NV = "UPDATE NhanVien SET MatKhau = ? WHERE EMAIL = ?";
+        jdbcHelper.update(UPDATE_MK_NV, e.getMatKhau(),e.getEmail());
+    }
 }

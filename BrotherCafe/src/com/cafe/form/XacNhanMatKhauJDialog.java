@@ -4,6 +4,13 @@
  */
 package com.cafe.form;
 
+import com.cafe.dao.NhanVienDAO;
+import com.cafe.model.NhanVien;
+import com.cafe.utils.MsgBox;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.util.List;
+
 /**
  *
  * @author ADMIN
@@ -16,6 +23,13 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
     public XacNhanMatKhauJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+         Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
+        this.setSize(screenWidth, screenHeight - 50);
     }
 
     /**
@@ -33,12 +47,13 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtMatKhauMoi = new javax.swing.JTextField();
-        txtXacNhanMatKhauMoi = new javax.swing.JTextField();
         btnTiepTuc = new javax.swing.JButton();
         btnHuy = new javax.swing.JButton();
+        txtMatKhauMoi = new javax.swing.JPasswordField();
+        txtXacNhanMatKhauMoi = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(230, 213, 193));
         jPanel1.setPreferredSize(new java.awt.Dimension(1536, 864));
@@ -66,11 +81,29 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
         btnTiepTuc.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnTiepTuc.setForeground(new java.awt.Color(255, 255, 255));
         btnTiepTuc.setText("Tiếp Tục");
+        btnTiepTuc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTiepTucActionPerformed(evt);
+            }
+        });
 
         btnHuy.setBackground(new java.awt.Color(191, 158, 117));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnHuy.setForeground(new java.awt.Color(255, 255, 255));
         btnHuy.setText("Hủy");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyActionPerformed(evt);
+            }
+        });
+
+        txtMatKhauMoi.setBackground(new java.awt.Color(235, 225, 213));
+        txtMatKhauMoi.setToolTipText("");
+        txtMatKhauMoi.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        txtXacNhanMatKhauMoi.setBackground(new java.awt.Color(235, 225, 213));
+        txtXacNhanMatKhauMoi.setToolTipText("");
+        txtXacNhanMatKhauMoi.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -99,24 +132,23 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(9, 9, 9)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtXacNhanMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtXacNhanMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnTiepTuc, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(13, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -153,6 +185,15 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTiepTucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTiepTucActionPerformed
+       xacNhan();
+    }//GEN-LAST:event_btnTiepTucActionPerformed
+
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+        this.dispose();
+        new DangNhapJDialog(null, true).setVisible(true);
+    }//GEN-LAST:event_btnHuyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -208,7 +249,27 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField txtMatKhauMoi;
-    private javax.swing.JTextField txtXacNhanMatKhauMoi;
+    private javax.swing.JPasswordField txtMatKhauMoi;
+    private javax.swing.JPasswordField txtXacNhanMatKhauMoi;
     // End of variables declaration//GEN-END:variables
+    NhanVienDAO nvdao = new NhanVienDAO();
+   
+
+    void xacNhan() {
+        List<NhanVien> list = QuenMatKhauJDialog.getList;
+        String matKhauMoi = new String(txtMatKhauMoi.getPassword());
+        String xacNhanMatKhauMoi = new String(txtXacNhanMatKhauMoi.getPassword());
+        if (matKhauMoi.equals(xacNhanMatKhauMoi)) {
+            for (NhanVien nv : list) {
+                nv.setEmail(nv.getEmail());
+                nv.setMatKhau(matKhauMoi);
+                nvdao.updateMK(nv);
+                MsgBox.alert(this, "Đổi mật khẩu thành công");
+                this.dispose();
+                new DangNhapJDialog(null, true).setVisible(true);
+            }
+        } else {
+            MsgBox.alert(this, "Xác nhận mật khẩu không khớp với mật khẩu mới");
+        }
+    }
 }

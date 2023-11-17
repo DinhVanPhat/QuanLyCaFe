@@ -377,11 +377,21 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_tblNhanVienMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        insert();
+        String src = evt.getActionCommand();
+        if (src.equalsIgnoreCase("Thêm")) {
+            insert();
+        } else if (src.equalsIgnoreCase("Lưu")) {
+            update();
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        update();
+        if (row != -1) {
+            row = -1;
+            updateStatus();
+            btnThem.setText("Lưu");
+            txtMaNV.setEditable(false);
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
 
@@ -419,12 +429,14 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     NhanVienDAO nvdao = new NhanVienDAO();
     int row = -1;
+
     private void init() {
         this.fillTable();
         this.row = -1;
         this.updateStatus();
     }
-     void insert() {
+
+    void insert() {
         if (checkValidateForm()) {
             if (!nvdao.chechTrungMa(txtMaNV.getText())) {
                 MsgBox.alert(this, "Mã nhân viên đã tồn tại");
@@ -485,7 +497,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btgGioiTinh.clearSelection();
         tblNhanVien.clearSelection();
         txtMatKhau.setText("");
- 
+
     }
 
     void edit() {
@@ -495,7 +507,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         this.updateStatus();
     }
 
-
     void fillTable() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
@@ -503,7 +514,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             String keyWord = txtTimKiem.getText();
             List<NhanVien> list = nvdao.selectByKeyWord(keyWord);
             for (NhanVien nv : list) {
-                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getQueQuan(), nv.isChucVu()?"Quản lý":"Nhân viên"};
+                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getQueQuan(), nv.isChucVu() ? "Quản lý" : "Nhân viên"};
                 model.addRow(row);
             }
         } catch (Exception e) {
@@ -511,16 +522,17 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
+
     void setForm(NhanVien nv) {
         txtMaNV.setText(nv.getMaNV());
         txtHoVaTen.setText(nv.getTenNV());
         txtQueQuan.setText(nv.getQueQuan());
-        txtMatKhau.setText(nv.getMatKhau()+ "");
+        txtMatKhau.setText(nv.getMatKhau() + "");
         rdoNam.setSelected(!nv.isGioiTinh());
         rdoNu.setSelected(nv.isGioiTinh());
         txtEmail.setText(nv.getEmail());
         txtSDT.setText(nv.getSDT());
-        cboChucVu.setSelectedIndex(nv.isChucVu()?0:1);
+        cboChucVu.setSelectedIndex(nv.isChucVu() ? 0 : 1);
     }
 
     NhanVien getForm() {
@@ -532,24 +544,36 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         nv.setGioiTinh(rdoNam.isSelected());
         nv.setEmail(txtEmail.getText());
         nv.setMatKhau(new String(txtMatKhau.getPassword()));
-        if(cboChucVu.getSelectedItem().equals("Quản lý")){
+        if (cboChucVu.getSelectedItem().equals("Quản lý")) {
             nv.setChucVu(true);
-        } else if(cboChucVu.getSelectedItem().equals("Nhân viên")){
+        } else if (cboChucVu.getSelectedItem().equals("Nhân viên")) {
             nv.setChucVu(true);
         }
         return nv;
     }
+
     void updateStatus() {
         boolean edit = (this.row >= 0);
         //Trạng thái form
         txtMaNV.setEditable(!edit);
+        txtHoVaTen.setEditable(!edit);
+        txtEmail.setEditable(!edit);
+        txtMatKhau.setEditable(!edit);
+        txtSDT.setEditable(!edit);
+        txtQueQuan.setEditable(!edit);
+        cboChucVu.setEnabled(!edit);
+        rdoNam.setEnabled(!edit);
+        rdoNu.setEnabled(!edit);
+
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
+        btnThem.setText("Thêm");
 
     }
+
     boolean checkValidateForm() {
-        if(txtMaNV.getText().isEmpty()){
+        if (txtMaNV.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập nhân viên!");
             return false;
         }
@@ -558,20 +582,20 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Sai mã nhân viên!\n Ví dụ:  NV*** . \n* là các số");
             return false;
         }
-        if(txtHoVaTen.getText().isEmpty()){
+        if (txtHoVaTen.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập họ và tên!");
             return false;
         }
-        if(!rdoNam.isSelected()&& !rdoNu.isSelected()){
+        if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
             MsgBox.alert(this, "Vui lòng chọn giới tính!");
             return false;
         }
         String mk = new String(txtMatKhau.getPassword());
-        if(mk.isEmpty()){
+        if (mk.isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập mật khẩu!");
             return false;
         }
-        if(txtSDT.getText().isEmpty()){
+        if (txtSDT.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập số điện thoại!");
             return false;
         }
@@ -591,18 +615,19 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Email! không hợp lệ");
             return false;
         }
-        
-        if(txtEmail.getText().isEmpty()){
+
+        if (txtEmail.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập email!");
             return false;
         }
-        if(txtQueQuan.getText().isEmpty()){
+        if (txtQueQuan.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập quê quán!");
             return false;
         }
         return true;
     }
-     private void timKiem() {
+
+    private void timKiem() {
         this.fillTable();
         this.clearForm();
         this.row = -1;

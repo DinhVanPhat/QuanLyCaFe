@@ -10,6 +10,9 @@ import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
@@ -30,7 +33,6 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        System.out.println(screenWidth+"|"+screenHeight);
    
        
         init();
@@ -53,10 +55,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txtTaiKhoan = new javax.swing.JTextField();
         btnDangNhap = new javax.swing.JButton();
-        btnHuy = new javax.swing.JButton();
+        btnThoat = new javax.swing.JButton();
         txtMatKhau = new javax.swing.JPasswordField();
         jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel2 = new javax.swing.JLabel();
+        lblQuenMatKhau = new javax.swing.JLabel();
         pnKetNoi = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -67,7 +69,6 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1536, 864));
 
         jPanel1.setBackground(new java.awt.Color(230, 213, 193));
         jPanel1.setPreferredSize(new java.awt.Dimension(1536, 864));
@@ -110,13 +111,13 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             }
         });
 
-        btnHuy.setBackground(new java.awt.Color(191, 158, 117));
-        btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnHuy.setForeground(new java.awt.Color(255, 255, 255));
-        btnHuy.setText("Hủy");
-        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+        btnThoat.setBackground(new java.awt.Color(191, 158, 117));
+        btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnThoat.setForeground(new java.awt.Color(255, 255, 255));
+        btnThoat.setText("Thoát");
+        btnThoat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHuyActionPerformed(evt);
+                btnThoatActionPerformed(evt);
             }
         });
 
@@ -128,9 +129,14 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jCheckBox1.setForeground(new java.awt.Color(97, 67, 67));
         jCheckBox1.setText("Lưu mật khẩu");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 5, 125));
-        jLabel2.setText("Quên mật khẩu?");
+        lblQuenMatKhau.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        lblQuenMatKhau.setForeground(new java.awt.Color(0, 5, 125));
+        lblQuenMatKhau.setText("Quên mật khẩu?");
+        lblQuenMatKhau.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblQuenMatKhauMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -148,13 +154,13 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMatKhau)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jCheckBox1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)))
+                                .addComponent(lblQuenMatKhau)))
                         .addGap(0, 32, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -174,11 +180,11 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCheckBox1)
-                            .addComponent(jLabel2))
+                            .addComponent(lblQuenMatKhau))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(lbLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(53, Short.MAX_VALUE))
         );
@@ -294,20 +300,24 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKetNoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKetNoiActionPerformed
-
+        luuThongTin();
     }//GEN-LAST:event_btnKetNoiActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         dangNhap();
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
-    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
         ketThuc();
-    }//GEN-LAST:event_btnHuyActionPerformed
+    }//GEN-LAST:event_btnThoatActionPerformed
 
     private void lbLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLogoMouseClicked
         clickLogo();
     }//GEN-LAST:event_lbLogoMouseClicked
+
+    private void lblQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuenMatKhauMouseClicked
+        new QuenMatKhauJDialog(null, true).setVisible(true);
+    }//GEN-LAST:event_lblQuenMatKhauMouseClicked
 
     /**
      * @param args the command line arguments
@@ -354,11 +364,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
-    private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnKetNoi;
+    private javax.swing.JButton btnThoat;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -367,6 +376,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbLogo;
+    private javax.swing.JLabel lblQuenMatKhau;
     private javax.swing.JPanel pnKetNoi;
     private javax.swing.JTextField txtDatabase;
     private javax.swing.JPasswordField txtMatKhau;
@@ -410,7 +420,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }
 
     void ketThuc() {
-        if (MsgBox.confirm(this, "Bạn muốn kết thúc ứng dụng?")) {
+        if (MsgBox.confirm(this, "Bạn muốn thoát ứng dụng?")) {
             System.exit(0);
         }
     }
@@ -422,6 +432,22 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         } else if (row == 1) {
             pnKetNoi.setVisible(false);
             row = -1;
+        }
+    }
+    private void luuThongTin() {
+        String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        String maychu = txtMayChu.getText();
+        String database = txtDatabase.getText();
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            bw.write(maychu);
+            bw.newLine();
+            bw.write(database);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

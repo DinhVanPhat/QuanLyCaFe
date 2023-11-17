@@ -331,11 +331,21 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        update();
+        if(row != -1){
+            row = -1;
+            updateStatus();
+            btnThem.setText("Lưu");
+            txtMaKH.setEditable(false);
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        insert();
+        String src = evt.getActionCommand();
+        if(src.equalsIgnoreCase("Thêm")){
+            insert();
+        } else if(src.equalsIgnoreCase("Lưu")){
+            update();
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
@@ -491,9 +501,16 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         boolean edit = (this.row >= 0);
         //Trạng thái form
         txtMaKH.setEditable(!edit);
+        txtHoVaTen.setEditable(!edit);
+        txtEmail.setEditable(!edit);
+        txtSDT.setEditable(!edit);
+        rdoNam.setEnabled(!edit);
+        rdoNu.setEnabled(!edit);
+        
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
+        btnThem.setText("Thêm");
 
     }
     boolean checkValidateForm() {
