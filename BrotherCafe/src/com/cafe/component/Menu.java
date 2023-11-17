@@ -5,6 +5,7 @@
 package com.cafe.component;
 
 import com.cafe.event.EventMenuSelected;
+import com.cafe.form.DangNhapJDialog;
 import com.cafe.model.ModelMenu;
 import com.cafe.swing.MenuItem;
 import java.awt.Color;
@@ -85,7 +86,7 @@ public class Menu extends javax.swing.JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        GradientPaint gra = new GradientPaint(0, 0, Color.decode("#005AA7"),0,getHeight(), Color.decode("#FFFDE4"));
+        GradientPaint gra = new GradientPaint(0, 0, Color.decode("#BF9E75"),0,getHeight(), Color.decode("#BF9E75"));
         g2.setPaint(gra);
         g2.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g); 

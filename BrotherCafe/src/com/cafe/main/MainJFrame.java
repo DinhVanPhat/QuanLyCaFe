@@ -6,6 +6,8 @@ package com.cafe.main;
 
 import com.cafe.component.Menu;
 import com.cafe.event.EventMenuSelected;
+import com.cafe.form.DangNhapJDialog;
+import com.cafe.form.GiaoDienChaoJDialog;
 import com.cafe.form.NhanVienJPanel;
 import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.TrangChuJPanel;
@@ -40,7 +42,9 @@ public class MainJFrame extends javax.swing.JFrame {
     private boolean menuShow;
 
     public MainJFrame() {
-        initComponents();
+        initComponents();       
+        new DangNhapJDialog(this, true).setVisible(true);
+        new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
 
@@ -48,7 +52,7 @@ public class MainJFrame extends javax.swing.JFrame {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        System.out.println(screenWidth+"|"+screenHeight);
+        
         init();
     }
     private void init(){

@@ -10,6 +10,13 @@ import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,9 +37,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        System.out.println(screenWidth+"|"+screenHeight);
-   
-       
+        System.out.println(screenWidth + "|" + screenHeight);
+
         init();
     }
 
@@ -294,7 +300,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKetNoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKetNoiActionPerformed
-
+        luuThongTin();
     }//GEN-LAST:event_btnKetNoiActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
@@ -422,6 +428,23 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         } else if (row == 1) {
             pnKetNoi.setVisible(false);
             row = -1;
+        }
+    }
+
+    private void luuThongTin() {
+        String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        String maychu = txtMayChu.getText();
+        String database = txtDatabase.getText();
+        try {
+            FileWriter fileWriter = new FileWriter(fileName);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            bw.write(maychu);
+            bw.newLine();
+            bw.write(database);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

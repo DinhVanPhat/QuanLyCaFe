@@ -377,11 +377,21 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_tblNhanVienMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        insert();
+        String src = evt.getActionCommand();
+        if(src.equalsIgnoreCase("Thêm")){
+            insert();
+        } else if(src.equalsIgnoreCase("Lưu")){
+            update();
+        }
+        
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        update();
+        if(row != -1){
+            row = -1;
+            updateStatus();
+            btnThem.setText("Lưu");
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
 
@@ -529,7 +539,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         nv.setTenNV(txtHoVaTen.getText());
         nv.setQueQuan(txtQueQuan.getText());
         nv.setSDT(txtSDT.getText());
-        nv.setGioiTinh(rdoNam.isSelected());
+        nv.setGioiTinh(!rdoNam.isSelected());
         nv.setEmail(txtEmail.getText());
         nv.setMatKhau(new String(txtMatKhau.getPassword()));
         if(cboChucVu.getSelectedItem().equals("Quản lý")){
@@ -543,6 +553,15 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         boolean edit = (this.row >= 0);
         //Trạng thái form
         txtMaNV.setEditable(!edit);
+        txtHoVaTen.setEditable(!edit);
+        txtEmail.setEditable(!edit);
+        txtMatKhau.setEditable(!edit);
+        txtSDT.setEditable(!edit);
+        txtQueQuan.setEditable(!edit);
+        cboChucVu.setEnabled(!edit);
+        rdoNam.setEnabled(!edit);
+        rdoNu.setEnabled(!edit);
+        
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
