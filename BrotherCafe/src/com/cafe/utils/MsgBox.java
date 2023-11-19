@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
  * @author NGHIA
  */
 public class MsgBox {
-    public static void alert(Component parent, String message) {
-        JOptionPane.showMessageDialog(parent, message,"Hệ thống quản lý cafe",JOptionPane.INFORMATION_MESSAGE);
+    public static void alert(Component parent, String message, int type) {
+        JOptionPane.showMessageDialog(parent, message,"Hệ thống quản lý cafe",type);
     }
     public static boolean confirm(Component parent, String message){
         int result = JOptionPane.showConfirmDialog(parent, message,

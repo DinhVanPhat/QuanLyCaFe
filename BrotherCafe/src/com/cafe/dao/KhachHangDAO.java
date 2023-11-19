@@ -16,19 +16,19 @@ import java.util.List;
  */
 public class KhachHangDAO { 
 
-    String INSERT_SQL = "INSERT INTO KhachHang (MaKH, TenKH, Email, SDT, GioiTinh) VALUES (?, ?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE KhachHang SET TenKH = ?, Email = ?, SDT = ?, GioiTinh = ? WHERE MaKH = ?";
+    String INSERT_SQL = "INSERT INTO KhachHang (MaKH, TenKH, Email, SDT, GioiTinh, DiaChi) VALUES (?, ?, ?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE KhachHang SET TenKH = ?, Email = ?, SDT = ?, GioiTinh = ?,  DiaChi = ? WHERE MaKH = ?";
     String DELETE_SQL = "DELETE FROM KhachHang WHERE MaKH = ?";
     String SELECT_ALL_SQL = "SELECT * FROM KhachHang";
     String SELECT_BY_ID_SQL = "SELECT * FROM KhachHang WHERE MaKH = ?";
 
 
     public void insert(KhachHang e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaKH(),e.getTenKH(),e.getEmail(),e.getSDT(),e.isGioiTinh());
+        jdbcHelper.update(INSERT_SQL, e.getMaKH(),e.getTenKH(),e.getEmail(),e.getSDT(),e.isGioiTinh(), e.getDiaChi());
     }
 
     public void update(KhachHang e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenKH(), e.getEmail(),  e.getSDT(), e.isGioiTinh(), e.getMaKH());
+        jdbcHelper.update(UPDATE_SQL, e.getTenKH(), e.getEmail(),  e.getSDT(), e.isGioiTinh(), e.getDiaChi(), e.getMaKH());
     }
 
     public void delete(String id) {
@@ -63,6 +63,7 @@ public class KhachHangDAO {
                 entity.setSDT(rs.getString("SDT"));
                 entity.setEmail(rs.getString("Email"));
                 entity.setGioiTinh(rs.getBoolean("GioiTinh"));
+                entity.setDiaChi(rs.getString("DiaChi"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -73,8 +74,8 @@ public class KhachHangDAO {
     }
 
     public List<KhachHang> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM KhachHang WHERE TenKH LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%");
+        String sql = "SELECT * FROM KhachHang WHERE TenKH LIKE ? OR MaKH LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
 
     public boolean chechTrungMa(String ma) {

@@ -14,6 +14,7 @@ public class KhachHang {
     private String SDT;
     private String email;
     private boolean gioiTinh;
+    private String diaChi;
 
     public String getMaKH() {
         return maKH;
@@ -55,14 +56,24 @@ public class KhachHang {
         this.gioiTinh = gioiTinh;
     }
 
-    public KhachHang(String maKH, String tenKH, String SDT, String email, boolean gioiTinh) {
+    public String getDiaChi() {
+        return diaChi;
+    }
+
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
+    }
+
+    public KhachHang(String maKH, String tenKH, String SDT, String email, boolean gioiTinh, String diaChi) {
         this.maKH = maKH;
         this.tenKH = tenKH;
         this.SDT = SDT;
         this.email = email;
         this.gioiTinh = gioiTinh;
+        this.diaChi = diaChi;
     }
 
+    
     public KhachHang() {
     }
 }

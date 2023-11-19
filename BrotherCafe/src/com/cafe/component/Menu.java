@@ -57,7 +57,6 @@ public class Menu extends javax.swing.JPanel {
         add(header);
         add(panelMenu);
 
-
     }
     
     public void addMenu(ModelMenu menu){
@@ -85,7 +84,7 @@ public class Menu extends javax.swing.JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        GradientPaint gra = new GradientPaint(0, 0, Color.decode("#005AA7"),0,getHeight(), Color.decode("#FFFDE4"));
+        GradientPaint gra = new GradientPaint(0, 0, Color.decode("#BF9E75"),0,getHeight(), Color.decode("#BF9E75"));
         g2.setPaint(gra);
         g2.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g); 

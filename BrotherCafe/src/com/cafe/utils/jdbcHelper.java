@@ -4,23 +4,50 @@
  */
 package com.cafe.utils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author NGHIA
  */
 public class jdbcHelper {
+    static String host;
+    static String database;
+
+    private static void docthongTin() {
+         String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+         List<String> list =  list = new ArrayList<>();
+        try {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader br = new BufferedReader(fileReader);
+            String dong;  
+            // Đọc từng dòng trong tệp tin
+            while ((dong = br.readLine()) != null) {
+                list.add(dong);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i <list.size(); i++) {
+            if(i ==0 ){
+                host = list.get(i);
+            } else if(i == 1){
+                database = list.get(1);
+            }
+        }
+    }
     private static String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    static String connectionUrl = "jdbc:sqlserver://localhost:1433;"
-                 + "databaseName=QuanLyCafe;"
-                 + "user=sa;password=123;"
-                 + "encrypt=true;trustServerCertificate=true;";
-    
+    static String connectionUrl;
+
     //nạp driver
     static {
         try {
@@ -30,6 +57,11 @@ public class jdbcHelper {
         }
     }
     public static PreparedStatement getStmt(String sql,Object...args) throws SQLException{
+        docthongTin();
+        String connectionUrl = "jdbc:sqlserver://"+host+":1433;"
+            + "databaseName="+database+";"
+            + "user=sa;password=nghia;"
+            + "encrypt=true;trustServerCertificate=true;";
         Connection conn = DriverManager.getConnection(connectionUrl);
         PreparedStatement stmt = null;
         if(sql.trim().startsWith("{")){
