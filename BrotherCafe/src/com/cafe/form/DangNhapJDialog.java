@@ -10,9 +10,20 @@ import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,8 +44,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-   
-       
+
         init();
     }
 
@@ -57,7 +67,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         btnDangNhap = new javax.swing.JButton();
         btnThoat = new javax.swing.JButton();
         txtMatKhau = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chkLuuMatKhau = new javax.swing.JCheckBox();
         lblQuenMatKhau = new javax.swing.JLabel();
         pnKetNoi = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -125,9 +135,9 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         txtMatKhau.setForeground(new java.awt.Color(0, 0, 0));
         txtMatKhau.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        jCheckBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jCheckBox1.setForeground(new java.awt.Color(97, 67, 67));
-        jCheckBox1.setText("Lưu mật khẩu");
+        chkLuuMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        chkLuuMatKhau.setForeground(new java.awt.Color(97, 67, 67));
+        chkLuuMatKhau.setText("Lưu mật khẩu");
 
         lblQuenMatKhau.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         lblQuenMatKhau.setForeground(new java.awt.Color(0, 5, 125));
@@ -158,7 +168,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                             .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMatKhau)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
+                                .addComponent(chkLuuMatKhau)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lblQuenMatKhau)))
                         .addGap(0, 32, Short.MAX_VALUE))))
@@ -179,7 +189,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                         .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
+                            .addComponent(chkLuuMatKhau)
                             .addComponent(lblQuenMatKhau))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -300,7 +310,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKetNoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKetNoiActionPerformed
-        luuThongTin();
+        luuThongTinKetNoi();
     }//GEN-LAST:event_btnKetNoiActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
@@ -366,7 +376,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnDangNhap;
     private javax.swing.JButton btnKetNoi;
     private javax.swing.JButton btnThoat;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox chkLuuMatKhau;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -385,19 +395,24 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     NhanVienDAO dao = new NhanVienDAO();
     int row = - 1;
+    String fileLuuMatKhau;
+    boolean checkLMK;
 
     private void init() {
+        checkLMK = false;
+        fileLuuMatKhau = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\luumatkhau.txt";
+        this.docLuuMK();
         pnKetNoi.setVisible(false);
     }
 
     boolean checkValidateForm() {
         if (txtTaiKhoan.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập tài khoản");
+            MsgBox.alert(this, "Vui lòng nhập tài khoản",JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String matKhau = new String(txtMatKhau.getPassword());
         if (matKhau.isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập mât khẩu");
+            MsgBox.alert(this, "Vui lòng nhập mât khẩu" ,JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
@@ -408,14 +423,76 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             String manv = txtTaiKhoan.getText();
             String matKhau = new String(txtMatKhau.getPassword());
             NhanVien tk = dao.selectById(manv);
-            if (tk == null) {
-                MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng");
-            } else if (!matKhau.equals(tk.getMatKhau())) {
-                MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng");
+            if (checkLMK == true) {
+                if (!matKhau.equals(tk.getMatKhau())) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (chkLuuMatKhau.isSelected()) {
+                        LuuMatKhau();
+                    } else {
+                        try {
+                            FileWriter fw = new FileWriter(fileLuuMatKhau);
+                            fw.write("");
+                            fw.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    Auth.user = tk;
+                    this.dispose();
+                }
             } else {
-                Auth.user = tk;
-                this.dispose();
+                if (tk == null) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                } else if (!maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (chkLuuMatKhau.isSelected()) {
+                        LuuMatKhau();
+                    } 
+//                    else {
+//                        File file = new File(fileLuuMatKhau);
+//                        file.delete();
+////                        try {
+////                            FileWriter fw = new FileWriter(fileLuuMatKhau);
+////                            BufferedWriter bw = new BufferedWriter(fw);
+////                            bw.write(0);
+////                            bw.close();
+////                            fw.close();
+////                        } catch (IOException ex) {
+////                            Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
+////                        }
+//                    }
+                    Auth.user = tk;
+                    this.dispose();
+                }
             }
+        }
+    }
+
+  
+
+    public static String maHoaMatKhauMD5(String password) {
+        try {
+            // Tạo đối tượng MessageDigest với thuật toán MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Cập nhật message digest với byte của mật khẩu
+            md.update(password.getBytes());
+
+            // Lấy bản băm (digest) từ message digest
+            byte[] byteData = md.digest();
+
+            // Chuyển đổi byte thành định dạng hex
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : byteData) {
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -434,7 +511,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             row = -1;
         }
     }
-    private void luuThongTin() {
+
+    private void luuThongTinKetNoi() {
         String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
         String maychu = txtMayChu.getText();
         String database = txtDatabase.getText();
@@ -450,4 +528,54 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }
+
+    private void LuuMatKhau() {
+        String taiKhoan = txtTaiKhoan.getText();
+        String matKhau;
+        NhanVien nv = dao.selectById(taiKhoan);
+        if ((new String(txtMatKhau.getPassword())).equals(nv.getMatKhau())) {
+            matKhau = nv.getMatKhau();
+        } else {
+            matKhau = maHoaMatKhauMD5(new String(txtMatKhau.getPassword()));
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(fileLuuMatKhau);
+            BufferedWriter bw = new BufferedWriter(fileWriter);
+            bw.write(taiKhoan);
+            bw.newLine();
+            bw.write(matKhau);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void docLuuMK() {
+        File file = new File(fileLuuMatKhau);
+        List<String> list = new ArrayList<>();
+        if (file.length() != 0) {
+            try {
+                FileReader fr = new FileReader(file);
+                BufferedReader br = new BufferedReader(fr);
+                String dong;
+                // Đọc từng dòng trong tệp tin
+                while ((dong = br.readLine()) != null) {
+                    list.add(dong);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 0) {
+                    txtTaiKhoan.setText(list.get(i));
+                } else if (i == 1) {
+                    txtMatKhau.setText(list.get(i));
+                }
+            }
+            chkLuuMatKhau.setSelected(true);
+            checkLMK = true;
+        }
+    }
+
 }

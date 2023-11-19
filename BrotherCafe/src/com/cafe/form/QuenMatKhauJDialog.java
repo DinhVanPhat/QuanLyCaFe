@@ -25,6 +25,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.swing.JOptionPane;
 import org.apache.commons.lang3.RandomStringUtils;
 
 /**
@@ -375,24 +376,22 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
             }
         }
         if (checkMa) {
-            MsgBox.alert(this, "Đã gửi mã");
+            MsgBox.alert(this, "Đã gửi mã",JOptionPane.INFORMATION_MESSAGE);
             btnTiepTuc.setEnabled(true);
-           System.out.println(getList);
-            System.out.println(maXacNhan);
         } else {
-            MsgBox.alert(this, "Tên đăng nhập hoặc email không đúng");
+            MsgBox.alert(this, "Tên đăng nhập hoặc email không đúng",JOptionPane.WARNING_MESSAGE);
         }
     }
 
     void tiepTuc() {
         if (checkMa){
             if (maXacNhan == null) {
-                MsgBox.alert(this, "Mã xác nhận đã hết hạn");
+                MsgBox.alert(this, "Mã xác nhận đã hết hạn",JOptionPane.WARNING_MESSAGE);
             } else if (txtMaXacNhan.getText().equals(maXacNhan)) {
                 this.dispose();
                 new XacNhanMatKhauJDialog(null, true).setVisible(true);
             } else {
-                MsgBox.alert(this, "Sai mã xác nhận");
+                MsgBox.alert(this, "Sai mã xác nhận",JOptionPane.WARNING_MESSAGE);
             }
         }
     }

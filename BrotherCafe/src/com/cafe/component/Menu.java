@@ -57,7 +57,6 @@ public class Menu extends javax.swing.JPanel {
         add(header);
         add(panelMenu);
 
-
     }
     
     public void addMenu(ModelMenu menu){
