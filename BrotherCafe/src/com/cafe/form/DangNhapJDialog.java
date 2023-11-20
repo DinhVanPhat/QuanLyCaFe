@@ -256,15 +256,16 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             .addGroup(pnKetNoiLayout.createSequentialGroup()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtMayChu, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnKetNoiLayout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnKetNoiLayout.createSequentialGroup()
-                        .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
@@ -310,7 +311,9 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKetNoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKetNoiActionPerformed
-        luuThongTinKetNoi();
+        if (checkValidateFormKetNoi()) {
+            luuThongTinKetNoi();
+        }
     }//GEN-LAST:event_btnKetNoiActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
@@ -395,26 +398,40 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     NhanVienDAO dao = new NhanVienDAO();
     int row = - 1;
-    String fileLuuMatKhau;
+    String fileName;
     boolean checkLMK;
 
     private void init() {
         checkLMK = false;
-        fileLuuMatKhau = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\luumatkhau.txt";
+        fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
         this.docLuuMK();
+        this.docthongTin();
         pnKetNoi.setVisible(false);
     }
 
     boolean checkValidateForm() {
         if (txtTaiKhoan.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập tài khoản",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập tài khoản", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String matKhau = new String(txtMatKhau.getPassword());
         if (matKhau.isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập mât khẩu" ,JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập mât khẩu", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+        return true;
+    }
+
+    boolean checkValidateFormKetNoi() {
+        if (txtMayChu.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập máy chủ", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (txtDatabase.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập database", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         return true;
     }
 
@@ -425,52 +442,37 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             NhanVien tk = dao.selectById(manv);
             if (checkLMK == true) {
                 if (!matKhau.equals(tk.getMatKhau())) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 1", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    if (chkLuuMatKhau.isSelected()) {
-                        LuuMatKhau();
-                    } else {
-                        try {
-                            FileWriter fw = new FileWriter(fileLuuMatKhau);
-                            fw.write("");
-                            fw.close();
-                        } catch (IOException ex) {
-                            Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    if (!chkLuuMatKhau.isSelected()) {
+                        // Đọc nội dung từ file 
+                        List<String> lines = readLinesFromFile(fileName);
+
+                        // Xóa dòng chứ tài khoản và mật khẩu, dòng 3 và 4
+                        removeLines(lines, 2, 3);
+
+                        // Ghi nội dung và file từ danh sách đã xóa 
+                        writeLinesToFile(fileName, lines);
+
                     }
                     Auth.user = tk;
                     this.dispose();
                 }
             } else {
                 if (tk == null) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 2", JOptionPane.WARNING_MESSAGE);
                 } else if (!maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng",JOptionPane.WARNING_MESSAGE);
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 3", JOptionPane.WARNING_MESSAGE);
                 } else {
                     if (chkLuuMatKhau.isSelected()) {
                         LuuMatKhau();
-                    } 
-//                    else {
-//                        File file = new File(fileLuuMatKhau);
-//                        file.delete();
-////                        try {
-////                            FileWriter fw = new FileWriter(fileLuuMatKhau);
-////                            BufferedWriter bw = new BufferedWriter(fw);
-////                            bw.write(0);
-////                            bw.close();
-////                            fw.close();
-////                        } catch (IOException ex) {
-////                            Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
-////                        }
-//                    }
+                    }
                     Auth.user = tk;
                     this.dispose();
                 }
             }
         }
     }
-
-  
 
     public static String maHoaMatKhauMD5(String password) {
         try {
@@ -513,24 +515,22 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }
 
     private void luuThongTinKetNoi() {
-        String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        List<String> list = new ArrayList<>();
         String maychu = txtMayChu.getText();
         String database = txtDatabase.getText();
-        try {
-            FileWriter fileWriter = new FileWriter(fileName);
-            BufferedWriter bw = new BufferedWriter(fileWriter);
-            bw.write(maychu);
-            bw.newLine();
-            bw.write(database);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        list.add(maychu);
+        list.add(database);
+      
+        writeLinesToFile(fileName, list);
     }
 
     private void LuuMatKhau() {
+        List<String> listMk = readLinesFromFile(fileName);
         String taiKhoan = txtTaiKhoan.getText();
+
+        listMk.add(taiKhoan);
+
         String matKhau;
         NhanVien nv = dao.selectById(taiKhoan);
         if ((new String(txtMatKhau.getPassword())).equals(nv.getMatKhau())) {
@@ -538,44 +538,77 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         } else {
             matKhau = maHoaMatKhauMD5(new String(txtMatKhau.getPassword()));
         }
-        try {
-            FileWriter fileWriter = new FileWriter(fileLuuMatKhau);
-            BufferedWriter bw = new BufferedWriter(fileWriter);
-            bw.write(taiKhoan);
-            bw.newLine();
-            bw.write(matKhau);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        listMk.add(matKhau);
+
+        writeLinesToFile(fileName, listMk);
     }
 
     private void docLuuMK() {
-        File file = new File(fileLuuMatKhau);
-        List<String> list = new ArrayList<>();
-        if (file.length() != 0) {
-            try {
-                FileReader fr = new FileReader(file);
-                BufferedReader br = new BufferedReader(fr);
-                String dong;
-                // Đọc từng dòng trong tệp tin
-                while ((dong = br.readLine()) != null) {
-                    list.add(dong);
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        List<String> list = readLinesFromFile(fileName);
+        if (list.size() > 2) {
             for (int i = 0; i < list.size(); i++) {
-                if (i == 0) {
+                if (i == 2) {
                     txtTaiKhoan.setText(list.get(i));
-                } else if (i == 1) {
+                } else if (i == 3) {
                     txtMatKhau.setText(list.get(i));
                 }
             }
             chkLuuMatKhau.setSelected(true);
             checkLMK = true;
         }
+    }
+
+    private void docthongTin() {
+        List<String> list = readLinesFromFile(fileName);
+        File file = new File(fileName);
+        if (file.length() != 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 0) {
+                    txtMayChu.setText(list.get(i));
+                } else if (i == 1) {
+                    txtDatabase.setText(list.get(i));
+                }
+            }
+        }
+    }
+
+    // Đọc dữ liệu từ file
+    private static List<String> readLinesFromFile(String filePath) {
+        List<String> list = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(filePath);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    //Ghi dư liệu vào file
+    private static void writeLinesToFile(String filePath, List<String> list) {
+        try {
+            FileWriter fw = new FileWriter(filePath);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (String line : list) {
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Xóa từng dòng trong file 
+    private static void removeLines(List<String> list, int lineIndex1, int lineIndex2) {
+        list.remove(lineIndex1);
+        list.remove(lineIndex2 - 1);
     }
 
 }

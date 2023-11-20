@@ -74,7 +74,7 @@ public class KhachHangDAO {
     }
 
     public List<KhachHang> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM KhachHang WHERE TenKH LIKE ? OR MaKH LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ?";
+        String sql = "SELECT * FROM KhachHang WHERE TenKH LIKE ? OR MaKH LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ? ORDER BY MaKH DESC";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
 

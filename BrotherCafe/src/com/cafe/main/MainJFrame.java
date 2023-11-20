@@ -7,6 +7,8 @@ package com.cafe.main;
 import com.cafe.component.Menu;
 import com.cafe.event.EventMenuSelected;
 import com.cafe.form.DangNhapJDialog;
+import com.cafe.form.DoiMatKhauJDialog;
+import com.cafe.form.DoiMatKhauJPanel;
 import com.cafe.form.GiaoDienChaoJDialog;
 import com.cafe.form.KhachHangJPanel;
 import com.cafe.form.KhuVucJPanel;
@@ -89,9 +91,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
                 }
-                if (index == 5) {
+              if (index == 5) {
                     showForm(new KhuVucJPanel());
                 }
+                if(index == 7){
+                    showForm(new DoiMatKhauJPanel());
+                }
+                
                 if (index == 8) {
                     new MainJFrame();
                 }

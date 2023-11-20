@@ -82,6 +82,7 @@ public class MenuItem extends javax.swing.JPanel {
         if(selected){
             Graphics2D g2 = (Graphics2D) grphcs;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            //
             g2.setColor(new Color(1,122,167));
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.5f));
             g2.fillRect(0, 0, getWidth(), getHeight());
