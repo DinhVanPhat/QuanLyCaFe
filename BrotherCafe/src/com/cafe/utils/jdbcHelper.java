@@ -58,7 +58,7 @@ public class jdbcHelper {
     }
     public static PreparedStatement getStmt(String sql,Object...args) throws SQLException{
         docthongTin();
-        String connectionUrl = "jdbc:sqlserver://"+host+":1433;"
+        connectionUrl = "jdbc:sqlserver://"+host+":1433;"
             + "databaseName="+database+";"
             + "user=sa;password=nghia;"
             + "encrypt=true;trustServerCertificate=true;";
