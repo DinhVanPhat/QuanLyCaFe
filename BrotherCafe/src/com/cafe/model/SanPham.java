@@ -12,14 +12,14 @@ public class SanPham {
     private String maSP;
     private String tenSP;
     private String loaiSP;
-    private String gia;
+    private double gia;
     private String hinhAnh;
     private String gioiThieu;
 
     public SanPham() {
     }
 
-    public SanPham(String maSP, String tenSP, String loaiSP, String gia, String hinhAnh, String gioiThieu) {
+    public SanPham(String maSP, String tenSP, String loaiSP, double gia, String hinhAnh, String gioiThieu) {
         this.maSP = maSP;
         this.tenSP = tenSP;
         this.loaiSP = loaiSP;
@@ -27,6 +27,8 @@ public class SanPham {
         this.hinhAnh = hinhAnh;
         this.gioiThieu = gioiThieu;
     }
+
+    
 
     public String getMaSP() {
         return maSP;
@@ -52,13 +54,14 @@ public class SanPham {
         this.loaiSP = loaiSP;
     }
 
-    public String getGia() {
+    public double getGia() {
         return gia;
     }
 
-    public void setGia(String gia) {
+    public void setGia(double gia) {
         this.gia = gia;
     }
+
 
     public String getHinhAnh() {
         return hinhAnh;

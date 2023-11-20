@@ -17,18 +17,18 @@ import java.util.List;
 public class KhuVucDAO { 
 
     String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa) VALUES (?, ?, ?)";
-    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ?? WHERE MaKV = ?";
+    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ? WHERE MaKV = ?";
     String DELETE_SQL = "DELETE FROM KhuVuc WHERE MaKV = ?";
     String SELECT_ALL_SQL = "SELECT * FROM KhuVuc";
     String SELECT_BY_ID_SQL = "SELECT * FROM KhuVuc WHERE MaKV = ?";
 
 
     public void insert(KhuVuc e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaKV(),e.getTenKV(),e.isChonKV());
+        jdbcHelper.update(INSERT_SQL, e.getMaKV(),e.getTenKV(),e.getMoTa());
     }
 
     public void update(KhuVuc e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenKV(),e.isChonKV(),e.isChonKV(), e.getMaKV());
+        jdbcHelper.update(UPDATE_SQL, e.getTenKV(),e.getMoTa(), e.getMaKV());
     }
 
     public void delete(String id) {
@@ -60,7 +60,7 @@ public class KhuVucDAO {
                 KhuVuc entity = new KhuVuc();
                 entity.setMaKV(rs.getString("MaKV"));
                 entity.setTenKV(rs.getString("TenKV"));
-                entity.setChonKV(rs.getBoolean("ChonKV"));
+                entity.setMoTa(rs.getString("MoTa"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

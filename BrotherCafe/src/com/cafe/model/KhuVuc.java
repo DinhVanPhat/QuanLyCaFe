@@ -11,7 +11,7 @@ package com.cafe.model;
 public class KhuVuc {
     private String maKV;
     private String tenKV;
-    private boolean chonKV;
+    private String moTa;
 
     public String getMaKV() {
         return maKV;
@@ -29,20 +29,24 @@ public class KhuVuc {
         this.tenKV = tenKV;
     }
 
-    public boolean isChonKV() {
-        return chonKV;
+    public String getMoTa() {
+        return moTa;
     }
 
-    public void setChonKV(boolean chonKV) {
-        this.chonKV = chonKV;
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
+
+ 
 
     public KhuVuc() {
     }
 
-    public KhuVuc(String maKV, String tenKV, boolean chonKV) {
+    public KhuVuc(String maKV, String tenKV, String moTa) {
         this.maKV = maKV;
         this.tenKV = tenKV;
-        this.chonKV = chonKV;
+        this.moTa = moTa;
     }
+
+    
 }

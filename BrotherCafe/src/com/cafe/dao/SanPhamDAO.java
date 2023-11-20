@@ -59,7 +59,7 @@ public class SanPhamDAO {
                 entity.setMaSP(rs.getString("MaSP"));
                 entity.setTenSP(rs.getString("TenSP"));
                 entity.setLoaiSP(rs.getString("LoaiSP"));
-                entity.setGia(rs.getString("Gia"));
+                entity.setGia(rs.getDouble("Gia"));
                 entity.setHinhAnh(rs.getString("HinhAnh"));
                 entity.setGioiThieu(rs.getString("GioiThieu"));
                 list.add(entity);
@@ -73,7 +73,7 @@ public class SanPhamDAO {
 
     public List<SanPham> selectByKeyWord(String keyword) {
         String sql = "SELECT * FROM SanPham WHERE tenSP LIKE ? OR maSP LIKE ? OR loaiSP LIKE ? OR gia LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "% ", "%" + keyword + "% ", "%" + keyword + "% ");
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
 
     public boolean chechTrungMa(String ma) {
