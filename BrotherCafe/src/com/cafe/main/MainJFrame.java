@@ -11,6 +11,7 @@ import com.cafe.form.DoiMatKhauJDialog;
 import com.cafe.form.DoiMatKhauJPanel;
 import com.cafe.form.GiaoDienChaoJDialog;
 import com.cafe.form.KhachHangJPanel;
+import com.cafe.form.KhuVucJPanel;
 import com.cafe.form.NhanVienJPanel;
 import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.TrangChuJPanel;
@@ -46,7 +47,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-        new DangNhapJDialog(this, true).setVisible(true);
+//        new DangNhapJDialog(this, true).setVisible(true);
         new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
@@ -90,10 +91,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
                 }
+              if (index == 5) {
+                    showForm(new KhuVucJPanel());
+                }
                 if(index == 7){
                     showForm(new DoiMatKhauJPanel());
-//                    new DoiMatKhauJDialog(null, true).setVisible(true);
                 }
+                
                 if (index == 8) {
                     new MainJFrame();
                 }
