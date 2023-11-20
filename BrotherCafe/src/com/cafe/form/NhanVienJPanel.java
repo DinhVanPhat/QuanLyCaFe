@@ -464,7 +464,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         this.row = -1;
         rowCapNhatMK = -1;
         this.updateStatus();
-        
+
         setBorderInput();
         focusInput();
     }
@@ -503,8 +503,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!",JOptionPane.WARNING_MESSAGE);
-        } else  if (MsgBox.confirm(this, "Bạn thực sự muốn xóa nhân viên này?")) {
+            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!", JOptionPane.INFORMATION_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa nhân viên này?")) {
             String maNV = txtMaNV.getText();
             try {
                 nvdao.delete(maNV);
@@ -658,15 +658,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Vui lòng nhập mật khẩu!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        try {
-            long sdt = Long.parseLong(txtSDT.getText());
-        } catch (Exception e) {
-            MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternSDT = "^(0[3-9])\\d{8}$";
-        if (!txtSDT.getText().matches(patternSDT)) {
-            MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+
+        if (txtEmail.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập email!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String patternEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]{2,}){1,2}$";
@@ -674,11 +668,20 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Email! không hợp lệ", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
-        if (txtEmail.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập email!", JOptionPane.WARNING_MESSAGE);
-            return false;
+        if (!txtSDT.getText().isEmpty()) {
+            try {
+                long sdt = Long.parseLong(txtSDT.getText());
+            } catch (Exception e) {
+                MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            String patternSDT = "^(0[3-9])\\d{8}$";
+            if (!txtSDT.getText().matches(patternSDT)) {
+                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         }
+
         return true;
     }
 
@@ -740,14 +743,15 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         }
         return ma;
     }
-    private void focusInput(){
+
+    private void focusInput() {
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtHoVaTen.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtHoVaTen.setBackground(new Color(227, 188, 140));
-                txtHoVaTen.setBorder(borderNhanVao);  
+                txtHoVaTen.setBorder(borderNhanVao);
             }
 
             @Override
@@ -760,7 +764,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtMatKhau.setBackground(new Color(227, 188, 140));
-                txtMatKhau.setBorder(borderNhanVao);  
+                txtMatKhau.setBorder(borderNhanVao);
             }
 
             @Override
@@ -773,7 +777,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtEmail.setBackground(new Color(227, 188, 140));
-                txtEmail.setBorder(borderNhanVao);  
+                txtEmail.setBorder(borderNhanVao);
             }
 
             @Override
@@ -786,7 +790,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtDiaChi.setBackground(new Color(227, 188, 140));
-                txtDiaChi.setBorder(borderNhanVao);  
+                txtDiaChi.setBorder(borderNhanVao);
             }
 
             @Override
@@ -799,7 +803,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtSDT.setBackground(new Color(227, 188, 140));
-                txtSDT.setBorder(borderNhanVao);  
+                txtSDT.setBorder(borderNhanVao);
             }
 
             @Override
@@ -812,7 +816,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTimKiem.setBackground(new Color(227, 188, 140));
-                txtTimKiem.setBorder(borderNhanVao);  
+                txtTimKiem.setBorder(borderNhanVao);
             }
 
             @Override
@@ -822,18 +826,18 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             }
         });
     }
-    
-    private void setBorderInput(){
+
+    private void setBorderInput() {
         Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtHoVaTen.setBorder(border);
         txtEmail.setBorder(border);
         txtMatKhau.setBorder(border);
         txtDiaChi.setBorder(border);
         txtMaNV.setBorder(border);
-        txtMaNV.setBackground(new Color(255,255,255));
-        
+        txtMaNV.setBackground(new Color(255, 255, 255));
+
         txtSDT.setBorder(border);
         txtTimKiem.setBorder(border);
-        
+
     }
 }

@@ -47,7 +47,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-//        new DangNhapJDialog(this, true).setVisible(true);
+        new DangNhapJDialog(this, true).setVisible(true);
         new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
@@ -91,13 +91,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
                 }
-              if (index == 5) {
+                if (index == 5) {
                     showForm(new KhuVucJPanel());
                 }
-                if(index == 7){
+                if (index == 7) {
                     showForm(new DoiMatKhauJPanel());
                 }
-                
+
                 if (index == 8) {
                     new MainJFrame();
                 }

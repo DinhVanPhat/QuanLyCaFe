@@ -21,7 +21,7 @@ public class XImage {
 //        return new ImageIcon(url).getImage();
 //    }
     public static void save(File src){
-        File dst = new File(".\\com\\cafe\\icon",src.getName());
+        File dst = new File("./src/com/cafe/icon",src.getName());
         if(!dst.getParentFile().exists()){
             dst.getParentFile().mkdirs();
         }
@@ -34,8 +34,7 @@ public class XImage {
         }
     }
     public static  ImageIcon read(String fileName){
-        File path = new File(".\\com\\cafe\\icon",fileName);
-
+        File path = new File("./src/com/cafe/icon",fileName);
         return new ImageIcon(path.getAbsolutePath());
     }
 }
