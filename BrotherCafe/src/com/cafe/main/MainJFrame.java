@@ -6,6 +6,7 @@ package com.cafe.main;
 
 import com.cafe.component.Menu;
 import com.cafe.event.EventMenuSelected;
+import com.cafe.form.BanJPanel;
 import com.cafe.form.DangNhapJDialog;
 import com.cafe.form.DoiMatKhauJDialog;
 import com.cafe.form.DoiMatKhauJPanel;
@@ -90,6 +91,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 }
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
+                }
+                if (index == 4) {
+                    showForm(new BanJPanel());
                 }
                 if (index == 5) {
                     showForm(new KhuVucJPanel());
