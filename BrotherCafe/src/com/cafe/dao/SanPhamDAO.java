@@ -20,6 +20,8 @@ public class SanPhamDAO {
     String DELETE_SQL = "DELETE FROM SanPham WHERE MaSP = ?";
     String SELECT_ALL_SQL = "SELECT * FROM SanPham";
     String SELECT_BY_ID_SQL = "SELECT * FROM SanPham WHERE MaSP = ?";
+    String SELECT_ALL_LOC_GIA_SQL = "SELECT * FROM SanPham WHERE Gia BETWEEN ? AND ?";
+
 
     public void insert(SanPham e) {
         jdbcHelper.update(INSERT_SQL, e.getMaSP(), e.getTenSP(), e.getLoaiSP(), e.getGia(), e.getHinhAnh(), e.getGioiThieu());
@@ -85,4 +87,8 @@ public class SanPhamDAO {
         }
         return true;
     }
+     public List<SanPham> locGiaSP(String giaNho, String giaLon) {
+        return this.selectBySql(SELECT_ALL_LOC_GIA_SQL, giaNho, giaLon);
+    }
+    
 }

@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -277,11 +279,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jLabel12.setText("Khoảng Giá");
 
         txtKhoangGiaNho.setForeground(new java.awt.Color(0, 0, 0));
-        txtKhoangGiaNho.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtKhoangGiaNhoActionPerformed(evt);
-            }
-        });
 
         jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("----");
@@ -326,9 +323,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(23, 23, 23)
@@ -441,12 +436,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         clearForm();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
-    private void txtKhoangGiaNhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKhoangGiaNhoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtKhoangGiaNhoActionPerformed
-
     private void btnLocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocActionPerformed
-        // TODO add your handling code here:
+        locSP();
     }//GEN-LAST:event_btnLocActionPerformed
 
     private void tblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMouseClicked
@@ -490,7 +481,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
       
-    SanPhamDAO nvdao = new SanPhamDAO();
+    SanPhamDAO spdao = new SanPhamDAO();
     int row = -1;
  
     
@@ -505,12 +496,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     void insert() {
         if (checkValidateForm()) {
-            if (!nvdao.chechTrungMa(txtMaSP.getText())) {
+            if (!spdao.chechTrungMa(txtMaSP.getText())) {
                 MsgBox.alert(this, "Mã sản phẩm đã tồn tại",javax.swing.JOptionPane.WARNING_MESSAGE);
             } else {
                 SanPham sp = getForm();
                 try {
-                    nvdao.insert(sp);
+                    spdao.insert(sp);
                     this.fillTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -527,7 +518,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         if (checkValidateForm()) {
             SanPham sp = getForm();
             try {
-                nvdao.update(sp);
+                spdao.update(sp);
                 this.fillTable();
                 MsgBox.alert(this, "Cập nhật thành công!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
@@ -545,7 +536,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         } else    if (MsgBox.confirm(this, "Bạn thực sự muốn xóa sản phẩm này?")) {
             String maNV = txtMaSP.getText();
             try {
-                nvdao.delete(maNV);
+                spdao.delete(maNV);
                 this.fillTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công",javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -569,7 +560,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     void edit() {
         String manv = (String) tblSanPham.getValueAt(this.row, 0);
-        SanPham sp = nvdao.selectById(manv);
+        SanPham sp = spdao.selectById(manv);
         this.setForm(sp);
         this.updateStatus();
     }
@@ -579,7 +570,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<SanPham> list = nvdao.selectByKeyWord(keyWord);
+            List<SanPham> list = spdao.selectByKeyWord(keyWord);
             for (SanPham sp : list) {
                 Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
                 model.addRow(row);
@@ -696,6 +687,52 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         this.clearForm();
         this.row = -1;
         updateStatus();
+    }
+    void locSP() {
+        if (checkKhoangGia()) {
+            DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
+            model.setRowCount(0);
+            String giaNho = txtKhoangGiaNho.getText();
+            String giaLon = txtKhoangGiaLon.getText();
+            try {
+                List<SanPham> list = spdao.locGiaSP(giaNho, giaLon);
+                for (SanPham sp : list) {
+                    Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
+                    model.addRow(row);
+                }
+            } catch (Exception e) {
+                MsgBox.alert(this, "Lỗi truy vấn dữ liệu!",JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    boolean checkKhoangGia() {
+        if (txtKhoangGiaNho.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập khoảng giá nhỏ",JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        String patternGN = ".*[a-zA-Z].*";
+        if (txtKhoangGiaNho.getText().matches(patternGN)) {
+            MsgBox.alert(this, "Khoảng giá nhỏ phải là số",JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (Integer.valueOf(txtKhoangGiaNho.getText()) < 0) {
+            MsgBox.alert(this, "Khoảng giá nhỏ phải lớn hơn 0",JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (txtKhoangGiaLon.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập khoảng giá lớn",JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        String patternGL = ".*[a-zA-Z].*";
+        if (txtKhoangGiaLon.getText().matches(patternGL)) {
+            MsgBox.alert(this, "Khoảng giá lớn phải là số",JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (Integer.valueOf(txtKhoangGiaLon.getText()) < 0) {
+            MsgBox.alert(this, "Khoảng giá lớn phải lớn hơn 0",JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
     
      private void focusInput(){

@@ -24,8 +24,8 @@ public class jdbcHelper {
     static String database;
 
     private static void docthongTin() {
-         String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
-         List<String> list =  list = new ArrayList<>();
+          String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        List<String> list =  list = new ArrayList<>();
         try {
             FileReader fileReader = new FileReader(fileName);
             BufferedReader br = new BufferedReader(fileReader);

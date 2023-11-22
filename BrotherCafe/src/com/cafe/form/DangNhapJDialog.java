@@ -440,35 +440,40 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             String manv = txtTaiKhoan.getText();
             String matKhau = new String(txtMatKhau.getPassword());
             NhanVien tk = dao.selectById(manv);
+            List<String> list = readLinesFromFile(fileName);
+
+            if (chkLuuMatKhau.isSelected()) {
+                checkLMK = true;
+            } else {
+                checkLMK = false;
+            }
             if (checkLMK == true) {
-                if (!matKhau.equals(tk.getMatKhau())) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 1", JOptionPane.WARNING_MESSAGE);
-                } else {
+                if (matKhau.equals(tk.getMatKhau()) || maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
                     if (!chkLuuMatKhau.isSelected()) {
-                        // Đọc nội dung từ file 
-                        List<String> lines = readLinesFromFile(fileName);
-
-                        // Xóa dòng chứ tài khoản và mật khẩu, dòng 3 và 4
-                        removeLines(lines, 2, 3);
-
-                        // Ghi nội dung và file từ danh sách đã xóa 
-                        writeLinesToFile(fileName, lines);
-
+                        if (list.size() > 2) {
+                            xoaTKMKTrongFile();
+                        }
                     }
+                    if (list.size() > 2) {
+                        xoaTKMKTrongFile();
+                    }
+                    LuuMatKhau();
                     Auth.user = tk;
                     this.dispose();
+                } else {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 1", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
                 if (tk == null) {
                     MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 2", JOptionPane.WARNING_MESSAGE);
-                } else if (!maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 3", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    if (chkLuuMatKhau.isSelected()) {
-                        LuuMatKhau();
+                } else if (maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau()) || matKhau.equals(tk.getMatKhau())) {
+                    if (list.size() > 2) {
+                        xoaTKMKTrongFile();
                     }
                     Auth.user = tk;
                     this.dispose();
+                } else {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 3", JOptionPane.WARNING_MESSAGE);
                 }
             }
         }
@@ -521,7 +526,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         list.add(maychu);
         list.add(database);
-      
+
         writeLinesToFile(fileName, list);
     }
 
@@ -606,9 +611,20 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }
 
     // Xóa từng dòng trong file 
-    private static void removeLines(List<String> list, int lineIndex1, int lineIndex2) {
+    private void removeLines(List<String> list, int lineIndex1, int lineIndex2) {
         list.remove(lineIndex1);
         list.remove(lineIndex2 - 1);
+    }
+
+    private void xoaTKMKTrongFile() {
+        // Đọc nội dung từ file 
+        List<String> lines = readLinesFromFile(fileName);
+
+        // Xóa dòng chứ tài khoản và mật khẩu, dòng 3 và 4
+        removeLines(lines, 2, 3);
+
+        // Ghi nội dung và file từ danh sách đã xóa 
+        writeLinesToFile(fileName, lines);
     }
 
 }
