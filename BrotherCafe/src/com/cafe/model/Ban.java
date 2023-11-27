@@ -10,7 +10,7 @@ package com.cafe.model;
  */
 public class Ban {
     
-private String maBan;
+    private String maBan;
     private String tenBan;
     private String trangThai;
     private String khuVuc;
