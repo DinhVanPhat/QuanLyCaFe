@@ -6,6 +6,7 @@ package com.cafe.form;
 
 import com.cafe.dao.KhuVucDAO;
 import com.cafe.model.KhuVuc;
+import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
@@ -377,9 +378,9 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     void delete() {
 //        if (!Auth.isManager()) {
-//            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!");
+//            MsgBox.alert(this, "Bạn không có quyền xóa khu vực!",JOptionPane.WARNING_MESSAGE);
 //        } else 
-        if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
+            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
             String maKH = txtMaKV.getText();
             try {
                 nvdao.delete(maKH);

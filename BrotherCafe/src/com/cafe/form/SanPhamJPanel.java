@@ -532,7 +532,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            MsgBox.alert(this, "Bạn không có quyền xóa sản phẩm!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
         } else    if (MsgBox.confirm(this, "Bạn thực sự muốn xóa sản phẩm này?")) {
             String maNV = txtMaSP.getText();
             try {

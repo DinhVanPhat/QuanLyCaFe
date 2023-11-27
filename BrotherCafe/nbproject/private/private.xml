@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/com/cafe/form/TrangChuJPanel.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>579</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/ADMIN/Documents/GitHub/QuanLyCaFe/BrotherCafe/src/com/cafe/form/KhachHangJPanel.java</file>
@@ -10,10 +19,11 @@
         </group>
         <group name="ASM1_MOB1023_DangVinhKy">
             <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/TrangChuJPanel.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/controller/MenuSanPhamMouse.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/controller/MenuKhuVucListener.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/SanPhamJPanel.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/main/MainJFrame.java</file>
+            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/dao/BanDAO.java</file>
+            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/dao/SanPhamDAO.java</file>
+            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/NhanVienJPanel.java</file>
+            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/model/Ban.java</file>
+            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/BanJPanel.java</file>
         </group>
     </open-files>
 </project-private>

@@ -444,7 +444,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Bạn không có quyền xóa khách hàng!",JOptionPane.WARNING_MESSAGE);
         } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khách hàng này?")) {
             String maKH = txtMaKH.getText();
             try {

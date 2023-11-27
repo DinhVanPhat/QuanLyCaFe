@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.lang.annotation.Target;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
@@ -47,8 +48,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-//        new DangNhapJDialog(this, true).setVisible(true);
-     //   new GiaoDienChaoJDialog(this, true).setVisible(true);
+    //    new DangNhapJDialog(this, true).setVisible(true);
+  //      new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
 
@@ -58,6 +59,9 @@ public class MainJFrame extends javax.swing.JFrame {
         this.setSize(screenWidth, screenHeight - 50);
         System.out.println(screenWidth + "|" + screenHeight);
         init();
+        
+        
+
     }
 
     private void init() {

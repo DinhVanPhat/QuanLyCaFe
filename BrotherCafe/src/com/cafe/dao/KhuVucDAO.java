@@ -74,7 +74,10 @@ public class KhuVucDAO {
         String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? OR MaKV LIKE ? OR MoTa LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
-
+public List<KhuVuc> selectByTenKV(String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%");
+    }
     public boolean chechTrungMa(String ma) {
         List<KhuVuc> list = this.selectAll();
         for (KhuVuc nv : list) {

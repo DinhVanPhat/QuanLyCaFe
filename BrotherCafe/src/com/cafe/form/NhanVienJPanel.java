@@ -506,7 +506,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa tài khoản!", JOptionPane.INFORMATION_MESSAGE);
+            MsgBox.alert(this, "Bạn không có quyền xóa nhân viên!", JOptionPane.INFORMATION_MESSAGE);
         } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa nhân viên này?")) {
             String maNV = txtMaNV.getText();
             try {
@@ -545,7 +545,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            System.out.println(keyWord);
             List<NhanVien> list = nvdao.selectByKeyWord(keyWord);
             for (NhanVien nv : list) {
                 Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên"};

@@ -90,5 +90,20 @@ public class SanPhamDAO {
      public List<SanPham> locGiaSP(String giaNho, String giaLon) {
         return this.selectBySql(SELECT_ALL_LOC_GIA_SQL, giaNho, giaLon);
     }
-    
+    public SanPham selectByMaSPTraVeTenSP(String keyword) {
+       String sql = "SELECT * FROM SanPham WHERE MaSP = ?";
+        List<SanPham> list = this.selectBySql(sql, keyword);
+        if (list.isEmpty()) {
+            return null;
+        }        
+        return list.get(0); 
+    }
+    public SanPham selectByTenSPTraveMaSP(String keyword) {
+       String sql = "SELECT * FROM SanPham WHERE TenSP = ?";
+        List<SanPham> list = this.selectBySql(sql, keyword);
+        if (list.isEmpty()) {
+            return null;
+        }        
+        return list.get(0); 
+    }
 }
