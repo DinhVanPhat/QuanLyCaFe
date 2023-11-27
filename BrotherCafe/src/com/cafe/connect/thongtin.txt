@@ -1,2 +1,4 @@
 localhost
 QuanLyCafe
+phatdv
+435f3dc720e8503667b821238b59fae2
