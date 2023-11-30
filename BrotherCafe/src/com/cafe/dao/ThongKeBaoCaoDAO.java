@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
     
-    String SELECT_SQL = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia) AS TongDoanhThu, NgayThanhToan\n" +
+    String SELECT_SQL = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia*SoLuong) AS TongDoanhThu, NgayThanhToan\n" +
                             "FROM ChiTietHoaDon A\n" +
                             "INNER JOIN SanPham B ON B.MaSP = A.MaSP\n"+ 
                             "INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
@@ -97,7 +97,7 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
         
     }
     public List<ThongKeBaoCao> selectByLoaiSP(String keyWord) {
-         String sql = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia) AS TongDoanhThu, NgayThanhToan\n" +
+         String sql = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia*SoLuong) AS TongDoanhThu, NgayThanhToan\n" +
                             "FROM ChiTietHoaDon A\n" +
                             "INNER JOIN SanPham B ON B.MaSP = A.MaSP\n"+ 
                             "INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
