@@ -50,8 +50,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-        new DangNhapJDialog(this, true).setVisible(true);
-        new GiaoDienChaoJDialog(this, true).setVisible(true);
+       // new DangNhapJDialog(this, true).setVisible(true);
+       // new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
 
@@ -59,7 +59,7 @@ public class MainJFrame extends javax.swing.JFrame {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        System.out.println(screenWidth + "|" + screenHeight);
+//        System.out.println(screenWidth + "|" + screenHeight);
         init();
         
         

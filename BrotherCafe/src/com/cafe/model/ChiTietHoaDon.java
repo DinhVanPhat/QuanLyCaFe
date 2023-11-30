@@ -19,6 +19,12 @@ public class ChiTietHoaDon{
     public ChiTietHoaDon() {
     }
 
+    public ChiTietHoaDon(int maCTHD, int soLuong, Double tongTienSP) {
+        this.maCTHD = maCTHD;
+        this.soLuong = soLuong;
+        this.tongTienSP = tongTienSP;
+    }
+    
     public ChiTietHoaDon(int maCTHD, int maHD, String maSP, int soLuong, Double tongTienSP, String ghiChu) {
         this.maCTHD = maCTHD;
         this.maHD = maHD;

@@ -22,6 +22,7 @@ public class ChiTietHoaDonDAO extends CafeDAO<ChiTietHoaDon, Integer> {
     String DELETE_SQL = "DELETE FROM ChiTietHoaDon WHERE MaCTHD = ?";
     String SELECT_ALL_SQL = "SELECT * FROM ChiTietHoaDon";
     String SELECT_BY_ID_SQL = "SELECT * FROM ChiTietHoaDon WHERE MaCTHD = ?";
+    String UPDATE_SL_SP_SQL = "UPDATE ChiTietHoaDon SET SoLuong = ?,  TongTienSP = ? WHERE MaCTHD = ?";
 
     @Override
     public void insert(ChiTietHoaDon e) {
@@ -33,7 +34,10 @@ public class ChiTietHoaDonDAO extends CafeDAO<ChiTietHoaDon, Integer> {
         jdbcHelper.update(UPDATE_SQL, e.getMaHD(),e.getMaSP(),e.getSoLuong(),e.getTongTienSP(),e.getGhiChu(),e.getMaCTHD());
     
     }
+    public void updateSLSP(ChiTietHoaDon e) {
+            jdbcHelper.update(UPDATE_SL_SP_SQL, e.getSoLuong(),e.getTongTienSP(),e.getMaCTHD());
 
+        }
     @Override
     public void delete(Integer id) {
         jdbcHelper.update(DELETE_SQL, id);
@@ -88,5 +92,21 @@ public class ChiTietHoaDonDAO extends CafeDAO<ChiTietHoaDon, Integer> {
         String sql = "SELECT cthd.* FROM ChiTietHoaDon cthd INNER JOIN HoaDon hd ON cthd.MaHD = hd.MaHD  WHERE MaBan LIKE ? AND hd.TrangThai = 0";
         return this.selectBySql(sql,keyword);
     }
-    
+    public List<ChiTietHoaDon> selectByMaSP(String keyword) {
+        String sql = "SELECT * FROM ChiTietHoaDon WHERE MaSP LIKE ?";
+        return this.selectBySql(sql,keyword);
+    }
+     public ChiTietHoaDon selectByTenSP(Integer id) {
+         String sql = "SELECT * FROM ChiTietHoaDon WHERE MaCTHD = ?";
+           List<ChiTietHoaDon> list = this.selectBySql(SELECT_BY_ID_SQL, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        for (ChiTietHoaDon ban : list) {
+            if (ban.getMaCTHD()!= id) {
+                return null;
+            }
+        }
+        return list.get(0);
+    }
 }

@@ -398,7 +398,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
- KhachHangDAO nvdao = new KhachHangDAO();
+    KhachHangDAO nvdao = new KhachHangDAO();
     int row = -1;
     private void init() {
         this.fillTable();
@@ -443,9 +443,10 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }
 
     void delete() {
-        if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa khách hàng!",JOptionPane.WARNING_MESSAGE);
-        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khách hàng này?")) {
+//        if (!Auth.isManager()) {
+//            MsgBox.alert(this, "Bạn không có quyền xóa khách hàng!",JOptionPane.WARNING_MESSAGE);
+//        } else 
+            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khách hàng này?")) {
             String maKH = txtMaKH.getText();
             try {
                 nvdao.delete(maKH);
@@ -552,7 +553,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             return false;
         }
         try {
-            long sdt = Long.parseLong(txtSDT.getText());
+            int sdt = Integer.getInteger(txtSDT.getText());
         } catch (Exception e) {
             MsgBox.alert(this, "Số điện thoại phải là số!",JOptionPane.WARNING_MESSAGE);
             return false;

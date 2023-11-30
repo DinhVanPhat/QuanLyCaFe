@@ -580,7 +580,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         nv.setSDT(txtSDT.getText());
         nv.setGioiTinh(!rdoNam.isSelected());
         nv.setEmail(txtEmail.getText());
-        System.out.println(row);
         if (rowCapNhatMK != -1) {
             NhanVien nvOld = nvdao.selectById(txtMaNV.getText());
             String matKhauTrenForm = new String(txtMatKhau.getPassword());
@@ -709,7 +708,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             } else if (i == count) {
                 if (count != 0) {
                     tenLot += String.valueOf(xoaDau(nameParts[i]).toLowerCase().charAt(0));
-                    System.out.println(xoaDau(nameParts[i]).toLowerCase().charAt(0));
                     count++;
                 }
 

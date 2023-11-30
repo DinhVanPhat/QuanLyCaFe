@@ -7,21 +7,16 @@ package com.cafe.form;
 import com.cafe.dao.BanDAO;
 import com.cafe.dao.KhuVucDAO;
 import com.cafe.model.Ban;
+import com.cafe.model.KhachHang;
 import com.cafe.model.KhuVuc;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
-import com.cafe.utils.jdbcHelper;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import static java.nio.file.Files.list;
-import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.awt.Color;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -349,7 +344,6 @@ public class BanJPanel extends javax.swing.JPanel {
 BanDAO banDao = new BanDAO() {};
     KhuVucDAO kvdao = new KhuVucDAO();
     int row = -1;
-
     private void init() {
         this.fillTable();
         this.row = -1;
@@ -412,9 +406,10 @@ BanDAO banDao = new BanDAO() {};
     }
 
     void delete() {
-        if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa bàn!", JOptionPane.WARNING_MESSAGE);
-        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
+//        if (!Auth.isManager()) {
+//            MsgBox.alert(this, "Bạn không có quyền xóa bàn!", JOptionPane.WARNING_MESSAGE);
+//        } else 
+            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
             String maKH = txtMaBan.getText();
             try {
                 banDao.delete(maKH);
@@ -469,25 +464,28 @@ BanDAO banDao = new BanDAO() {};
     void setForm(Ban b) {
         txtMaBan.setText(b.getMaBan());
         txtTenban.setText(b.getTenBan());
-        cboChonKhuVuc.setSelectedItem(b.getKhuVuc());
     }
 
     Ban getForm() {
-        Ban ban = new Ban();
-        ban.setMaBan(txtMaBan.getText());
+        Ban ban = new Ban();   
+        ban.setMaBan(checkTrungMaKH("B"));
         ban.setTenBan(txtTenban.getText());
         ban.setTrangThai("Trống");
-        ban.setKhuVuc(cboChonKhuVuc.getSelectedItem() + "");
-
+        String tenKV = (String) cboChonKhuVuc.getSelectedItem();
+        List<KhuVuc> list = kvdao.selectByTenKV(tenKV);
+        for (KhuVuc kv : list) {
+            ban.setKhuVuc(kv.getMaKV());
+            System.out.println(kv.getMaKV());
+        }
         return ban;
     }
 
     void updateStatus() {
         boolean edit = (this.row >= 0);
         //Trạng thái form
-        txtMaBan.setEditable(!edit);
+        txtMaBan.setEditable(false);
         txtTenban.setEditable(!edit);
-        cboChonKhuVuc.setEditable(!edit);
+
 
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
@@ -497,15 +495,6 @@ BanDAO banDao = new BanDAO() {};
     }
 
     boolean checkValidateForm() {
-        if (txtMaBan.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập Mã Bàn!", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternMaNV = "^B\\d+";
-        if (!txtMaBan.getText().matches(patternMaNV)) {
-            MsgBox.alert(this, "Sai mã bàn!\n Ví dụ:  B*** . \n* là các số", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
         if (txtTenban.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng nhập tên bàn!", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -524,23 +513,33 @@ BanDAO banDao = new BanDAO() {};
         this.row = -1;
         updateStatus();
     }
+    
+     private String checkTrungMaKH(String id) {
+        List<Ban> list = banDao.selectAll();
+        Set<String> set = new HashSet<>();
+
+        for (Ban b : list) {
+            set.add(b.getMaBan());
+        }
+
+        int countTrungMa = 1;
+        
+        String ma = id+"0"+countTrungMa;
+        while (set.contains(ma)) {
+            countTrungMa++;
+            if(countTrungMa < 10){
+                ma = id +"0"+ countTrungMa;
+            } else {  
+                ma = id + countTrungMa;
+            }
+        }
+         System.out.println(ma);
+        return ma;
+    }
 
     private void focusInput() {
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
-        txtMaBan.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                txtMaBan.setBackground(new Color(227, 188, 140));
-                txtMaBan.setBorder(borderNhanVao);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                txtMaBan.setBackground(new Color(255, 255, 255));
-                txtMaBan.setBorder(borderKhongNhan);
-            }
-        });
         txtTenban.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -575,6 +574,5 @@ BanDAO banDao = new BanDAO() {};
         txtMaBan.setBorder(border);
         txtTenban.setBorder(border);
         txtTimKiem.setBorder(border);
-
     }
 }
