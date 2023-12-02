@@ -15,6 +15,7 @@ public class SanPham {
     private double gia;
     private String hinhAnh;
     private String gioiThieu;
+    
 
     public SanPham() {
     }

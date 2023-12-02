@@ -24,7 +24,7 @@ public class jdbcHelper {
     static String database;
 
     private static void docthongTin() {
-          String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+          String fileName = "C:\\Users\\ADMIN\\Documents\\GitHub\\QuanLyCaFe\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
         List<String> list =  list = new ArrayList<>();
         try {
             FileReader fileReader = new FileReader(fileName);
@@ -60,7 +60,7 @@ public class jdbcHelper {
         docthongTin();
         connectionUrl = "jdbc:sqlserver://"+host+":1433;"
             + "databaseName="+database+";"
-            + "user=sa;password=nghia;"
+            + "user=sa;password=123;"
             + "encrypt=true;trustServerCertificate=true;";
         Connection conn = DriverManager.getConnection(connectionUrl);
         PreparedStatement stmt = null;

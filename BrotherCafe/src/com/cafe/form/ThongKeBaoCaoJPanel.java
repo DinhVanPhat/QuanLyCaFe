@@ -19,6 +19,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,10 +31,20 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -300,9 +314,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTu;
     // End of variables declaration//GEN-END:variables
 
-    
     //
-    
     ThongKeBaoCaoDAO thongKeDAO = new ThongKeBaoCaoDAO();
     SanPhamDAO spdao = new SanPhamDAO();
     HoaDonDAO hddao = new HoaDonDAO();
@@ -320,20 +332,22 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         focusInput();
         setBorderInput();
     }
-    public void fiillHoaDonToTable(){ 
-        String[] columnNames = {"Mã HD","Mã bàn","Ngày đặt bàn","Thời Gian tạo HD","Ngày thanh toán","Thời gian thanh toán","Mã NV","Tổng tiền","Trạng Thái"};
-        DefaultTableModel model =new DefaultTableModel(columnNames, 0);
+
+    public void fiillHoaDonToTable() {
+        String[] columnNames = {"Mã HD", "Mã bàn", "Ngày đặt bàn", "Thời Gian tạo HD", "Ngày thanh toán", "Thời gian thanh toán", "Mã NV", "Tổng tiền", "Trạng Thái"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         List<HoaDon> list = hddao.selectAll();
         for (HoaDon hd : list) {
-            model.addRow(new Object[]{hd.getMaHD(),hd.getMaBan(),hd.getNgayDatBan(),hd.getThoiGianTaoHD(),hd.getNgayThanhToan(),
-                      hd.getThoiGianThanhToan(),hd.getMaNV(),hd.getTongTien(), hd.isTrangThai() ? "Chưa Thanh Toán":"Đã Thanh Toán"});
+            model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
+                hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Chưa Thanh Toán" : "Đã Thanh Toán"});
             tblHoaDon.setModel(model);
         }
-        
+
     }
-    public void fiillDoanhThuSPToTable(){ 
-        String[] columnNames = {"Mã SP","Tên SP","Loại SP","Đơn Giá","Số Lượng Bán","Tổng Tiền"};
-        DefaultTableModel model =new DefaultTableModel(columnNames, 0);
+
+    public void fiillDoanhThuSPToTable() {
+        String[] columnNames = {"Mã SP", "Tên SP", "Loại SP", "Đơn Giá", "Số Lượng Bán", "Tổng Tiền"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         List<Object[]> list = spdao.getDoanhThuSP();
         for (Object[] sp : list) {
 //            Object[] row = {sp.getMaSP(),sp.getTenSP(),sp.getLoaiSP(),sp.getGia(),sp.getSoLuong(),
@@ -341,16 +355,16 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             model.addRow(sp);
             tblDoanhThuSP.setModel(model);
         }
-        
+
     }
-    
+
     public void fillToThongKeTable() {
         String loaiSP = (String) cboTheoSanPham.getSelectedItem();
-        String[] columnNames = {"Mã SP","Tên SP","Loại SP","Đơn Giá","Số lượng","Tổng doanh thu","Ngày thanh toán"};
-        DefaultTableModel model =new DefaultTableModel(columnNames, 0);
-        if (loaiSP.equalsIgnoreCase("Tất cả")) {   
+        String[] columnNames = {"Mã SP", "Tên SP", "Loại SP", "Đơn Giá", "Số lượng", "Tổng doanh thu", "Ngày thanh toán"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        if (loaiSP.equalsIgnoreCase("Tất cả")) {
             try {
-                List<ThongKeBaoCao> list = thongKeDAO.selectAll();      
+                List<ThongKeBaoCao> list = thongKeDAO.selectAll();
                 for (ThongKeBaoCao thongKe : list) {
                     Object[] row = {thongKe.getMaSP(), thongKe.getTenSP(), thongKe.getLoai(),
                         thongKe.getDonGia(), thongKe.getSoLuongBan(), thongKe.getTongDoanhThu(), thongKe.getNgayThanhToan()};
@@ -364,19 +378,17 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             try {
                 List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(loaiSP);
                 for (ThongKeBaoCao thongKe : list) {
-                Object[] row = {thongKe.getMaSP(), thongKe.getTenSP(), thongKe.getLoai(),
-                    thongKe.getDonGia(), thongKe.getSoLuongBan(), thongKe.getTongDoanhThu(), thongKe.getNgayThanhToan()};
-                model.addRow(row);
-                tblThongKe.setModel(model);
+                    Object[] row = {thongKe.getMaSP(), thongKe.getTenSP(), thongKe.getLoai(),
+                        thongKe.getDonGia(), thongKe.getSoLuongBan(), thongKe.getTongDoanhThu(), thongKe.getNgayThanhToan()};
+                    model.addRow(row);
+                    tblThongKe.setModel(model);
                 }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-        }
-            
 
     }
-
 
     private void fillComboBoxTheoLoai() {
         List<SanPham> list = spdao.selectLayLoaiSP();
@@ -387,17 +399,37 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     }
 
     void xemThongKe() {
-        DefaultTableModel model = (DefaultTableModel) tblThongKe.getModel();
-        model.setRowCount(0);
+        DefaultTableModel modelThongKe = (DefaultTableModel) tblThongKe.getModel();
+        DefaultTableModel modelHoaDon = (DefaultTableModel) tblHoaDon.getModel();
+        DefaultTableModel modelSanPham = (DefaultTableModel) tblDoanhThuSP.getModel();
+
+        modelThongKe.setRowCount(0);
+        modelHoaDon.setRowCount(0);
+        modelSanPham.setRowCount(0);
+       
         try {
             Date tuNgay = XDate.toDate(txtTu.getText(), "yyyy-MM-dd");
             Date denNgay = XDate.toDate(txtDen.getText(), "yyyy-MM-dd");
-            List<Object[]> list = thongKeDAO.getThongKe(tuNgay,denNgay);
-            for (Object[] thongKe : list) {
-                model.addRow(new Object[]{thongKe[0],thongKe[1],thongKe[2],thongKe[3],thongKe[4],thongKe[5],thongKe[6],});
+
+            List<Object[]> listThongKe = thongKeDAO.getThongKe(tuNgay, denNgay);
+            for (Object[] thongKe : listThongKe) {
+                modelThongKe.addRow(new Object[]{thongKe[0], thongKe[1], thongKe[2], thongKe[3], thongKe[4], thongKe[5], thongKe[6]});
             }
+
+            HoaDonDAO hd = new HoaDonDAO();
+            List<Object[]> listHoaDon = hd.getHoaDon(tuNgay, denNgay);
+
+            for (Object[] hoaDon : listHoaDon) {
+               modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6],hoaDon[7],hoaDon[8]});
+
+            }
+
+//           List<Object[]> listSanPham = SanPhamDAO.getSanPham(tuNgay, denNgay);
+//            for (Object[] sanPham : listSanPham) {
+//                modelSanPham.addRow(new Object[]{sanPham[0], sanPham[1], sanPham[2], sanPham[3], sanPham[4], sanPham[5]});
+//            }
         } catch (Exception e) {
-              throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -415,60 +447,183 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     }
 
     public void xuatFile() {
-//        try {
-//            SXSSWorkbook workbook = new SXSSWorkbook();
-//            SXSSFSheet sheet = workbook.createSheet("Thống Kê");
-//            sheet.trackAllColumnsForAutoSizing();
-//            SXSSFRow row = null;
-//            Cell cell= null;
-//            
-//            row = sheet.createRow(3);
-//            cell= row.createCell(0,CellType.STRING);
-//            cell.setCellValue("Mã Sản Phẩm");
-//            
-//            cell= row.createCell(1,CellType.STRING);
-//            cell.setCellValue("Tên Sản Phẩm");
-//            
-//            cell= row.createCell(2,CellType.STRING);
-//            cell.setCellValue("Loại");
-//            
-//            cell= row.createCell(3,CellType.STRING);
-//            cell.setCellValue("Đơn Giá");
-//            
-//            cell= row.createCell(4,CellType.STRING);
-//            cell.setCellValue("Số Lượng Bán Ra");
-//            
-//            cell= row.createCell(5,CellType.STRING);
-//            cell.setCellValue("Tổng Doanh Thu");
-//            
-//            for (int i = 0; i < thongKe.size(); i++) {
-//                row=sheet.createRow(4+i);
-//                
-//                cell= row.createCell(0, CellType.STRING);
-//                cell.setCellValue(thongKe.get(i).getMaSP());
-//                
-//                cell= row.createCell(1, CellType.STRING);
-//                cell.setCellValue(thongKe.get(i).getTenSP());
-//                
-//                cell= row.createCell(2, CellType.STRING);
-//                cell.setCellValue(thongKe.get(i).getLoai());
-//                
-//                cell= row.createCell(3, CellType.NUMERIC);
-//                cell.setCellValue(thongKe.get(i).getDonGia());
-//                
-//                cell= row.createCell(4, CellType.NUMERIC);
-//                cell.setCellValue(thongKe.get(i).getSoLuongBan());
-//                
-//                cell= row.createCell(5, CellType.NUMERIC);
-//                cell.setCellValue(thongKe.get(i).getTongDoanhThu());
-//            }
-//            File f = new File(TOOL_TIP_TEXT_KEY);
-//       
-//        } catch (Exception e) {
-//        }
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheetThongKe = workbook.createSheet("Thống Kê");
+            XSSFSheet sheetHoaDon = workbook.createSheet("Hóa Đơn");
+            XSSFSheet sheetSanPham = workbook.createSheet("Sản Phẩm");
+
+            XSSFRow row = null;
+            Cell cell = null;
+            row = sheetThongKe.createRow(1);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Mã Sản Phẩm");
+
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue("Tên Sản Phẩm");
+
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue("Loại");
+
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue("Đơn Giá");
+
+            cell = row.createCell(4, CellType.STRING);
+            cell.setCellValue("Số Lượng Bán Ra");
+
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Tổng Doanh Thu");
+
+            //hoa don
+            row = sheetHoaDon.createRow(1);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Mã Hóa Đơn");
+
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue("Mã Bàn");
+
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue("Ngày Đặt Bàn");
+
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue("Thời Gian Tạo Hóa Đơn");
+
+            cell = row.createCell(4, CellType.STRING);
+            cell.setCellValue("Ngày thanh toán");
+
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Thời gian thanh toán");
+            cell = row.createCell(6, CellType.STRING);
+            cell.setCellValue("Mã Nhân Viên");
+            cell = row.createCell(7, CellType.STRING);
+            cell.setCellValue("Tổng Tiền");
+            cell = row.createCell(8, CellType.STRING);
+            cell.setCellValue("Trạng Thái");
+
+            // san pham
+            row = sheetSanPham.createRow(1);
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Mã Sản Phẩm");
+
+            cell = row.createCell(1, CellType.STRING);
+            cell.setCellValue("Tên Sản Phẩm");
+
+            cell = row.createCell(2, CellType.STRING);
+            cell.setCellValue("Loại");
+
+            cell = row.createCell(3, CellType.STRING);
+            cell.setCellValue("Đơn Giá");
+
+            cell = row.createCell(4, CellType.STRING);
+            cell.setCellValue("Số Lượng Bán");
+
+            cell = row.createCell(5, CellType.STRING);
+            cell.setCellValue("Tổng Tiền");
+            //
+            try {
+                int i = 0;
+                List<ThongKeBaoCao> list = thongKeDAO.selectAll();
+                for (ThongKeBaoCao thongKe : list) {
+                    row = sheetThongKe.createRow(2 + i);
+
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue(thongKe.getMaSP());
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue(thongKe.getTenSP());
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue(thongKe.getLoai());
+
+                    cell = row.createCell(3, CellType.NUMERIC);
+                    cell.setCellValue(thongKe.getDonGia());
+
+                    cell = row.createCell(4, CellType.NUMERIC);
+                    cell.setCellValue(thongKe.getSoLuongBan());
+
+                    cell = row.createCell(5, CellType.NUMERIC);
+                    cell.setCellValue(thongKe.getTongDoanhThu());
+                    i++;
+                }
+                int j = 0;
+                List<HoaDon> listHD = hddao.selectAll();
+                for (HoaDon hd : listHD) {
+                    row = sheetHoaDon.createRow(2 + j);
+
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue(hd.getMaHD());
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue(hd.getMaBan());
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue(hd.getNgayDatBan());
+
+                    cell = row.createCell(3, CellType.NUMERIC);
+                    cell.setCellValue(hd.getThoiGianTaoHD());
+
+                    cell = row.createCell(4, CellType.NUMERIC);
+                    cell.setCellValue(hd.getNgayThanhToan());
+
+                    cell = row.createCell(5, CellType.NUMERIC);
+                    cell.setCellValue(hd.getThoiGianThanhToan());
+                    cell = row.createCell(6, CellType.NUMERIC);
+                    cell.setCellValue(hd.getMaNV());
+                    cell = row.createCell(7, CellType.NUMERIC);
+                    cell.setCellValue(hd.getTongTien());
+                    cell = row.createCell(8, CellType.NUMERIC);
+                    cell.setCellValue(hd.isTrangThai() ? "Chưa thanh toán" : "Đã thanh toán");
+                    j++;
+                }
+                int f = 0;
+                List<Object[]> listSP = spdao.getDoanhThuSP();
+                for (Object[] sp : listSP) {
+                    row = sheetSanPham.createRow(2 + f);
+
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue(sp[0] + "");
+
+                    cell = row.createCell(1, CellType.STRING);
+                    cell.setCellValue(sp[1] + "");
+
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue(sp[2] + "");
+
+                    cell = row.createCell(3, CellType.NUMERIC);
+                    cell.setCellValue(sp[3] + "");
+
+                    cell = row.createCell(4, CellType.NUMERIC);
+                    cell.setCellValue(sp[4] + "");
+
+                    cell = row.createCell(5, CellType.NUMERIC);
+                    cell.setCellValue(sp[5] + "");
+                    f++;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            File f = new File("C:\\Users\\ADMIN\\Documents\\GitHub\\QuanLyCaFe\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
+            try {
+                FileOutputStream fis = new FileOutputStream(f);
+                workbook.write(fis);
+                fis.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(this, "Xuất file thành công");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "lỗi mở file");
+        }
     }
 
     private void focusInput() {
+
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtTu.addFocusListener(new FocusListener() {
@@ -512,6 +667,5 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         txtTu.setBorder(border);
         txtDen.setBorder(border);
     }
-    
 
 }
