@@ -222,6 +222,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnTimKiem.setBackground(new java.awt.Color(191, 158, 117));
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/search.png"))); // NOI18N
         btnTimKiem.setText("Tìm Kiếm");
         btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,6 +233,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnThem.setBackground(new java.awt.Color(191, 158, 117));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnThem.setForeground(new java.awt.Color(255, 255, 255));
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/add.png"))); // NOI18N
         btnThem.setText("Thêm");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,6 +244,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnSua.setBackground(new java.awt.Color(191, 158, 117));
         btnSua.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnSua.setForeground(new java.awt.Color(255, 255, 255));
+        btnSua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/update.png"))); // NOI18N
         btnSua.setText("Sửa");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,6 +255,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnXoa.setBackground(new java.awt.Color(191, 158, 117));
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/delete.png"))); // NOI18N
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -262,6 +266,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnLamMoi.setBackground(new java.awt.Color(191, 158, 117));
         btnLamMoi.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnLamMoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/lammoi.png"))); // NOI18N
         btnLamMoi.setText("Làm Mới");
         btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,6 +293,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnLoc.setBackground(new java.awt.Color(191, 158, 117));
         btnLoc.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnLoc.setForeground(new java.awt.Color(255, 255, 255));
+        btnLoc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/product-release.png"))); // NOI18N
         btnLoc.setText("Lọc");
         btnLoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -114,6 +114,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         btnDangNhap.setBackground(new java.awt.Color(191, 158, 117));
         btnDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnDangNhap.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/dangnhap.png"))); // NOI18N
         btnDangNhap.setText("Đăng Nhập");
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,6 +125,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         btnThoat.setBackground(new java.awt.Color(191, 158, 117));
         btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnThoat.setForeground(new java.awt.Color(255, 255, 255));
+        btnThoat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/thoat.png"))); // NOI18N
         btnThoat.setText("Thoát");
         btnThoat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,18 +162,19 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtMatKhau)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(chkLuuMatKhau)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                                    .addComponent(lblQuenMatKhau)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMatKhau)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(chkLuuMatKhau)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblQuenMatKhau)))
-                        .addGap(0, 32, Short.MAX_VALUE))))
+                                .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 20, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,8 +196,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                             .addComponent(lblQuenMatKhau))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnDangNhap)
+                            .addComponent(btnThoat)))
                     .addComponent(lbLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(53, Short.MAX_VALUE))
         );
@@ -223,6 +226,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         btnKetNoi.setBackground(new java.awt.Color(191, 158, 117));
         btnKetNoi.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnKetNoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnKetNoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/ketnoi.png"))); // NOI18N
         btnKetNoi.setText("Kết Nối");
         btnKetNoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,20 +240,20 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         pnKetNoi.setLayout(pnKetNoiLayout);
         pnKetNoiLayout.setHorizontalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnKetNoiLayout.createSequentialGroup()
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
                         .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnKetNoi, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(93, 93, 93))
-            .addComponent(jSeparator1)
         );
         pnKetNoiLayout.setVerticalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,8 +271,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addComponent(btnKetNoi)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
