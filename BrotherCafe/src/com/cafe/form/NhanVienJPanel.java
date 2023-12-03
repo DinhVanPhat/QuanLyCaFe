@@ -88,6 +88,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btnXoa.setBackground(new java.awt.Color(191, 158, 117));
         btnXoa.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/delete.png"))); // NOI18N
         btnXoa.setText("Xóa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +105,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btnTimKiem.setBackground(new java.awt.Color(191, 158, 117));
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/search.png"))); // NOI18N
         btnTimKiem.setText("Tìm Kiếm");
         btnTimKiem.setBorder(null);
         btnTimKiem.setPreferredSize(new java.awt.Dimension(180, 40));
@@ -138,6 +140,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btnThem.setBackground(new java.awt.Color(191, 158, 117));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnThem.setForeground(new java.awt.Color(255, 255, 255));
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/add.png"))); // NOI18N
         btnThem.setText("Thêm");
         btnThem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,6 +151,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btnSua.setBackground(new java.awt.Color(191, 158, 117));
         btnSua.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnSua.setForeground(new java.awt.Color(255, 255, 255));
+        btnSua.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/update.png"))); // NOI18N
         btnSua.setText("Sửa");
         btnSua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,6 +309,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jButton1.setBackground(new java.awt.Color(191, 158, 117));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/lammoi.png"))); // NOI18N
         jButton1.setText("Làm mới");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,9 +361,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(33, 33, 33))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(9, 9, 9)

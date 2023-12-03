@@ -56,6 +56,7 @@ public class jdbcHelper {
             throw new RuntimeException(e);
         }
     }
+    
     public static PreparedStatement getStmt(String sql,Object...args) throws SQLException{
         docthongTin();
         connectionUrl = "jdbc:sqlserver://"+host+":1433;"
