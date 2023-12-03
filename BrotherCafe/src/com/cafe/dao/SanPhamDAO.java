@@ -9,6 +9,7 @@ import com.cafe.utils.jdbcHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
+import java.util.Date;
 
 /**
  *
@@ -107,7 +108,7 @@ public class SanPhamDAO {
         return list.get(0); 
     }
      public List<SanPham> selectLayLoaiSP() {
-         String sql = "Select distinct loaiSP from SanPham";
+         String sql = "Select distinct TenSP from SanPham";
         return this.selectBySqlLoaiSP(sql);
     }
      protected List<SanPham> selectBySqlLoaiSP(String sql, Object... args) {
@@ -116,7 +117,7 @@ public class SanPhamDAO {
             ResultSet rs = jdbcHelper.query(sql, args);
             while (rs.next()) {
                 SanPham entity = new SanPham();
-                entity.setLoaiSP(rs.getString("LoaiSP"));
+                entity.setTenSP(rs.getString("TenSP"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -148,5 +149,11 @@ public class SanPhamDAO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+        public List<Object[]> getSanPham(Date tuNgay, Date DenNgay) {
+        String sql = "{CALL Proc_SanPham(?,?)}";
+        String[] cols= {"MaSP", "TenSP", "LoaiSP", "Gia","SoLuong", "TongTien"};
+        return getListOfArray(sql, cols, tuNgay,DenNgay);
+        
     }
 }

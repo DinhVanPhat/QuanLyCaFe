@@ -18,11 +18,12 @@ import java.util.List;
  */
 public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
     
-    String SELECT_SQL = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia*SoLuong) AS TongDoanhThu, NgayThanhToan\n" +
-                            "FROM ChiTietHoaDon A\n" +
-                            "INNER JOIN SanPham B ON B.MaSP = A.MaSP\n"+ 
-                            "INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
-                            "GROUP BY A.MaSP, TenSP, LoaiSP, Gia, NgayThanhToan";
+    String SELECT_SQL = "SELECT  NgayThanhToan	AS NgayThanhToan,TenSP, SUM(SoLuong) AS SoLuong , SUM(Gia*SoLuong) AS TongTien\n" +
+                        "FROM ChiTietHoaDon A\n" +
+                        "INNER JOIN SanPham B ON B.MaSP = A.MaSP\n" +
+                        "INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
+                        "GROUP BY  NgayThanhToan,TenSP\n" +
+                        "ORDER BY NgayThanhToan ASC";
     
 
     @Override
@@ -57,13 +58,10 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
             ResultSet rs = jdbcHelper.query(sql, args);
             while (rs.next()) {
                 ThongKeBaoCao b = new ThongKeBaoCao();
-                b.setMaSP(rs.getString("MaSP"));
-                b.setTenSP(rs.getString("TenSP"));
-                b.setLoai(rs.getString("LoaiSP"));
-                b.setDonGia(rs.getDouble("Gia"));
-                b.setSoLuongBan(rs.getInt("SoLuongBanRa"));
-                b.setTongDoanhThu(rs.getDouble("TongDoanhThu"));
                 b.setNgayThanhToan(rs.getDate("NgayThanhToan"));
+                b.setTenSP(rs.getString("TenSP"));
+                b.setSoLuongBan(rs.getInt("SoLuong"));
+                b.setTongTien(rs.getDouble("TongTien"));
                 list.add(b);
             }
             rs.getStatement().getConnection().close();
@@ -92,17 +90,18 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
     }
     public List<Object[]> getThongKe(Date tuNgay, Date DenNgay) {
         String sql = "{CALL Proc_ThongKe(?,?)}";
-        String[] cols= {"MaSP", "TenSP", "LoaiSP", "Gia","SoLuong", "TongDoanhThu", "NgayThanhToan"};
+        String[] cols= {"NgayThanhToan", "TenSP" ,"SoLuong", "TongTien" };
         return getListOfArray(sql, cols, tuNgay,DenNgay);
         
     }
     public List<ThongKeBaoCao> selectByLoaiSP(String keyWord) {
-         String sql = "SELECT A.MaSP, TenSP, LoaiSP, Gia, SUM(SoLuong) AS SoLuongBanRa , SUM(Gia*SoLuong) AS TongDoanhThu, NgayThanhToan\n" +
-                            "FROM ChiTietHoaDon A\n" +
-                            "INNER JOIN SanPham B ON B.MaSP = A.MaSP\n"+ 
-                            "INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
-                            "Where LoaiSP LiKE ?\n"+
-                            "GROUP BY A.MaSP, TenSP, LoaiSP, Gia, NgayThanhToan";
+         String sql = "SELECT NgayThanhToan AS NgayThanhToan,TenSP, SUM(SoLuong) AS SoLuong , SUM(Gia*SoLuong) AS TongTien\n" +
+"		FROM ChiTietHoaDon A\n" +
+"			INNER JOIN SanPham B ON B.MaSP = A.MaSP\n" +
+"			INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
+"		WHERE TenSP LIKE ?\n" +
+"		GROUP BY  NgayThanhToan,TenSP\n" +
+"		ORDER BY NgayThanhToan ASC";
         return this.selectBySql(sql,keyWord);
         
     }

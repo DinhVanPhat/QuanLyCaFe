@@ -12,12 +12,10 @@ import java.util.Date;
  */
 public class ThongKeBaoCao {
 
-    private String maSP;
+    
     private String tenSP;
-    private String loai;
-    private Double donGia;
     private int soLuongBan;
-    private Double tongDoanhThu;
+    private Double tongTien;
     private Date tuNgay;
     private Date denNgay;
     private Date NgayThanhToan;
@@ -26,25 +24,14 @@ public class ThongKeBaoCao {
     public ThongKeBaoCao() {
     }
 
-    public ThongKeBaoCao(String maSP, String tenSP, String loai, Double donGia, int soLuongBan, Double tongDoanhThu, Date tuNgay, Date denNgay, Date NgayThanhToan, String theoSanPham) {
-        this.maSP = maSP;
+    public ThongKeBaoCao(String tenSP, int soLuongBan, Double tongTien, Date tuNgay, Date denNgay, Date NgayThanhToan, String theoSanPham) {
         this.tenSP = tenSP;
-        this.loai = loai;
-        this.donGia = donGia;
         this.soLuongBan = soLuongBan;
-        this.tongDoanhThu = tongDoanhThu;
+        this.tongTien = tongTien;
         this.tuNgay = tuNgay;
         this.denNgay = denNgay;
         this.NgayThanhToan = NgayThanhToan;
         this.theoSanPham = theoSanPham;
-    }
-
-    public String getMaSP() {
-        return maSP;
-    }
-
-    public void setMaSP(String maSP) {
-        this.maSP = maSP;
     }
 
     public String getTenSP() {
@@ -55,22 +42,6 @@ public class ThongKeBaoCao {
         this.tenSP = tenSP;
     }
 
-    public String getLoai() {
-        return loai;
-    }
-
-    public void setLoai(String loai) {
-        this.loai = loai;
-    }
-
-    public Double getDonGia() {
-        return donGia;
-    }
-
-    public void setDonGia(Double donGia) {
-        this.donGia = donGia;
-    }
-
     public int getSoLuongBan() {
         return soLuongBan;
     }
@@ -79,12 +50,12 @@ public class ThongKeBaoCao {
         this.soLuongBan = soLuongBan;
     }
 
-    public Double getTongDoanhThu() {
-        return tongDoanhThu;
+    public Double getTongTien() {
+        return tongTien;
     }
 
-    public void setTongDoanhThu(Double tongDoanhThu) {
-        this.tongDoanhThu = tongDoanhThu;
+    public void setTongTien(Double tongTien) {
+        this.tongTien = tongTien;
     }
 
     public Date getTuNgay() {

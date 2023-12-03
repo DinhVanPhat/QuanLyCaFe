@@ -74,7 +74,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         jLabel52 = new javax.swing.JLabel();
         txtDen = new javax.swing.JTextField();
         jLabel56 = new javax.swing.JLabel();
-        cboTheoSanPham = new javax.swing.JComboBox<String>();
+        cboTheoSanPham = new javax.swing.JComboBox<>();
         jLabel58 = new javax.swing.JLabel();
         btnXuatFile = new javax.swing.JButton();
         btnXemThongKe = new javax.swing.JButton();
@@ -202,61 +202,56 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(128, 128, 128)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(66, 66, 66)
-                                .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
                                 .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTu, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDen, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnXemThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(289, 289, 289))
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(txtTu, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(35, 35, 35)
+                                        .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnXemThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel7Layout.createSequentialGroup()
+                                        .addComponent(txtDen, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(63, 63, 63)
+                                        .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(34, 34, 34)
+                                        .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 101, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jTabbedPane1)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel33)
-                        .addGap(42, 42, 42)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel52)
-                            .addComponent(txtTu, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel56)
-                            .addComponent(txtDen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addComponent(jLabel58)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel51))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(btnXemThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24)
-                        .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jLabel33)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel52)
+                    .addComponent(txtTu, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel56)
+                    .addComponent(txtDen, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel58)
+                    .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnXemThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(67, 67, 67)
+                .addComponent(jLabel51)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE))
         );
@@ -359,15 +354,14 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     }
 
     public void fillToThongKeTable() {
-        String loaiSP = (String) cboTheoSanPham.getSelectedItem();
-        String[] columnNames = {"Mã SP", "Tên SP", "Loại SP", "Đơn Giá", "Số lượng", "Tổng doanh thu", "Ngày thanh toán"};
+        String tenSP = (String) cboTheoSanPham.getSelectedItem();
+        String[] columnNames = { "Ngày thanh toán", "Tên SP", "Số lượng", "Tổng tiền",};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        if (loaiSP.equalsIgnoreCase("Tất cả")) {
+        if (tenSP.equalsIgnoreCase("Tất cả")) {
             try {
                 List<ThongKeBaoCao> list = thongKeDAO.selectAll();
                 for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getMaSP(), thongKe.getTenSP(), thongKe.getLoai(),
-                        thongKe.getDonGia(), thongKe.getSoLuongBan(), thongKe.getTongDoanhThu(), thongKe.getNgayThanhToan()};
+                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(),thongKe.getSoLuongBan(), thongKe.getTongTien()};
                     model.addRow(row);
                     tblThongKe.setModel(model);
                 }
@@ -376,10 +370,9 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             }
         } else {
             try {
-                List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(loaiSP);
+                List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(tenSP);
                 for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getMaSP(), thongKe.getTenSP(), thongKe.getLoai(),
-                        thongKe.getDonGia(), thongKe.getSoLuongBan(), thongKe.getTongDoanhThu(), thongKe.getNgayThanhToan()};
+                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(),thongKe.getSoLuongBan(), thongKe.getTongTien()};
                     model.addRow(row);
                     tblThongKe.setModel(model);
                 }
@@ -394,7 +387,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         List<SanPham> list = spdao.selectLayLoaiSP();
         cboTheoSanPham.addItem("Tất cả");
         for (SanPham sp : list) {
-            cboTheoSanPham.addItem(sp.getLoaiSP());
+            cboTheoSanPham.addItem(sp.getTenSP());
         }
     }
 
@@ -413,7 +406,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
             List<Object[]> listThongKe = thongKeDAO.getThongKe(tuNgay, denNgay);
             for (Object[] thongKe : listThongKe) {
-                modelThongKe.addRow(new Object[]{thongKe[0], thongKe[1], thongKe[2], thongKe[3], thongKe[4], thongKe[5], thongKe[6]});
+                modelThongKe.addRow(new Object[]{thongKe[0], thongKe[1], thongKe[2], thongKe[3]});
             }
 
             HoaDonDAO hd = new HoaDonDAO();
@@ -424,10 +417,10 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
             }
 
-//           List<Object[]> listSanPham = SanPhamDAO.getSanPham(tuNgay, denNgay);
-//            for (Object[] sanPham : listSanPham) {
-//                modelSanPham.addRow(new Object[]{sanPham[0], sanPham[1], sanPham[2], sanPham[3], sanPham[4], sanPham[5]});
-//            }
+           List<Object[]> listSanPham = SanPhamDAO.getSanPham(tuNgay, denNgay);
+            for (Object[] sanPham : listSanPham) {
+                modelSanPham.addRow(new Object[]{sanPham[0], sanPham[1], sanPham[2], sanPham[3]});
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -456,23 +449,18 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             XSSFRow row = null;
             Cell cell = null;
             row = sheetThongKe.createRow(1);
-            cell = row.createCell(0, CellType.STRING);
-            cell.setCellValue("Mã Sản Phẩm");
 
+            cell = row.createCell(0, CellType.STRING);
+            cell.setCellValue("Ngày Thanh Toán");
+            
             cell = row.createCell(1, CellType.STRING);
             cell.setCellValue("Tên Sản Phẩm");
-
-            cell = row.createCell(2, CellType.STRING);
-            cell.setCellValue("Loại");
-
-            cell = row.createCell(3, CellType.STRING);
-            cell.setCellValue("Đơn Giá");
 
             cell = row.createCell(4, CellType.STRING);
             cell.setCellValue("Số Lượng Bán Ra");
 
             cell = row.createCell(5, CellType.STRING);
-            cell.setCellValue("Tổng Doanh Thu");
+            cell.setCellValue("Tổng Tiền");
 
             //hoa don
             row = sheetHoaDon.createRow(1);
@@ -527,22 +515,16 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                     row = sheetThongKe.createRow(2 + i);
 
                     cell = row.createCell(0, CellType.STRING);
-                    cell.setCellValue(thongKe.getMaSP());
+                    cell.setCellValue(thongKe.getNgayThanhToan());
 
                     cell = row.createCell(1, CellType.STRING);
                     cell.setCellValue(thongKe.getTenSP());
 
-                    cell = row.createCell(2, CellType.STRING);
-                    cell.setCellValue(thongKe.getLoai());
-
-                    cell = row.createCell(3, CellType.NUMERIC);
-                    cell.setCellValue(thongKe.getDonGia());
-
-                    cell = row.createCell(4, CellType.NUMERIC);
+                    cell = row.createCell(2, CellType.NUMERIC);
                     cell.setCellValue(thongKe.getSoLuongBan());
 
-                    cell = row.createCell(5, CellType.NUMERIC);
-                    cell.setCellValue(thongKe.getTongDoanhThu());
+                    cell = row.createCell(3, CellType.NUMERIC);
+                    cell.setCellValue(thongKe.getTongTien());
                     i++;
                 }
                 int j = 0;
