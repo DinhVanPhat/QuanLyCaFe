@@ -5,13 +5,16 @@
 package com.cafe.form;
 
 import com.cafe.dao.KhuVucDAO;
+import com.cafe.model.KhachHang;
 import com.cafe.model.KhuVuc;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -200,7 +203,15 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             new String [] {
                 "Mã khu vực", "Tên khu vực", "Mô tả"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblKhuVuc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblKhuVucMouseClicked(evt);
@@ -334,7 +345,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenKV;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
-    KhuVucDAO nvdao = new KhuVucDAO();
+    KhuVucDAO kvdao = new KhuVucDAO();
     int row = -1;
 
     private void init() {
@@ -348,12 +359,12 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     void insert() {
         if (checkValidateForm()) {
-            if (!nvdao.chechTrungMa(txtMaKV.getText())) {
+            if (!kvdao.chechTrungMa(txtMaKV.getText())) {
                 MsgBox.alert(this, "Mã khu vực đã tồn tại", JOptionPane.WARNING_MESSAGE);
             } else {
                 KhuVuc nv = getForm();
                 try {
-                    nvdao.insert(nv);
+                    kvdao.insert(nv);
                     this.fillTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
@@ -370,7 +381,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         if (checkValidateForm()) {
             KhuVuc kh = getForm();
             try {
-                nvdao.update(kh);
+                kvdao.update(kh);
                 this.fillTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
@@ -382,13 +393,12 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }
 
     void delete() {
-//        if (!Auth.isManager()) {
-//            MsgBox.alert(this, "Bạn không có quyền xóa khu vực!",JOptionPane.WARNING_MESSAGE);
-//        } else 
-            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
+        if (!Auth.isManager()) {
+            MsgBox.alert(this, "Bạn không có quyền xóa khu vực!",JOptionPane.WARNING_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
             String maKH = txtMaKV.getText();
             try {
-                nvdao.delete(maKH);
+                kvdao.delete(maKH);
                 this.fillTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
@@ -410,7 +420,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     void edit() {
         String manv = (String) tblKhuVuc.getValueAt(this.row, 0);
-        KhuVuc nv = nvdao.selectById(manv);
+        KhuVuc nv = kvdao.selectById(manv);
         this.setForm(nv);
         this.updateStatus();
     }
@@ -420,7 +430,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = nvdao.selectByKeyWord(keyWord);
+            List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
             for (KhuVuc nv : list) {
                 Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
                 model.addRow(row);
@@ -430,7 +440,28 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
+    
+     private String checkTrungMaKV(String id) {
+        List<KhuVuc> list = kvdao.selectAll();
+        Set<String> set = new HashSet<>();
 
+        for (KhuVuc kv : list) {
+            set.add(kv.getMaKV());
+        }
+
+        int countTrungMa = 1;
+        
+        String ma = id+"0"+countTrungMa;
+        while (set.contains(ma)) {
+            countTrungMa++;
+            if(countTrungMa < 10){
+                ma = id +"0"+ countTrungMa;
+            } else {  
+                ma = id + countTrungMa;
+            }
+        }
+        return ma;
+    }
     void setForm(KhuVuc kv) {
         txtMaKV.setText(kv.getMaKV());
         txtTenKV.setText(kv.getTenKV());
@@ -439,7 +470,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     KhuVuc getForm() {
         KhuVuc nv = new KhuVuc();
-        nv.setMaKV(txtMaKV.getText());
+        nv.setMaKV(checkTrungMaKV("KV"));
         nv.setTenKV(txtTenKV.getText());
         nv.setMoTa(txtMoTa.getText());
         return nv;
@@ -448,7 +479,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     void updateStatus() {
         boolean edit = (this.row >= 0);
         //Trạng thái form
-        txtMaKV.setEditable(!edit);
+        txtMaKV.setEditable(false);
         txtTenKV.setEditable(!edit);
         txtMoTa.setEditable(!edit);
        
@@ -460,15 +491,6 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }
 
  boolean checkValidateForm() {
-        if (txtMaKV.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập khu vực!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternMaNV = "^KV\\d+";
-        if (!txtMaKV.getText().matches(patternMaNV)) {
-            MsgBox.alert(this, "Sai mã nhân viên!\n Ví dụ:  KV*** . \n* là các số",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
         if (txtTenKV.getText().isEmpty()) {
             MsgBox.alert(this, "Vui lòng tên khu vực!",JOptionPane.WARNING_MESSAGE);
             return false;
@@ -486,19 +508,6 @@ public class KhuVucJPanel extends javax.swing.JPanel {
      private void focusInput(){
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
-        txtMaKV.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                txtMaKV.setBackground(new Color(227, 188, 140));
-                txtMaKV.setBorder(borderNhanVao);  
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                txtMaKV.setBackground(new Color(255, 255, 255));
-                txtMaKV.setBorder(borderKhongNhan);
-            }
-        });
         txtTenKV.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -543,9 +552,8 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     private void setBorderInput(){
         Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtMaKV.setBorder(border);
-        txtTenKV.setBorder(border);
         txtMoTa.setBorder(border);
- 
+        txtTenKV.setBorder(border);
         txtTimKiem.setBorder(border);
         
     }

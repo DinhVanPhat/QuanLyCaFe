@@ -5,13 +5,16 @@
 package com.cafe.form;
 
 import com.cafe.dao.KhachHangDAO;
+import com.cafe.model.Ban;
 import com.cafe.model.KhachHang;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -261,7 +264,15 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             new String [] {
                 "Mã Khách Hàng", "Tên Khách Hàng", "Số Điện Thoại", "Email", "Giới Tính", "Địa chỉ"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblNhanVienMouseClicked(evt);
@@ -346,7 +357,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        if(row != -1){
+        if (row != -1) {
             row = -1;
             updateStatus();
             btnThem.setText("Lưu");
@@ -356,9 +367,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         String src = evt.getActionCommand();
-        if(src.equalsIgnoreCase("Thêm")){
+        if (src.equalsIgnoreCase("Thêm")) {
             insert();
-        } else if(src.equalsIgnoreCase("Lưu")){
+        } else if (src.equalsIgnoreCase("Lưu")) {
             update();
         }
     }//GEN-LAST:event_btnThemActionPerformed
@@ -403,8 +414,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
-    KhachHangDAO nvdao = new KhachHangDAO();
+    KhachHangDAO khdao = new KhachHangDAO();
     int row = -1;
+
     private void init() {
         this.fillTable();
         this.row = -1;
@@ -412,17 +424,18 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         focusInput();
         setBorderInput();
     }
-     void insert() {
+
+    void insert() {
         if (checkValidateForm()) {
-            if (!nvdao.chechTrungMa(txtMaKH.getText())) {
-                MsgBox.alert(this, "Mã khách hàng đã tồn tại",JOptionPane.WARNING_MESSAGE);
+            if (!khdao.chechTrungMa(txtMaKH.getText())) {
+                MsgBox.alert(this, "Mã khách hàng đã tồn tại", JOptionPane.WARNING_MESSAGE);
             } else {
                 KhachHang nv = getForm();
                 try {
-                    nvdao.insert(nv);
+                    khdao.insert(nv);
                     this.fillTable();
                     this.clearForm();
-                    MsgBox.alert(this, "Thêm mới thành công!",JOptionPane.INFORMATION_MESSAGE);
+                    MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
                     //throw new RuntimeException(e);
                     MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);
@@ -436,9 +449,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         if (checkValidateForm()) {
             KhachHang kh = getForm();
             try {
-                nvdao.update(kh);
+                khdao.update(kh);
                 this.fillTable();
-                MsgBox.alert(this, "Cập nhật thành công!",JOptionPane.INFORMATION_MESSAGE);
+                MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
                 //throw new RuntimeException(e);
@@ -448,19 +461,18 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }
 
     void delete() {
-//        if (!Auth.isManager()) {
-//            MsgBox.alert(this, "Bạn không có quyền xóa khách hàng!",JOptionPane.WARNING_MESSAGE);
-//        } else 
-            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khách hàng này?")) {
+        if (!Auth.isManager()) {
+            MsgBox.alert(this, "Bạn không có quyền xóa khách hàng!", JOptionPane.WARNING_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khách hàng này?")) {
             String maKH = txtMaKH.getText();
             try {
-                nvdao.delete(maKH);
+                khdao.delete(maKH);
                 this.fillTable();
                 this.clearForm();
-                MsgBox.alert(this, "Xóa thành công",JOptionPane.INFORMATION_MESSAGE);
+                MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 //throw new RuntimeException(e);
-                MsgBox.alert(this, "Xóa thất bại",JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Xóa thất bại", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -471,23 +483,23 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         this.row = -1;
         this.updateStatus();
         tblNhanVien.clearSelection();
- 
+        btgGioiTinh.clearSelection();
+
     }
 
     void edit() {
         String manv = (String) tblNhanVien.getValueAt(this.row, 0);
-        KhachHang nv = nvdao.selectById(manv);
+        KhachHang nv = khdao.selectById(manv);
         this.setForm(nv);
         this.updateStatus();
     }
-
 
     void fillTable() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhachHang> list = nvdao.selectByKeyWord(keyWord);
+            List<KhachHang> list = khdao.selectByKeyWord(keyWord);
             for (KhachHang nv : list) {
                 Object[] row = {nv.getMaKH(), nv.getTenKH(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi()};
                 model.addRow(row);
@@ -497,6 +509,29 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
+
+    private String checkTrungMaKH(String id) {
+        List<KhachHang> list = khdao.selectAll();
+        Set<String> set = new HashSet<>();
+
+        for (KhachHang kh : list) {
+            set.add(kh.getMaKH());
+        }
+
+        int countTrungMa = 1;
+
+        String ma = id + "0" + countTrungMa;
+        while (set.contains(ma)) {
+            countTrungMa++;
+            if (countTrungMa < 10) {
+                ma = id + "0" + countTrungMa;
+            } else {
+                ma = id + countTrungMa;
+            }
+        }
+        return ma;
+    }
+
     void setForm(KhachHang nv) {
         txtMaKH.setText(nv.getMaKH());
         txtHoVaTen.setText(nv.getTenKH());
@@ -509,97 +544,81 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     KhachHang getForm() {
         KhachHang nv = new KhachHang();
-        nv.setMaKH(txtMaKH.getText());
+        nv.setMaKH(checkTrungMaKH("KH"));
         nv.setTenKH(txtHoVaTen.getText());
         nv.setSDT(txtSDT.getText());
         nv.setGioiTinh(!rdoNam.isSelected());
         nv.setEmail(txtEmail.getText());
         nv.setDiaChi(txtDiaChi.getText());
-        
+
         return nv;
     }
+
     void updateStatus() {
         boolean edit = (this.row >= 0);
         //Trạng thái form
-        txtMaKH.setEditable(!edit);
+        txtMaKH.setEditable(false);
         txtHoVaTen.setEditable(!edit);
         txtEmail.setEditable(!edit);
         txtSDT.setEditable(!edit);
         rdoNam.setEnabled(!edit);
         rdoNu.setEnabled(!edit);
-        
+
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
         btnThem.setText("Thêm");
 
     }
+
     boolean checkValidateForm() {
-        if(txtMaKH.getText().isEmpty()){
-            MsgBox.alert(this, "Vui lòng nhập Khách Hàng!",JOptionPane.WARNING_MESSAGE);
+        if (txtHoVaTen.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập họ và tên!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        String patternMaNV = "^KH\\d+";
-        if (!txtMaKH.getText().matches(patternMaNV)) {
-            MsgBox.alert(this, "Sai mã khách hàng!\n Ví dụ:  KH*** . \n* là các số",JOptionPane.WARNING_MESSAGE);
+        if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
+            MsgBox.alert(this, "Vui lòng chọn giới tính!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        if(txtHoVaTen.getText().isEmpty()){
-            MsgBox.alert(this, "Vui lòng nhập họ và tên!",JOptionPane.WARNING_MESSAGE);
-            return false;
+        if (!txtSDT.getText().isEmpty()) {
+            try {
+                int sdt = Integer.parseInt(txtSDT.getText());
+            } catch (Exception e) {
+                MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            String patternSDT = "^(0[3-9])\\d{8}$";
+            if (!txtSDT.getText().matches(patternSDT)) {
+                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         }
-        if(!rdoNam.isSelected()&& !rdoNu.isSelected()){
-            MsgBox.alert(this, "Vui lòng chọn giới tính!",JOptionPane.WARNING_MESSAGE);
-            return false;
+        if (!txtEmail.getText().isEmpty()) {
+            String patternEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]{2,}){1,2}$";
+            if (!txtEmail.getText().matches(patternEmail)) {
+                MsgBox.alert(this, "Email! không hợp lệ", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         }
-      
-        if(txtSDT.getText().isEmpty()){
-            MsgBox.alert(this, "Vui lòng nhập số điện thoại!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        try {
-            int sdt = Integer.getInteger(txtSDT.getText());
-        } catch (Exception e) {
-            MsgBox.alert(this, "Số điện thoại phải là số!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternSDT = "^(0[3-9])\\d{8}$";
-        if (!txtSDT.getText().matches(patternSDT)) {
-            MsgBox.alert(this, "Số điện thoại phải là 10 số!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]{2,}){1,2}$";
-        if (!txtEmail.getText().matches(patternEmail)) {
-            MsgBox.alert(this, "Email! không hợp lệ",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        if(txtEmail.getText().isEmpty()){
-            MsgBox.alert(this, "Vui lòng nhập email!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        
-        if(txtDiaChi.getText().isEmpty()){
-            MsgBox.alert(this, "Vui lòng nhập địa chỉ!",JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-    
+
         return true;
     }
-     private void timKiem() {
+
+    private void timKiem() {
         this.fillTable();
         this.clearForm();
         this.row = -1;
         updateStatus();
     }
-     private void focusInput(){
+
+    private void focusInput() {
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtHoVaTen.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtHoVaTen.setBackground(new Color(227, 188, 140));
-                txtHoVaTen.setBorder(borderNhanVao);  
+                txtHoVaTen.setBorder(borderNhanVao);
             }
 
             @Override
@@ -608,24 +627,11 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 txtHoVaTen.setBorder(borderKhongNhan);
             }
         });
-        txtMaKH.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                txtMaKH.setBackground(new Color(227, 188, 140));
-                txtMaKH.setBorder(borderNhanVao);  
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                txtMaKH.setBackground(new Color(255, 255, 255));
-                txtMaKH.setBorder(borderKhongNhan);
-            }
-        });
         txtEmail.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtEmail.setBackground(new Color(227, 188, 140));
-                txtEmail.setBorder(borderNhanVao);  
+                txtEmail.setBorder(borderNhanVao);
             }
 
             @Override
@@ -638,7 +644,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtDiaChi.setBackground(new Color(227, 188, 140));
-                txtDiaChi.setBorder(borderNhanVao);  
+                txtDiaChi.setBorder(borderNhanVao);
             }
 
             @Override
@@ -651,7 +657,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtSDT.setBackground(new Color(227, 188, 140));
-                txtSDT.setBorder(borderNhanVao);  
+                txtSDT.setBorder(borderNhanVao);
             }
 
             @Override
@@ -664,7 +670,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTimKiem.setBackground(new Color(227, 188, 140));
-                txtTimKiem.setBorder(borderNhanVao);  
+                txtTimKiem.setBorder(borderNhanVao);
             }
 
             @Override
@@ -674,17 +680,15 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             }
         });
     }
-    
-    private void setBorderInput(){
+
+    private void setBorderInput() {
         Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtHoVaTen.setBorder(border);
+        txtMaKH.setBorder(border);
         txtEmail.setBorder(border);
         txtDiaChi.setBorder(border);
-        txtMaKH.setBorder(border);
-        
         txtSDT.setBorder(border);
         txtTimKiem.setBorder(border);
-        
+
     }
 }
-

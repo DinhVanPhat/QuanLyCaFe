@@ -407,7 +407,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
     private void init() {
         checkLMK = false;
-        fileName = "C:\\Users\\ADMIN\\Documents\\GitHub\\QuanLyCaFe\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
         this.docLuuMK();
         this.docthongTin();
         pnKetNoi.setVisible(false);

@@ -175,7 +175,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -499,8 +499,10 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         fillBan(b.getKhuVuc());
         if (b.getTrangThai().equals("Đã đặt")) {
             btnDatBan.setText("Hủy đặt bàn");
+            mnDatBan.setText("Hủy đặt bàn");
         } else {
             btnDatBan.setText("Đặt bàn");
+            mnDatBan.setText("Đặt bàn");
         }
         Point point = lblKhuVucBan.getLocation();
         xBan = point.x;
@@ -645,6 +647,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
     private void init() {
         giaoDienChinh();
+        datLaiBanKhiQuaGio();
 
     }
 
@@ -1128,22 +1131,28 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void thanhToan() {
-        if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
-            thoiGianTT = 1;
-            checkFillDuoiTable = false;
-            HoaDon hd = getFormHD();
-            hddao.update(hd);
-            updateBanKhiOrderVaTT();
-            setlblrong = 1;
-            clickBan();
-            fillTable();
-            pnCenter.setVisible(true);
-            pn_MenuSP.setVisible(false);
-            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
-            tenBan = null;
-            fillBan(b.getKhuVuc());
-            setlblrong = -1;
-
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        if (b.getTrangThai().equals("Có khách")) {
+            if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
+                thoiGianTT = 1;
+                checkFillDuoiTable = false;
+                HoaDon hd = getFormHD();
+                hddao.update(hd);
+                updateBanKhiOrderVaTT();
+                setlblrong = 1;
+                clickBan();
+                fillTable();
+                pnCenter.setVisible(true);
+                pn_MenuSP.setVisible(false);
+                tenBan = null;
+                fillBan(b.getKhuVuc());
+                setlblrong = -1;
+                xuatHoaDon xhd = new xuatHoaDon();
+                xhd.XuatHoaDon(hd.getMaHD());
+                xhd.setVisible(true);
+            }
+        } else {
+            MsgBox.alert(this, "Vui lòng chọn bàn có khách để thanh toán", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -1378,6 +1387,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 Ban b = updateBanTrong();
                 bdao.update(b);
                 btnDatBan.setText("Đặt bàn");
+                mnDatBan.setText("Đặt bàn");
                 fillBan(b.getKhuVuc());
                 clickBan();
                 List<HoaDon> list = hddao.selectByMaBan(b.getMaBan());
@@ -1415,6 +1425,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             fillBan(bfill.getKhuVuc());
             clickBan();
             btnDatBan.setText("Hủy đặt bàn");
+            mnDatBan.setText("Hủy đặt bàn");
         }
 
     }
@@ -1560,7 +1571,6 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         timeGioDen.setDisplayText(txtGioiDen);
 
         btgGioiTinh = new ButtonGroup();
-        btgGioiTinh.add(rdoNam);
         rdoNam = new JRadioButton();
         rdoNam.setPreferredSize(new Dimension(62, 30));
         rdoNam.setSize(new Dimension(62, 30));
@@ -1568,8 +1578,8 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         rdoNam.setForeground(new java.awt.Color(97, 67, 67));
         rdoNam.setText("Nam");
         rdoNam.setLocation(125, 157);
+        btgGioiTinh.add(rdoNam);
 
-        btgGioiTinh.add(rdoNu);
         rdoNu = new JRadioButton();
         rdoNu.setPreferredSize(new Dimension(62, 30));
         rdoNu.setSize(new Dimension(62, 30));
@@ -1577,6 +1587,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         rdoNu.setForeground(new java.awt.Color(97, 67, 67));
         rdoNu.setText("Nữ");
         rdoNu.setLocation(204, 157);
+        btgGioiTinh.add(rdoNu);
 
         btnOkDatBan = new JButton();
         btnOkDatBan.setPreferredSize(new Dimension(150, 40));
@@ -1799,19 +1810,50 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     private void datLaiBanKhiQuaGio() {
+        Thread t = new Thread(() -> {
+            for (int i = 0; true; i++) {
+                List<HoaDon> listHD = hddao.selectAll();
+                Date now = new Date();
+                LocalTime timeNow = LocalTime.now();
+                String ngay = XDate.toString(now, "yyyy-MM-dd");
+                for (HoaDon hoaDon : listHD) {
+                    if (!hoaDon.isTrangThai() && hoaDon.getThoiGianTaoHD() == null && hoaDon.getNgayDatBan() != null) {
+                        String ngayHD = XDate.toString(hoaDon.getNgayDatBan(), "yyyy-MM-dd");
+                        String gioHD = XDate.toString(hoaDon.getNgayDatBan(), "HH:mm:ss");
+                        System.out.println(hoaDon.getMaBan());
+                        LocalTime timeHD = LocalTime.parse(gioHD);
+                        if (ngay.equals(ngayHD)) {
+                            int checkGio = (int) (timeNow.toSecondOfDay() - timeHD.toSecondOfDay());
+                            if (checkGio >= 3600) {
+                                hddao.delete(hoaDon.getMaHD());
+                                Ban b = bdao.selectById(hoaDon.getMaBan());
+                                Ban bnew = new Ban();
+                                bnew.setMaBan(b.getMaBan());
+                                bnew.setKhuVuc(b.getKhuVuc());
+                                bnew.setTenBan(b.getTenBan());
+                                bnew.setTrangThai("Trống");
+                                bdao.update(bnew);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // Hủy bỏ mã xác nhận sau 10 phút
-                System.out.println("Đã hết hạn");
-                //        System.out.println("Mã xác nhận đã hết hạn.");
+                                tenBan = null;
+                                pn_MenuKV.setVisible(false);
+                                fillBan(b.getKhuVuc());
+                                clickBan();
+                            }
+                        }
+                    }
+                }
+                try {
+                    Thread.sleep(2 * 60 * 1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
-        }, 1000);
+
+        });
+        t.start();
     }
 }

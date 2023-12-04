@@ -99,7 +99,7 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
 "		FROM ChiTietHoaDon A\n" +
 "			INNER JOIN SanPham B ON B.MaSP = A.MaSP\n" +
 "			INNER JOIN HoaDon C ON C.MaHD = A.MaHD\n" +
-"		WHERE TenSP LIKE ?\n" +
+"		WHERE LoaiSP LIKE ?\n" +
 "		GROUP BY  NgayThanhToan,TenSP\n" +
 "		ORDER BY NgayThanhToan ASC";
         return this.selectBySql(sql,keyWord);

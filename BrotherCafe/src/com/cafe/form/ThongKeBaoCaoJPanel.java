@@ -4,10 +4,12 @@
  */
 package com.cafe.form;
 
+import com.cafe.dao.ChiTietHoaDonDAO;
 import com.cafe.dao.HoaDonDAO;
 import com.cafe.dao.SanPhamDAO;
 import com.cafe.dao.ThongKeBaoCaoDAO;
 import com.cafe.model.Ban;
+import com.cafe.model.ChiTietHoaDon;
 import com.cafe.model.HoaDon;
 import com.cafe.model.SanPham;
 import com.cafe.model.ThongKeBaoCao;
@@ -118,6 +120,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         btnXuatFile.setBackground(new java.awt.Color(191, 158, 117));
         btnXuatFile.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnXuatFile.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/xuatfile.png"))); // NOI18N
         btnXuatFile.setText("Xuất file Excel");
         btnXuatFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,6 +131,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         btnXemThongKe.setBackground(new java.awt.Color(191, 158, 117));
         btnXemThongKe.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnXemThongKe.setForeground(new java.awt.Color(255, 255, 255));
+        btnXemThongKe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/thongke.png"))); // NOI18N
         btnXemThongKe.setText("Xem thống kê");
         btnXemThongKe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,16 +221,16 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                                         .addComponent(txtTu, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(35, 35, 35)
                                         .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btnXemThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnXemThongKe))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnXuatFile, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel7Layout.createSequentialGroup()
                                         .addComponent(txtDen, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(63, 63, 63)
                                         .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(34, 34, 34)
-                                        .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(cboTheoSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnXuatFile)))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(19, 19, 19)
                                 .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -284,7 +288,15 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_tblThongKeMouseClicked
 
     private void cboTheoSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTheoSanPhamActionPerformed
+        String loai = (String) cboTheoSanPham.getSelectedItem();
         fillToThongKeTable();
+        if (loai.equals("Tất cả")) {
+            fillHoaDonToTable();
+            fillDoanhThuSPToTable();
+        } else {
+            fillHoaDonToTableTheoLoai();
+            fillDoanhThuSPToTableTheoLoai();
+        }
     }//GEN-LAST:event_cboTheoSanPhamActionPerformed
 
 
@@ -314,6 +326,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     SanPhamDAO spdao = new SanPhamDAO();
     HoaDonDAO hddao = new HoaDonDAO();
     ThongKeBaoCao tK = new ThongKeBaoCao();
+    ChiTietHoaDonDAO cthddao = new ChiTietHoaDonDAO();
     ArrayList<ThongKeBaoCao> thongKe = new ArrayList();
     int row = -1;
 //    int countXemHD = -1;
@@ -321,14 +334,14 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     private void init() {
         fillComboBoxTheoLoai();
         this.fillToThongKeTable();
-        this.fiillHoaDonToTable();
-        fiillDoanhThuSPToTable();
+        this.fillHoaDonToTable();
+        fillDoanhThuSPToTable();
         this.row = -1;
         focusInput();
         setBorderInput();
     }
 
-    public void fiillHoaDonToTable() {
+    public void fillHoaDonToTable() {
         String[] columnNames = {"Mã HD", "Mã bàn", "Ngày đặt bàn", "Thời Gian tạo HD", "Ngày thanh toán", "Thời gian thanh toán", "Mã NV", "Tổng tiền", "Trạng Thái"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         List<HoaDon> list = hddao.selectAll();
@@ -340,7 +353,28 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
     }
 
-    public void fiillDoanhThuSPToTable() {
+    public void fillHoaDonToTableTheoLoai() {
+        String[] columnNames = {"Mã HD", "Mã bàn", "Ngày đặt bàn", "Thời Gian tạo HD", "Ngày thanh toán", "Thời gian thanh toán", "Mã NV", "Tổng tiền", "Trạng Thái"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        List<SanPham> splist = spdao.selectByKeyWord((String) cboTheoSanPham.getSelectedItem());
+        for (SanPham sanPham : splist) {
+            List<HoaDon> list = hddao.selectAll();
+            for (HoaDon hd : list) {
+                List<ChiTietHoaDon> listcthd = cthddao.selectByMaHD(hd.getMaHD());
+                for (ChiTietHoaDon chiTietHoaDon : listcthd) {
+                    if (chiTietHoaDon.getMaSP().equals(sanPham.getMaSP())) {
+                        model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
+                            hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Chưa Thanh Toán" : "Đã Thanh Toán"});
+                        tblHoaDon.setModel(model);
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    public void fillDoanhThuSPToTable() {
         String[] columnNames = {"Mã SP", "Tên SP", "Loại SP", "Đơn Giá", "Số Lượng Bán", "Tổng Tiền"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         List<Object[]> list = spdao.getDoanhThuSP();
@@ -353,15 +387,29 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
     }
 
-    public void fillToThongKeTable() {
-        String tenSP = (String) cboTheoSanPham.getSelectedItem();
-        String[] columnNames = { "Ngày thanh toán", "Tên SP", "Số lượng", "Tổng tiền",};
+    public void fillDoanhThuSPToTableTheoLoai() {
+        String loai = (String) cboTheoSanPham.getSelectedItem();
+        String[] columnNames = {"Mã SP", "Tên SP", "Loại SP", "Đơn Giá", "Số Lượng Bán", "Tổng Tiền"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        if (tenSP.equalsIgnoreCase("Tất cả")) {
+        List<Object[]> list = spdao.getDoanhThuSPTheoLoai(loai);
+        for (Object[] sp : list) {
+//            Object[] row = {sp.getMaSP(),sp.getTenSP(),sp.getLoaiSP(),sp.getGia(),sp.getSoLuong(),
+//                       sp.getTongTien()};
+            model.addRow(sp);
+            tblDoanhThuSP.setModel(model);
+        }
+
+    }
+
+    public void fillToThongKeTable() {
+        String loaiSP = (String) cboTheoSanPham.getSelectedItem();
+        String[] columnNames = {"Ngày thanh toán", "Tên SP", "Số lượng", "Tổng tiền",};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        if (loaiSP.equalsIgnoreCase("Tất cả")) {
             try {
                 List<ThongKeBaoCao> list = thongKeDAO.selectAll();
                 for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(),thongKe.getSoLuongBan(), thongKe.getTongTien()};
+                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(), thongKe.getSoLuongBan(), thongKe.getTongTien()};
                     model.addRow(row);
                     tblThongKe.setModel(model);
                 }
@@ -370,9 +418,9 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             }
         } else {
             try {
-                List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(tenSP);
+                List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(loaiSP);
                 for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(),thongKe.getSoLuongBan(), thongKe.getTongTien()};
+                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(), thongKe.getSoLuongBan(), thongKe.getTongTien()};
                     model.addRow(row);
                     tblThongKe.setModel(model);
                 }
@@ -387,7 +435,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         List<SanPham> list = spdao.selectLayLoaiSP();
         cboTheoSanPham.addItem("Tất cả");
         for (SanPham sp : list) {
-            cboTheoSanPham.addItem(sp.getTenSP());
+            cboTheoSanPham.addItem(sp.getLoaiSP());
         }
     }
 
@@ -399,7 +447,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         modelThongKe.setRowCount(0);
         modelHoaDon.setRowCount(0);
         modelSanPham.setRowCount(0);
-       
+
         try {
             Date tuNgay = XDate.toDate(txtTu.getText(), "yyyy-MM-dd");
             Date denNgay = XDate.toDate(txtDen.getText(), "yyyy-MM-dd");
@@ -413,14 +461,14 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             List<Object[]> listHoaDon = hd.getHoaDon(tuNgay, denNgay);
 
             for (Object[] hoaDon : listHoaDon) {
-               modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6],hoaDon[7],hoaDon[8]});
+                modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6], hoaDon[7], hoaDon[8]});
 
             }
 
-           List<Object[]> listSanPham = SanPhamDAO.getSanPham(tuNgay, denNgay);
-            for (Object[] sanPham : listSanPham) {
-                modelSanPham.addRow(new Object[]{sanPham[0], sanPham[1], sanPham[2], sanPham[3]});
-            }
+            // List<Object[]> listSanPham = SanPhamDAO.getSanPham(tuNgay, denNgay);
+//            for (Object[] sanPham : listSanPham) {
+//                modelSanPham.addRow(new Object[]{sanPham[0], sanPham[1], sanPham[2], sanPham[3]});
+//            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -452,14 +500,14 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
             cell = row.createCell(0, CellType.STRING);
             cell.setCellValue("Ngày Thanh Toán");
-            
+
             cell = row.createCell(1, CellType.STRING);
             cell.setCellValue("Tên Sản Phẩm");
 
-            cell = row.createCell(4, CellType.STRING);
+            cell = row.createCell(2, CellType.STRING);
             cell.setCellValue("Số Lượng Bán Ra");
 
-            cell = row.createCell(5, CellType.STRING);
+            cell = row.createCell(3, CellType.STRING);
             cell.setCellValue("Tổng Tiền");
 
             //hoa don
@@ -509,83 +557,81 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             cell.setCellValue("Tổng Tiền");
             //
             try {
-                int i = 0;
-                List<ThongKeBaoCao> list = thongKeDAO.selectAll();
-                for (ThongKeBaoCao thongKe : list) {
+                for (int i = 0; i < tblThongKe.getRowCount(); i++) {
                     row = sheetThongKe.createRow(2 + i);
-
+                    
                     cell = row.createCell(0, CellType.STRING);
-                    cell.setCellValue(thongKe.getNgayThanhToan());
+                    cell.setCellValue(String.valueOf( tblThongKe.getValueAt(i, 0)));
 
                     cell = row.createCell(1, CellType.STRING);
-                    cell.setCellValue(thongKe.getTenSP());
+                    cell.setCellValue((String) tblThongKe.getValueAt(i, 1));
 
                     cell = row.createCell(2, CellType.NUMERIC);
-                    cell.setCellValue(thongKe.getSoLuongBan());
+                    cell.setCellValue((Integer) tblThongKe.getValueAt(i, 2));
 
                     cell = row.createCell(3, CellType.NUMERIC);
-                    cell.setCellValue(thongKe.getTongTien());
-                    i++;
+                    cell.setCellValue((Double) tblThongKe.getValueAt(i, 3));
                 }
-                int j = 0;
-                List<HoaDon> listHD = hddao.selectAll();
-                for (HoaDon hd : listHD) {
-                    row = sheetHoaDon.createRow(2 + j);
 
-                    cell = row.createCell(0, CellType.STRING);
-                    cell.setCellValue(hd.getMaHD());
+                for (int i = 0; i < tblHoaDon.getRowCount(); i++) {
+                    row = sheetHoaDon.createRow(2 + i);
+
+                    cell = row.createCell(0, CellType.NUMERIC);
+                    cell.setCellValue((Integer) tblHoaDon.getValueAt(i, 0));
 
                     cell = row.createCell(1, CellType.STRING);
-                    cell.setCellValue(hd.getMaBan());
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 1)));
 
                     cell = row.createCell(2, CellType.STRING);
-                    cell.setCellValue(hd.getNgayDatBan());
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 2)));
 
-                    cell = row.createCell(3, CellType.NUMERIC);
-                    cell.setCellValue(hd.getThoiGianTaoHD());
+                    cell = row.createCell(3, CellType.STRING);
+                    cell.setCellValue(String.valueOf( tblHoaDon.getValueAt(i, 3)));
 
-                    cell = row.createCell(4, CellType.NUMERIC);
-                    cell.setCellValue(hd.getNgayThanhToan());
+                    cell = row.createCell(4, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 4)));
 
-                    cell = row.createCell(5, CellType.NUMERIC);
-                    cell.setCellValue(hd.getThoiGianThanhToan());
-                    cell = row.createCell(6, CellType.NUMERIC);
-                    cell.setCellValue(hd.getMaNV());
+                    cell = row.createCell(5, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 5)));
+
+                    cell = row.createCell(6, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 6)));
+
                     cell = row.createCell(7, CellType.NUMERIC);
-                    cell.setCellValue(hd.getTongTien());
-                    cell = row.createCell(8, CellType.NUMERIC);
-                    cell.setCellValue(hd.isTrangThai() ? "Chưa thanh toán" : "Đã thanh toán");
-                    j++;
+                    cell.setCellValue((Double) tblHoaDon.getValueAt(i, 7));
+
+                    cell = row.createCell(8, CellType.STRING);
+                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 8)));
+
                 }
-                int f = 0;
-                List<Object[]> listSP = spdao.getDoanhThuSP();
-                for (Object[] sp : listSP) {
-                    row = sheetSanPham.createRow(2 + f);
+                for (int i = 0; i < tblDoanhThuSP.getRowCount(); i++) {
+
+                    row = sheetSanPham.createRow(2 + i);
 
                     cell = row.createCell(0, CellType.STRING);
-                    cell.setCellValue(sp[0] + "");
+                    cell.setCellValue(String.valueOf(tblDoanhThuSP.getValueAt(i, 0)));
 
                     cell = row.createCell(1, CellType.STRING);
-                    cell.setCellValue(sp[1] + "");
+                    cell.setCellValue(String.valueOf(tblDoanhThuSP.getValueAt(i, 1)));
 
                     cell = row.createCell(2, CellType.STRING);
-                    cell.setCellValue(sp[2] + "");
+                    cell.setCellValue(String.valueOf(tblDoanhThuSP.getValueAt(i, 2)));
 
                     cell = row.createCell(3, CellType.NUMERIC);
-                    cell.setCellValue(sp[3] + "");
+                    cell.setCellValue((Double) tblDoanhThuSP.getValueAt(i, 3));
 
                     cell = row.createCell(4, CellType.NUMERIC);
-                    cell.setCellValue(sp[4] + "");
+                    cell.setCellValue((Integer)tblDoanhThuSP.getValueAt(i, 4));
 
                     cell = row.createCell(5, CellType.NUMERIC);
-                    cell.setCellValue(sp[5] + "");
-                    f++;
+                    cell.setCellValue((Double) tblDoanhThuSP.getValueAt(i, 5));
+
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
-            File f = new File("C:\\Users\\ADMIN\\Documents\\GitHub\\QuanLyCaFe\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
+            File f = new File("C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
             try {
                 FileOutputStream fis = new FileOutputStream(f);
                 workbook.write(fis);

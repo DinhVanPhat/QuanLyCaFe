@@ -209,7 +209,15 @@ public class BanJPanel extends javax.swing.JPanel {
             new String [] {
                 "Mã Bàn", "Tên Bàn", "Khu Vực", "Trạng Thái"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblBan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblBanMouseClicked(evt);
@@ -473,7 +481,7 @@ BanDAO banDao = new BanDAO() {};
 
     Ban getForm() {
         Ban ban = new Ban();   
-        ban.setMaBan(checkTrungMaKH("B"));
+        ban.setMaBan(checkTrungMaB("B"));
         ban.setTenBan(txtTenban.getText());
         ban.setTrangThai("Trống");
         String tenKV = (String) cboChonKhuVuc.getSelectedItem();
@@ -519,7 +527,7 @@ BanDAO banDao = new BanDAO() {};
         updateStatus();
     }
     
-     private String checkTrungMaKH(String id) {
+     private String checkTrungMaB(String id) {
         List<Ban> list = banDao.selectAll();
         Set<String> set = new HashSet<>();
 
@@ -538,7 +546,6 @@ BanDAO banDao = new BanDAO() {};
                 ma = id + countTrungMa;
             }
         }
-         System.out.println(ma);
         return ma;
     }
 

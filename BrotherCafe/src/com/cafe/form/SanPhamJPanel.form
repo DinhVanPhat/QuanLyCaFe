@@ -282,7 +282,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="43" green="43" red="61" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Ma&#x303; Sa&#x309;n Ph&#xe2;&#x309;m *"/>
+                <Property name="text" type="java.lang.String" value="Ma&#x303; Sa&#x309;n Ph&#xe2;&#x309;m "/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtMaSP">
@@ -585,11 +585,11 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="5" rowCount="4">
-                    <Column editable="true" title="M&#xe3; SP" type="java.lang.Object"/>
-                    <Column editable="true" title="T&#xea;n SP" type="java.lang.Object"/>
-                    <Column editable="true" title="Lo&#x1ea1;i SP" type="java.lang.Object"/>
-                    <Column editable="true" title="Gi&#xe1;" type="java.lang.Object"/>
-                    <Column editable="true" title="Gi&#x1edb;i thi&#x1ec7;u" type="java.lang.Object"/>
+                    <Column editable="false" title="M&#xe3; SP" type="java.lang.Object"/>
+                    <Column editable="false" title="T&#xea;n SP" type="java.lang.Object"/>
+                    <Column editable="false" title="Lo&#x1ea1;i SP" type="java.lang.Object"/>
+                    <Column editable="false" title="Gi&#xe1;" type="java.lang.Object"/>
+                    <Column editable="false" title="Gi&#x1edb;i thi&#x1ec7;u" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>

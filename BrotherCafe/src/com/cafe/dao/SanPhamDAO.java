@@ -108,7 +108,7 @@ public class SanPhamDAO {
         return list.get(0); 
     }
      public List<SanPham> selectLayLoaiSP() {
-         String sql = "Select distinct TenSP from SanPham";
+         String sql = "Select distinct LoaiSP from SanPham";
         return this.selectBySqlLoaiSP(sql);
     }
      protected List<SanPham> selectBySqlLoaiSP(String sql, Object... args) {
@@ -117,7 +117,7 @@ public class SanPhamDAO {
             ResultSet rs = jdbcHelper.query(sql, args);
             while (rs.next()) {
                 SanPham entity = new SanPham();
-                entity.setTenSP(rs.getString("TenSP"));
+                entity.setLoaiSP(rs.getString("LoaiSP"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -126,12 +126,17 @@ public class SanPhamDAO {
             throw new RuntimeException(e);
         }
     }
-     
+
       
     public List<Object[]> getDoanhThuSP(){
         String sql = "{CALL Proc_DoanhThuSP}";
         String [] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
         return getListOfArray(sql, cols);
+    }
+    public List<Object[]> getDoanhThuSPTheoLoai(String loaiSP){
+        String sql = "{CALL Proc_DoanhThuSPTheoLoai(?)}";
+        String [] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
+        return getListOfArray(sql, cols,loaiSP);
     }
          private List<Object[]> getListOfArray(String sql, String[] cols, Object...args){
         try {

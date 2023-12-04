@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="MaHD" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -34,7 +37,7 @@
 	<pageHeader>
 		<band height="124" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="50" uuid="5828fa12-77ab-42c2-bdf3-4e5f086db996"/>
+				<reportElement x="0" y="0" width="555" height="45" uuid="5828fa12-77ab-42c2-bdf3-4e5f086db996"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="28" isBold="true"/>
 				</textElement>

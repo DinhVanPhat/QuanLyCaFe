@@ -5,6 +5,7 @@
 package com.cafe.form;
 
 import com.cafe.dao.SanPhamDAO;
+import com.cafe.model.KhachHang;
 import com.cafe.model.SanPham;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
@@ -14,7 +15,9 @@ import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -37,7 +40,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         initComponents();
         init();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,7 +107,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(97, 67, 67));
-        jLabel2.setText("Mã Sản Phẩm *");
+        jLabel2.setText("Mã Sản Phẩm ");
 
         txtMaSP.setForeground(new java.awt.Color(0, 0, 0));
         txtMaSP.setMinimumSize(new java.awt.Dimension(64, 30));
@@ -311,7 +313,15 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             new String [] {
                 "Mã SP", "Tên SP", "Loại SP", "Giá", "Giới thiệu"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblSanPhamMouseClicked(evt);
@@ -452,7 +462,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             this.edit();
         }
     }//GEN-LAST:event_tblSanPhamMouseClicked
-                                        
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser FileChooser;
@@ -486,16 +496,15 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenSP;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
-      
+
     SanPhamDAO spdao = new SanPhamDAO();
     int row = -1;
- 
-    
+
     private void init() {
         this.fillTable();
         this.row = -1;
         this.updateStatus();
-        
+
         setBorderInput();
         focusInput();
     }
@@ -503,17 +512,17 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     void insert() {
         if (checkValidateForm()) {
             if (!spdao.chechTrungMa(txtMaSP.getText())) {
-                MsgBox.alert(this, "Mã sản phẩm đã tồn tại",javax.swing.JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Mã sản phẩm đã tồn tại", javax.swing.JOptionPane.WARNING_MESSAGE);
             } else {
                 SanPham sp = getForm();
                 try {
                     spdao.insert(sp);
                     this.fillTable();
                     this.clearForm();
-                    MsgBox.alert(this, "Thêm mới thành công!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    MsgBox.alert(this, "Thêm mới thành công!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
-                    //throw new RuntimeException(e);
-                    MsgBox.alert(this, "Thêm mới thất bại",javax.swing.JOptionPane.WARNING_MESSAGE);
+                    throw new RuntimeException(e);
+                   // MsgBox.alert(this, "Thêm mới thất bại", javax.swing.JOptionPane.WARNING_MESSAGE);
                 }
             }
         }
@@ -526,29 +535,29 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             try {
                 spdao.update(sp);
                 this.fillTable();
-                MsgBox.alert(this, "Cập nhật thành công!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                MsgBox.alert(this, "Cập nhật thành công!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
                 //throw new RuntimeException(e);
                 e.printStackTrace();
-               MsgBox.alert(this, "Cập nhật thất bại",javax.swing.JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Cập nhật thất bại", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
         }
     }
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa sản phẩm!",javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        } else    if (MsgBox.confirm(this, "Bạn thực sự muốn xóa sản phẩm này?")) {
+            MsgBox.alert(this, "Bạn không có quyền xóa sản phẩm!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa sản phẩm này?")) {
             String maNV = txtMaSP.getText();
             try {
                 spdao.delete(maNV);
                 this.fillTable();
                 this.clearForm();
-                MsgBox.alert(this, "Xóa thành công",javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                MsgBox.alert(this, "Xóa thành công", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
                 //throw new RuntimeException(e);
-                MsgBox.alert(this, "Xóa thất bại",javax.swing.JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Xóa thất bại", javax.swing.JOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -586,7 +595,29 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
-    
+
+    private String checkTrungMaSP(String id) {
+        List<SanPham> list = spdao.selectAll();
+        Set<String> set = new HashSet<>();
+
+        for (SanPham sp : list) {
+            set.add(sp.getMaSP());
+        }
+
+        int countTrungMa = 1;
+
+        String ma = id + "0" + countTrungMa;
+        while (set.contains(ma)) {
+            countTrungMa++;
+            if (countTrungMa < 10) {
+                ma = id + "0" + countTrungMa;
+            } else {
+                ma = id + countTrungMa;
+            }
+        }
+        return ma;
+    }
+
     void chonAnh() {
         if (FileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
@@ -606,7 +637,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         txtMaSP.setText(sp.getMaSP());
         txtTenSP.setText(sp.getTenSP());
         txtLoaiSP.setText(sp.getLoaiSP());
-        txtDonGia.setText(sp.getGia()+ "");
+        txtDonGia.setText(sp.getGia() + "");
         txtGioiThieu.setText(sp.getGioiThieu());
         if (sp.getHinhAnh() != null) {
             ImageIcon imageIcon = XImage.read(sp.getHinhAnh());
@@ -624,7 +655,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     SanPham getForm() {
         SanPham sp = new SanPham();
-        sp.setMaSP(txtMaSP.getText());
+        sp.setMaSP(checkTrungMaSP("SP"));
         sp.setTenSP(txtTenSP.getText());
         sp.setLoaiSP(txtLoaiSP.getText());
         sp.setGia(Double.valueOf(txtDonGia.getText()));
@@ -633,11 +664,10 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         return sp;
     }
 
-
     void updateStatus() {
         boolean edit = (this.row >= 0);
         //Trạng thái form
-        txtMaSP.setEditable(!edit);
+        txtMaSP.setEditable(false);
         txtTenSP.setEditable(!edit);
         txtLoaiSP.setEditable(!edit);
         txtTenSP.setEditable(!edit);
@@ -652,37 +682,28 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }
 
     boolean checkValidateForm() {
-        if(lblHinhAnh.getToolTipText() == null){
-            MsgBox.alert(this, "Vui lòng chọn hình ảnh!",javax.swing.JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        if (txtMaSP.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập mã sản phẩm!",javax.swing.JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternMaNV = "^SP\\d+";
-        if (!txtMaSP.getText().matches(patternMaNV)) {
-            MsgBox.alert(this, "Sai mã sản phẩm!\n Ví dụ:  SP*** . \n* là các số",javax.swing.JOptionPane.WARNING_MESSAGE);
+        if (lblHinhAnh.getToolTipText() == null) {
+            MsgBox.alert(this, "Vui lòng chọn hình ảnh!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
         if (txtTenSP.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập tên sản phẩm!",javax.swing.JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập tên sản phẩm!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+
         if (txtLoaiSP.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập loại sản phẩm!",javax.swing.JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập loại sản phẩm!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         if (txtDonGia.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập đơn giá!",javax.swing.JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập đơn giá!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
         try {
             long sdt = Long.parseLong(txtDonGia.getText());
         } catch (Exception e) {
-            MsgBox.alert(this, "Đơn giá phải là số!",javax.swing.JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Đơn giá phải là số!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
@@ -694,6 +715,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         this.row = -1;
         updateStatus();
     }
+
     void locSP() {
         if (checkKhoangGia()) {
             DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
@@ -707,61 +729,48 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                     model.addRow(row);
                 }
             } catch (Exception e) {
-                MsgBox.alert(this, "Lỗi truy vấn dữ liệu!",JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Lỗi truy vấn dữ liệu!", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
 
     boolean checkKhoangGia() {
         if (txtKhoangGiaNho.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập khoảng giá nhỏ",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập khoảng giá nhỏ", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String patternGN = ".*[a-zA-Z].*";
         if (txtKhoangGiaNho.getText().matches(patternGN)) {
-            MsgBox.alert(this, "Khoảng giá nhỏ phải là số",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Khoảng giá nhỏ phải là số", JOptionPane.WARNING_MESSAGE);
             return false;
         } else if (Integer.valueOf(txtKhoangGiaNho.getText()) < 0) {
-            MsgBox.alert(this, "Khoảng giá nhỏ phải lớn hơn 0",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Khoảng giá nhỏ phải lớn hơn 0", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         if (txtKhoangGiaLon.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập khoảng giá lớn",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng nhập khoảng giá lớn", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String patternGL = ".*[a-zA-Z].*";
         if (txtKhoangGiaLon.getText().matches(patternGL)) {
-            MsgBox.alert(this, "Khoảng giá lớn phải là số",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Khoảng giá lớn phải là số", JOptionPane.WARNING_MESSAGE);
             return false;
         } else if (Integer.valueOf(txtKhoangGiaLon.getText()) < 0) {
-            MsgBox.alert(this, "Khoảng giá lớn phải lớn hơn 0",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Khoảng giá lớn phải lớn hơn 0", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         return true;
     }
-    
-     private void focusInput(){
+
+    private void focusInput() {
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
-        txtMaSP.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                txtMaSP.setBackground(new Color(227, 188, 140));
-                txtMaSP.setBorder(borderNhanVao);  
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                txtMaSP.setBackground(new Color(255, 255, 255));
-                txtMaSP.setBorder(borderKhongNhan);
-            }
-        });
         txtTenSP.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTenSP.setBackground(new Color(227, 188, 140));
-                txtTenSP.setBorder(borderNhanVao);  
+                txtTenSP.setBorder(borderNhanVao);
             }
 
             @Override
@@ -774,7 +783,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtLoaiSP.setBackground(new Color(227, 188, 140));
-                txtLoaiSP.setBorder(borderNhanVao);  
+                txtLoaiSP.setBorder(borderNhanVao);
             }
 
             @Override
@@ -787,7 +796,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtDonGia.setBackground(new Color(227, 188, 140));
-                txtDonGia.setBorder(borderNhanVao);  
+                txtDonGia.setBorder(borderNhanVao);
             }
 
             @Override
@@ -800,7 +809,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtGioiThieu.setBackground(new Color(227, 188, 140));
-                txtGioiThieu.setBorder(borderNhanVao);  
+                txtGioiThieu.setBorder(borderNhanVao);
             }
 
             @Override
@@ -813,7 +822,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtKhoangGiaLon.setBackground(new Color(227, 188, 140));
-                txtKhoangGiaLon.setBorder(borderNhanVao);  
+                txtKhoangGiaLon.setBorder(borderNhanVao);
             }
 
             @Override
@@ -826,7 +835,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtKhoangGiaNho.setBackground(new Color(227, 188, 140));
-                txtKhoangGiaNho.setBorder(borderNhanVao);  
+                txtKhoangGiaNho.setBorder(borderNhanVao);
             }
 
             @Override
@@ -839,7 +848,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTimKiem.setBackground(new Color(227, 188, 140));
-                txtTimKiem.setBorder(borderNhanVao);  
+                txtTimKiem.setBorder(borderNhanVao);
             }
 
             @Override
@@ -849,16 +858,16 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             }
         });
     }
-    
-    private void setBorderInput(){
+
+    private void setBorderInput() {
         Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtMaSP.setBorder(border);
+        txtTenSP.setBorder(border);
         txtDonGia.setBorder(border);
         txtGioiThieu.setBorder(border);
         txtKhoangGiaLon.setBorder(border);
-        txtTenSP.setBorder(border);
-         txtKhoangGiaNho.setBorder(border);
-          txtLoaiSP.setBorder(border);
+        txtKhoangGiaNho.setBorder(border);
+        txtLoaiSP.setBorder(border);
         txtTimKiem.setBorder(border);
     }
 
