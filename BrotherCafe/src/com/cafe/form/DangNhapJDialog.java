@@ -654,6 +654,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             while ((line = br.readLine()) != null) {
                 list.add(line);
             }
+            br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -37,6 +37,7 @@ public class jdbcHelper {
             while ((dong = br.readLine()) != null) {
                 list.add(dong);
             }
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
