@@ -35,6 +35,11 @@ public class HoaDon {
         this.maHD = maHD;
         this.maBan = maBan;
     }
+
+    public HoaDon(int maHD, Date ngayDatBan) {
+        this.maHD = maHD;
+        this.ngayDatBan = ngayDatBan;
+    }
     
 
     public HoaDon(int maHD, Date ngayDatBan, Date ngayThanhToan, String thoiGianTaoHD, String thoiGianThanhToan, Double tongTien, boolean trangThai, String maNV, String maBan, String maKH) {

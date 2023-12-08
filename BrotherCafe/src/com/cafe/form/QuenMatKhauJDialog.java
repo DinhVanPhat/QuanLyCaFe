@@ -60,9 +60,9 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         txtMaXacNhan = new javax.swing.JTextField();
-        btnTiepTuc = new javax.swing.JButton();
-        btnHuy = new javax.swing.JButton();
         btnGuiMa = new javax.swing.JButton();
+        btnXacNhan = new javax.swing.JButton();
+        btnHuy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -97,14 +97,25 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         txtMaXacNhan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtMaXacNhan.setPreferredSize(new java.awt.Dimension(64, 28));
 
-        btnTiepTuc.setBackground(new java.awt.Color(191, 158, 117));
-        btnTiepTuc.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnTiepTuc.setForeground(new java.awt.Color(255, 255, 255));
-        btnTiepTuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/next.png"))); // NOI18N
-        btnTiepTuc.setText("Tiếp Tục");
-        btnTiepTuc.addActionListener(new java.awt.event.ActionListener() {
+        btnGuiMa.setBackground(new java.awt.Color(191, 158, 117));
+        btnGuiMa.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnGuiMa.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuiMa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/send-data.png"))); // NOI18N
+        btnGuiMa.setText("Gửi Mã");
+        btnGuiMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTiepTucActionPerformed(evt);
+                btnGuiMaActionPerformed(evt);
+            }
+        });
+
+        btnXacNhan.setBackground(new java.awt.Color(191, 158, 117));
+        btnXacNhan.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnXacNhan.setForeground(new java.awt.Color(255, 255, 255));
+        btnXacNhan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/next.png"))); // NOI18N
+        btnXacNhan.setText("Tiếp Tục");
+        btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXacNhanActionPerformed(evt);
             }
         });
 
@@ -116,17 +127,6 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         btnHuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHuyActionPerformed(evt);
-            }
-        });
-
-        btnGuiMa.setBackground(new java.awt.Color(191, 158, 117));
-        btnGuiMa.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnGuiMa.setForeground(new java.awt.Color(255, 255, 255));
-        btnGuiMa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/send-data.png"))); // NOI18N
-        btnGuiMa.setText("Gửi Mã");
-        btnGuiMa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuiMaActionPerformed(evt);
             }
         });
 
@@ -144,18 +144,18 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnTiepTuc)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                                .addComponent(btnHuy))
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(txtMaXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(34, 34, 34)
-                                .addComponent(btnGuiMa)))
-                        .addGap(0, 7, Short.MAX_VALUE))))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnHuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnGuiMa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 25, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnXacNhan)
+                .addGap(184, 184, 184))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,15 +173,15 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtMaXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGuiMa))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnHuy)
-                            .addComponent(btnTiepTuc, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnGuiMa)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(9, 9, 9)
-                        .addComponent(jLabel2)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHuy))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -223,9 +223,9 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         guiMaEmail();
     }//GEN-LAST:event_btnGuiMaActionPerformed
 
-    private void btnTiepTucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTiepTucActionPerformed
+    private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
         tiepTuc();
-    }//GEN-LAST:event_btnTiepTucActionPerformed
+    }//GEN-LAST:event_btnXacNhanActionPerformed
 
     private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
         this.dispose();
@@ -278,7 +278,7 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuiMa;
     private javax.swing.JButton btnHuy;
-    private javax.swing.JButton btnTiepTuc;
+    private javax.swing.JButton btnXacNhan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -299,7 +299,7 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        btnTiepTuc.setEnabled(false);
+        btnXacNhan.setEnabled(false);
     }
     // Phần code gửi email
 
@@ -325,7 +325,7 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
                     maXacNhan = null;
                     //        System.out.println("Mã xác nhận đã hết hạn.");
                 }
-            }, 10 * 60 * 1000); // 10 phút (10 * 60 * 1000 milliseconds)
+            }, 1 * 60 * 1000); // 10 phút (10 * 60 * 1000 milliseconds)
         } else {
             //        System.out.println("Không thể gửi mã xác nhận qua email. Vui lòng kiểm tra cài đặt SMTP.");
         }
@@ -382,9 +382,9 @@ public class QuenMatKhauJDialog extends javax.swing.JDialog {
         }
         if (checkMa) {
             MsgBox.alert(this, "Đã gửi mã",JOptionPane.INFORMATION_MESSAGE);
-            btnTiepTuc.setEnabled(true);
+            btnXacNhan.setEnabled(true);
         } else {
-            MsgBox.alert(this, "Tên đăng nhập hoặc email không đúng",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Email không đúng",JOptionPane.WARNING_MESSAGE);
         }
     }
 

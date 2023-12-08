@@ -20,9 +20,7 @@ import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import com.cafe.utils.XDate;
 import com.cafe.utils.XImage;
-import com.sun.mail.imap.protocol.UID;
 import com.toedter.calendar.JDateChooser;
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -61,6 +59,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -174,9 +173,16 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 "Mã SP", "Tên SP", "Số lượng", "Giá", "Tổng tiền SP"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -799,6 +805,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     public void clickBan() {
+        DecimalFormat formatTienVND = new DecimalFormat("###,###.###");
         List<Ban> listBan = bdao.selectByTenBan(tenBan);
         String gioiDenFormatTime = null;
         for (Ban ban : listBan) {
@@ -826,7 +833,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                         gioiDenFormatTime = gioDen.substring(0, 8);
                     }
                     lblGioiDen.setText(gioiDenFormatTime);
-                    lblTongTien.setText(tongTienTuTable() + "");
+                    lblTongTien.setText(formatTienVND.format(tongTienTuTable()));
                 }
             } else {
                 lblGioiDen.setText("");
@@ -1103,8 +1110,8 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
         }
 
-//        hd.setMaNV(Auth.user.getMaNV());
-        hd.setMaNV("nghiatv");
+        hd.setMaNV(Auth.user.getMaNV());
+        //hd.setMaNV("nghiatv");
         Ban b = bdao.selectByTenBanTraVeBan(tenBan);
         hd.setMaBan(b.getMaBan());
         if (b.getTrangThai().equals("Đã đặt")) {
@@ -1131,7 +1138,10 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void thanhToan() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        if(tenBan == null) { 
+            MsgBox.alert(this, "Vui lòng chọn bàn để thanh toán", JOptionPane.WARNING_MESSAGE);
+        } else { 
+            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
         if (b.getTrangThai().equals("Có khách")) {
             if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
                 thoiGianTT = 1;
@@ -1153,6 +1163,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             }
         } else {
             MsgBox.alert(this, "Vui lòng chọn bàn có khách để thanh toán", JOptionPane.WARNING_MESSAGE);
+        }
         }
     }
 
@@ -1435,9 +1446,13 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Vui lòng nhập số lượng!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        int sdt;
+        int sl;
         try {
-            sdt = Integer.parseInt(txtSoLuong.getText());
+            sl = Integer.parseInt(txtSoLuong.getText());
+            if (sl <= 0) {
+                MsgBox.alert(this, "Số lượng phải lớn hơn 0!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
         } catch (Exception e) {
             MsgBox.alert(this, "Số lượng phải là số!", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -1740,24 +1755,20 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private String checkTrungMaKH(String id) {
-        List<KhachHang> list = khdao.selectAll();
-        Set<String> set = new HashSet<>();
-
-        for (KhachHang kh : list) {
-            set.add(kh.getMaKH());
-        }
-
-        int countTrungMa = 1;
-        String ma = id + "0" + countTrungMa;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            if (countTrungMa < 10) {
-                ma = id + "0" + countTrungMa;
+       List<KhachHang> list = khdao.selectAll();
+        String maKH = id;
+        if (list.isEmpty()) {
+            maKH = maKH + "01";
+        } else {
+            String maKHCuoiList = list.get(list.size() - 1).getMaKH();
+            int sauMaKH = Integer.valueOf(maKHCuoiList.substring(2, maKHCuoiList.length())) + 1;
+            if (sauMaKH < 10) {
+                maKH = maKH + "0" + sauMaKH;
             } else {
-                ma = id + countTrungMa;
+                maKH = maKH + sauMaKH;
             }
         }
-        return ma;
+        return maKH;
     }
 
     boolean checkValidateFormKH() {
@@ -1770,16 +1781,27 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             return false;
         }
         try {
-            long sdt = Long.parseLong(txtSoDT.getText());
-        } catch (Exception e) {
-            MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        String patternSDT = "^(0[3-9])\\d{8}$";
-        if (!txtSoDT.getText().matches(patternSDT)) {
-            MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
+                long sdt = Long.parseLong(txtSoDT.getText());
+                if(sdt < 0){
+                    MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
+                return false;
+                }
+            } catch (Exception e) {
+                MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            String sdt10so = "\\d{10}";
+            if (!txtSoDT.getText().matches(sdt10so)) {
+                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            
+            String patternSDT = "^(0[3-9])\\d{8}$";
+            if (!txtSoDT.getText().matches(patternSDT)) {
+                MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        
         if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
             MsgBox.alert(this, "Vui lòng chọn giới tính!", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -1824,30 +1846,34 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                     if (!hoaDon.isTrangThai() && hoaDon.getThoiGianTaoHD() == null && hoaDon.getNgayDatBan() != null) {
                         String ngayHD = XDate.toString(hoaDon.getNgayDatBan(), "yyyy-MM-dd");
                         String gioHD = XDate.toString(hoaDon.getNgayDatBan(), "HH:mm:ss");
-                        System.out.println(hoaDon.getMaBan());
                         LocalTime timeHD = LocalTime.parse(gioHD);
                         if (ngay.equals(ngayHD)) {
                             int checkGio = (int) (timeNow.toSecondOfDay() - timeHD.toSecondOfDay());
-                            if (checkGio >= 3600) {
-                                hddao.delete(hoaDon.getMaHD());
+                            if (checkGio >= 60) {
                                 Ban b = bdao.selectById(hoaDon.getMaBan());
-                                Ban bnew = new Ban();
-                                bnew.setMaBan(b.getMaBan());
-                                bnew.setKhuVuc(b.getKhuVuc());
-                                bnew.setTenBan(b.getTenBan());
-                                bnew.setTrangThai("Trống");
-                                bdao.update(bnew);
+                                if (MsgBox.confirm(this, b.getTenBan() + " đã qua giờ đặt. Bạn có muốn đặt tiếp hay không?")) {
+                                    HoaDon hd = new HoaDon(idHoaDon(b.getTenBan()), now);
+                                    hddao.updateNgayDBCuaHD(hd);
+                                } else {
+                                    hddao.delete(hoaDon.getMaHD());
+                                    Ban bnew = new Ban();
+                                    bnew.setMaBan(b.getMaBan());
+                                    bnew.setKhuVuc(b.getKhuVuc());
+                                    bnew.setTenBan(b.getTenBan());
+                                    bnew.setTrangThai("Trống");
+                                    bdao.update(bnew);
 
-                                tenBan = null;
-                                pn_MenuKV.setVisible(false);
-                                fillBan(b.getKhuVuc());
-                                clickBan();
+                                    tenBan = null;
+                                    pn_MenuKV.setVisible(false);
+                                    fillBan(b.getKhuVuc());
+                                    clickBan();
+                                }
                             }
                         }
                     }
                 }
                 try {
-                    Thread.sleep(2 * 60 * 1000);
+                    Thread.sleep(5 * 1000);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

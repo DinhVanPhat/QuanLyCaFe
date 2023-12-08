@@ -7,6 +7,8 @@ package com.cafe.form;
 import com.cafe.dao.HoaDonDAO;
 import com.cafe.model.HoaDon;
 import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -62,15 +64,23 @@ public class LichSuHoaDonJDialog extends javax.swing.JDialog {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã HD", "Mã NV", "Mã bàn", "Ngày đặt bàn", "Ngày thanh toán", "Thời gian tạo HD", "Thời gian thanh toán", "Tổng tiền", "Trạng thái"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblHoaDon);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -176,8 +186,8 @@ public class LichSuHoaDonJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
     public void fiillHoaDonToTable(){ 
-        String[] columnNames = {"Mã HD","Mã NV","Mã bàn","Ngày đặt bàn","Ngày thanh toán","Thời Gian tạo HD","Thời gian thanh toán","Tổng tiền","Trạng Thái"};
-        DefaultTableModel model =new DefaultTableModel(columnNames, 0);
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
         List<HoaDon> list = hddao.selectAll();
         for (HoaDon hd : list) {
             model.addRow(new Object[]{hd.getMaHD(),hd.getMaNV(),hd.getMaBan(),hd.getNgayDatBan(),hd.getNgayThanhToan(),

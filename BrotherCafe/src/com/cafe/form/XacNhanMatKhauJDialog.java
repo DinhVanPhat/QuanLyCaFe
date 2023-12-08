@@ -81,8 +81,8 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
         btnTiepTuc.setBackground(new java.awt.Color(191, 158, 117));
         btnTiepTuc.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnTiepTuc.setForeground(new java.awt.Color(255, 255, 255));
-        btnTiepTuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/next.png"))); // NOI18N
-        btnTiepTuc.setText("Tiếp Tục");
+        btnTiepTuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/xacnhan.png"))); // NOI18N
+        btnTiepTuc.setText("Xác nhận");
         btnTiepTuc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTiepTucActionPerformed(evt);
@@ -152,7 +152,7 @@ public class XacNhanMatKhauJDialog extends javax.swing.JDialog {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTiepTuc, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTiepTuc)
                     .addComponent(btnHuy))
                 .addContainerGap(30, Short.MAX_VALUE))
         );

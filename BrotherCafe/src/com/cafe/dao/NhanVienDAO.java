@@ -84,6 +84,10 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
         String sql = "SELECT * FROM NhanVien WHERE TenNV LIKE ? OR MaNV LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%");
     }
+    public List<NhanVien> selectByTenNV(String keyword) {
+        String sql = "SELECT * FROM NhanVien WHERE TenNV LIKE ? ";
+        return this.selectBySql(sql, keyword);
+    }
      public boolean chechTrungMa(String ma) {
         List<NhanVien> list = this.selectAll();
         for (NhanVien nv : list) {

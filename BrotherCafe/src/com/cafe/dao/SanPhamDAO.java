@@ -16,13 +16,13 @@ import java.util.Date;
  * @author ASUS
  */
 public class SanPhamDAO {
+
     String INSERT_SQL = "INSERT INTO SanPham (MaSP, TenSP, LoaiSP, Gia, HinhAnh, GioiThieu) VALUES (?, ?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE SanPham SET TenSP = ?, LoaiSP = ?, Gia = ?, HinhAnh = ?, GioiThieu = ? WHERE MaSP = ?";
     String DELETE_SQL = "DELETE FROM SanPham WHERE MaSP = ?";
     String SELECT_ALL_SQL = "SELECT * FROM SanPham";
     String SELECT_BY_ID_SQL = "SELECT * FROM SanPham WHERE MaSP = ?";
     String SELECT_ALL_LOC_GIA_SQL = "SELECT * FROM SanPham WHERE Gia BETWEEN ? AND ?";
-
 
     public void insert(SanPham e) {
         jdbcHelper.update(INSERT_SQL, e.getMaSP(), e.getTenSP(), e.getLoaiSP(), e.getGia(), e.getHinhAnh(), e.getGioiThieu());
@@ -88,30 +88,35 @@ public class SanPhamDAO {
         }
         return true;
     }
-     public List<SanPham> locGiaSP(String giaNho, String giaLon) {
+
+    public List<SanPham> locGiaSP(String giaNho, String giaLon) {
         return this.selectBySql(SELECT_ALL_LOC_GIA_SQL, giaNho, giaLon);
     }
+
     public SanPham selectByMaSPTraVeTenSP(String keyword) {
-       String sql = "SELECT * FROM SanPham WHERE MaSP = ?";
+        String sql = "SELECT * FROM SanPham WHERE MaSP = ?";
         List<SanPham> list = this.selectBySql(sql, keyword);
         if (list.isEmpty()) {
             return null;
-        }        
-        return list.get(0); 
+        }
+        return list.get(0);
     }
+
     public SanPham selectByTenSPTraveMaSP(String keyword) {
-       String sql = "SELECT * FROM SanPham WHERE TenSP = ?";
+        String sql = "SELECT * FROM SanPham WHERE TenSP = ?";
         List<SanPham> list = this.selectBySql(sql, keyword);
         if (list.isEmpty()) {
             return null;
-        }        
-        return list.get(0); 
+        }
+        return list.get(0);
     }
-     public List<SanPham> selectLayLoaiSP() {
-         String sql = "Select distinct LoaiSP from SanPham";
+
+    public List<SanPham> selectLayLoaiSP() {
+        String sql = "Select distinct LoaiSP from SanPham";
         return this.selectBySqlLoaiSP(sql);
     }
-     protected List<SanPham> selectBySqlLoaiSP(String sql, Object... args) {
+
+    protected List<SanPham> selectBySqlLoaiSP(String sql, Object... args) {
         List<SanPham> list = new ArrayList<SanPham>();
         try {
             ResultSet rs = jdbcHelper.query(sql, args);
@@ -127,24 +132,25 @@ public class SanPhamDAO {
         }
     }
 
-      
-    public List<Object[]> getDoanhThuSP(){
+    public List<Object[]> getDoanhThuSP() {
         String sql = "{CALL Proc_DoanhThuSP}";
-        String [] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
+        String[] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
         return getListOfArray(sql, cols);
     }
-    public List<Object[]> getDoanhThuSPTheoLoai(String loaiSP){
+
+    public List<Object[]> getDoanhThuSPTheoLoai(String loaiSP) {
         String sql = "{CALL Proc_DoanhThuSPTheoLoai(?)}";
-        String [] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
-        return getListOfArray(sql, cols,loaiSP);
+        String[] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
+        return getListOfArray(sql, cols, loaiSP);
     }
-         private List<Object[]> getListOfArray(String sql, String[] cols, Object...args){
+
+    private List<Object[]> getListOfArray(String sql, String[] cols, Object... args) {
         try {
             List<Object[]> list = new ArrayList<>();
             ResultSet rs = jdbcHelper.query(sql, args);
-            while(rs.next()){
+            while (rs.next()) {
                 Object[] vals = new Object[cols.length];
-                for(int i = 0; i<cols.length; i++){
+                for (int i = 0; i < cols.length; i++) {
                     vals[i] = rs.getObject(cols[i]);
                 }
                 list.add(vals);
@@ -155,10 +161,11 @@ public class SanPhamDAO {
             throw new RuntimeException(e);
         }
     }
-        public List<Object[]> getSanPham(Date tuNgay, Date DenNgay) {
+
+    public List<Object[]> getSanPham(Date tuNgay, Date DenNgay) {
         String sql = "{CALL Proc_SanPham(?,?)}";
-        String[] cols= {"MaSP", "TenSP", "LoaiSP", "Gia","SoLuong", "TongTien"};
-        return getListOfArray(sql, cols, tuNgay,DenNgay);
-        
+        String[] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongTien"};
+        return getListOfArray(sql, cols, tuNgay, DenNgay);
+
     }
 }

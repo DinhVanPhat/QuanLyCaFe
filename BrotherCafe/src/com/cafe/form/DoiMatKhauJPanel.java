@@ -214,6 +214,9 @@ public class DoiMatKhauJPanel extends javax.swing.JPanel {
             Auth.user.setMatKhau(new NhanVienJPanel().maHoaMatKhauMD5(matKhauMoi));
             dao.update(Auth.user);
             MsgBox.alert(this, "Đổi mật khẩu thành công",JOptionPane.INFORMATION_MESSAGE);
+            txtMatKhauCu.setText("");
+            txtMatKhauMoi.setText("");
+            txtXacNhanMatKhauMoi.setText("");
         }
     }
     

@@ -5,16 +5,13 @@
 package com.cafe.form;
 
 import com.cafe.dao.KhuVucDAO;
-import com.cafe.model.KhachHang;
 import com.cafe.model.KhuVuc;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -288,7 +285,15 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        timKiem();
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
+
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
@@ -296,7 +301,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        if(row != -1){
+        if (row != -1) {
             row = -1;
             updateStatus();
             btnThem.setText("Lưu");
@@ -306,9 +311,9 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         String src = evt.getActionCommand();
-        if(src.equalsIgnoreCase("Thêm")){
+        if (src.equalsIgnoreCase("Thêm")) {
             insert();
-        } else if(src.equalsIgnoreCase("Lưu")){
+        } else if (src.equalsIgnoreCase("Lưu")) {
             update();
         }
     }//GEN-LAST:event_btnThemActionPerformed
@@ -349,10 +354,10 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     int row = -1;
 
     private void init() {
-        this.fillTable();
+        this.fillAllTable();
         this.row = -1;
         this.updateStatus();
-        
+
         setBorderInput();
         focusInput();
     }
@@ -365,7 +370,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
                 KhuVuc nv = getForm();
                 try {
                     kvdao.insert(nv);
-                    this.fillTable();
+                    this.fillAllTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
@@ -382,7 +387,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             KhuVuc kh = getForm();
             try {
                 kvdao.update(kh);
-                this.fillTable();
+                this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
@@ -394,12 +399,12 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     void delete() {
         if (!Auth.isManager()) {
-            MsgBox.alert(this, "Bạn không có quyền xóa khu vực!",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Bạn không có quyền xóa khu vực!", JOptionPane.WARNING_MESSAGE);
         } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
             String maKH = txtMaKV.getText();
             try {
                 kvdao.delete(maKH);
-                this.fillTable();
+                this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -425,12 +430,12 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         this.updateStatus();
     }
 
-    void fillTable() {
+    void fillAllTable() {
         DefaultTableModel model = (DefaultTableModel) tblKhuVuc.getModel();
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
+            List<KhuVuc> list = kvdao.selectAll();
             for (KhuVuc nv : list) {
                 Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
                 model.addRow(row);
@@ -440,28 +445,44 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
-    
-     private String checkTrungMaKV(String id) {
-        List<KhuVuc> list = kvdao.selectAll();
-        Set<String> set = new HashSet<>();
 
-        for (KhuVuc kv : list) {
-            set.add(kv.getMaKV());
+    void filltimkiemtable() {
+        DefaultTableModel model = (DefaultTableModel) tblKhuVuc.getModel();
+        model.setRowCount(0);
+        try {
+            String keyWord = txtTimKiem.getText();
+            List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có khu vực nào!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (KhuVuc nv : list) {
+                    Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
+    }
 
-        int countTrungMa = 1;
-        
-        String ma = id+"0"+countTrungMa;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            if(countTrungMa < 10){
-                ma = id +"0"+ countTrungMa;
-            } else {  
-                ma = id + countTrungMa;
+    private String layMaKV(String id) {
+        List<KhuVuc> list = kvdao.selectAll();
+        String ma = id;
+        if (list.isEmpty()) {
+            ma = ma + "01";
+        } else {
+            String maBCuoiList = list.get(list.size() - 1).getMaKV();
+            int sauMaKH = Integer.valueOf(maBCuoiList.substring(2, maBCuoiList.length())) + 1;
+            if (sauMaKH < 10) {
+                ma = ma + "0" + sauMaKH;
+            } else {
+                ma = ma + sauMaKH;
             }
         }
         return ma;
     }
+
     void setForm(KhuVuc kv) {
         txtMaKV.setText(kv.getMaKV());
         txtTenKV.setText(kv.getTenKV());
@@ -470,7 +491,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     KhuVuc getForm() {
         KhuVuc nv = new KhuVuc();
-        nv.setMaKV(checkTrungMaKV("KV"));
+        nv.setMaKV(layMaKV("KV"));
         nv.setTenKV(txtTenKV.getText());
         nv.setMoTa(txtMoTa.getText());
         return nv;
@@ -482,7 +503,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         txtMaKV.setEditable(false);
         txtTenKV.setEditable(!edit);
         txtMoTa.setEditable(!edit);
-       
+
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
         btnXoa.setEnabled(edit);
@@ -490,29 +511,30 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     }
 
- boolean checkValidateForm() {
+    boolean checkValidateForm() {
         if (txtTenKV.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng tên khu vực!",JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Vui lòng tên khu vực!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+
         return true;
     }
 
     private void timKiem() {
-        this.fillTable();
+        this.filltimkiemtable();
         this.clearForm();
         this.row = -1;
         updateStatus();
     }
-     private void focusInput(){
+
+    private void focusInput() {
         Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
         Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtTenKV.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTenKV.setBackground(new Color(227, 188, 140));
-                txtTenKV.setBorder(borderNhanVao);  
+                txtTenKV.setBorder(borderNhanVao);
             }
 
             @Override
@@ -525,7 +547,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtMoTa.setBackground(new Color(227, 188, 140));
-                txtMoTa.setBorder(borderNhanVao);  
+                txtMoTa.setBorder(borderNhanVao);
             }
 
             @Override
@@ -538,7 +560,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 txtTimKiem.setBackground(new Color(227, 188, 140));
-                txtTimKiem.setBorder(borderNhanVao);  
+                txtTimKiem.setBorder(borderNhanVao);
             }
 
             @Override
@@ -548,13 +570,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
             }
         });
     }
-    
-    private void setBorderInput(){
+
+    private void setBorderInput() {
         Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
         txtMaKV.setBorder(border);
         txtMoTa.setBorder(border);
         txtTenKV.setBorder(border);
         txtTimKiem.setBorder(border);
-        
+
     }
 }

@@ -18,6 +18,8 @@ import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.ThongKeBaoCaoJPanel;
 import com.cafe.form.TrangChuJPanel;
 import com.cafe.model.ModelMenu;
+import com.cafe.utils.Auth;
+import com.cafe.utils.MsgBox;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -26,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.annotation.Target;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import net.miginfocom.swing.MigLayout;
@@ -50,8 +53,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
     public MainJFrame() {
         initComponents();
-      //  new DangNhapJDialog(this, true).setVisible(true);
-    //    new GiaoDienChaoJDialog(this, true).setVisible(true);
+        new DangNhapJDialog(this, true).setVisible(true);
+        new GiaoDienChaoJDialog(this, true).setVisible(true);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
 
@@ -92,7 +95,13 @@ public class MainJFrame extends javax.swing.JFrame {
                     showForm(new SanPhamJPanel());
                 }
                 if (index == 2) {
-                    showForm(new NhanVienJPanel());
+                    if(Auth.isManager()){ 
+                        showForm(new NhanVienJPanel());
+                    } else { 
+                        MsgBox.alert(null, "Bạn không có quyền xem nhân viên!", JOptionPane.WARNING_MESSAGE);
+       
+                    }
+                    
                 }
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
@@ -104,7 +113,12 @@ public class MainJFrame extends javax.swing.JFrame {
                     showForm(new KhuVucJPanel());
                 }
                 if (index == 6){ 
-                    showForm(new ThongKeBaoCaoJPanel());
+                    if(Auth.isManager()){ 
+                        showForm(new ThongKeBaoCaoJPanel());
+                    } else { 
+                        MsgBox.alert(null, "Bạn không có quyền xem thống kê!", JOptionPane.WARNING_MESSAGE);
+       
+                    }
                 }
                     
                 if (index == 7) {
@@ -113,6 +127,9 @@ public class MainJFrame extends javax.swing.JFrame {
 
                 if (index == 8) {
                     new MainJFrame();
+                }
+                if  (index == 9){ 
+                    System.exit(0);
                 }
             }
 
@@ -126,6 +143,7 @@ public class MainJFrame extends javax.swing.JFrame {
         menu.addMenu(new ModelMenu("Thông kê và báo cáo", new ImageIcon(getClass().getResource("/com/cafe/icon/analytics.png"))));
         menu.addMenu(new ModelMenu("Đổi mật khẩu", new ImageIcon(getClass().getResource("/com/cafe/icon/refresh.png"))));
         menu.addMenu(new ModelMenu("Đăng xuất", new ImageIcon(getClass().getResource("/com/cafe/icon/logout.png"))));
+        menu.addMenu(new ModelMenu("Thoát", new ImageIcon(getClass().getResource("/com/cafe/icon/exit.png"))));
         body.add(menu, "w 55!");
         body.add(main, "w 100%");
         TimingTarget target = new TimingTargetAdapter() {

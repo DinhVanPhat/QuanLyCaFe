@@ -9,24 +9,17 @@ import com.cafe.model.NhanVien;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.Caret;
 
 /**
  *
@@ -404,7 +397,15 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        timKiem();
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
+
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void tblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVienMouseClicked
@@ -474,7 +475,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     int rowCapNhatMK = -1;
 
     private void init() {
-        this.fillTable();
+        this.fillAllTable();
         this.row = -1;
         rowCapNhatMK = -1;
         this.updateStatus();
@@ -488,12 +489,12 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             NhanVien nv = getForm();
             try {
                 nvdao.insert(nv);
-                this.fillTable();
+                this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
-                //throw new RuntimeException(e);
-                MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);
+                throw new RuntimeException(e);
+                //MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);
             }
 
         }
@@ -505,7 +506,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             NhanVien kh = getForm();
             try {
                 nvdao.update(kh);
-                this.fillTable();
+                this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
@@ -518,16 +519,21 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     void delete() {
         if (!Auth.isManager()) {
             MsgBox.alert(this, "Bạn không có quyền xóa nhân viên!", JOptionPane.INFORMATION_MESSAGE);
-        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa nhân viên này?")) {
-            String maNV = txtMaNV.getText();
-            try {
-                nvdao.delete(maNV);
-                this.fillTable();
-                this.clearForm();
-                MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                //throw new RuntimeException(e);
-                MsgBox.alert(this, "Xóa thất bại", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String manv = txtMaNV.getText();
+            if (manv.equals(Auth.user.getMaNV())) {
+                MsgBox.alert(this, "Bạn không được xóa chính mình", JOptionPane.WARNING_MESSAGE);
+            } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa nhân viên này?")) {
+                String maNV = txtMaNV.getText();
+                try {
+                    nvdao.delete(maNV);
+                    this.fillAllTable();
+                    this.clearForm();
+                    MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    //throw new RuntimeException(e);
+                    MsgBox.alert(this, "Xóa thất bại", JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }
@@ -551,15 +557,34 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         this.updateStatus();
     }
 
-    void fillTable() {
+    void fillAllTable() {
+        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+        model.setRowCount(0);
+        try {
+            List<NhanVien> list = nvdao.selectAll();
+            for (NhanVien nv : list) {
+                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên"};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    void filltimkiemTable() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
             List<NhanVien> list = nvdao.selectByKeyWord(keyWord);
-            for (NhanVien nv : list) {
-                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên"};
-                model.addRow(row);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có nhân viên nào!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (NhanVien nv : list) {
+                    Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên"};
+                    model.addRow(row);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -607,7 +632,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         if (cboChucVu.getSelectedItem().equals("Quản lý")) {
             nv.setChucVu(true);
         } else if (cboChucVu.getSelectedItem().equals("Nhân viên")) {
-            nv.setChucVu(true);
+            nv.setChucVu(false);
         }
         return nv;
     }
@@ -681,15 +706,26 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             return false;
         }
         if (!txtSDT.getText().isEmpty()) {
+
             try {
                 long sdt = Long.parseLong(txtSDT.getText());
+                if (sdt < 0) {
+                    MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
             } catch (Exception e) {
                 MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
+            String sdt10so = "\\d{10}";
+            if (!txtSDT.getText().matches(sdt10so)) {
+                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
             String patternSDT = "^(0[3-9])\\d{8}$";
             if (!txtSDT.getText().matches(patternSDT)) {
-                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         }
@@ -698,7 +734,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     }
 
     private void timKiem() {
-        this.fillTable();
+        this.filltimkiemTable();
         this.clearForm();
         this.row = -1;
         updateStatus();
@@ -725,7 +761,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             }
         }
         String maNV = ten + ho + tenLot;
-        String ma = checkTrungMa(maNV);
+        String ma = layMaNV(fullName, maNV);
         return ma;
     }
 
@@ -738,20 +774,24 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         return chuyenD;
     }
 
-    private String checkTrungMa(String maNV) {
-        List<NhanVien> list = nvdao.selectAll();
-        Set<String> set = new HashSet<>();
-
-        for (NhanVien nv : list) {
-            set.add(nv.getMaNV());
+    private String layMaNV(String tenNV, String maNV) {
+        List<NhanVien> list = nvdao.selectByTenNV(tenNV);
+        String maBCuoiList = null;
+        if (list.size() == 0) {
+            maBCuoiList = maNV;
+        } else {
+            maBCuoiList = list.get(list.size() - 1).getMaNV();
         }
 
-        int countTrungMa = 0;
         String ma = maNV;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            ma = maNV + countTrungMa;
+        int sauMaKH = 0;
+        if (maBCuoiList.substring(maNV.length(), maBCuoiList.length()).equals("")) {
+            sauMaKH = 1;
+        } else {
+            sauMaKH = Integer.valueOf(maBCuoiList.substring(maNV.length(), maBCuoiList.length())) + 1;
         }
+        ma = ma + sauMaKH;
+
         return ma;
     }
 

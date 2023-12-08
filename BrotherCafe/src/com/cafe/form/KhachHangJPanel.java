@@ -5,16 +5,13 @@
 package com.cafe.form;
 
 import com.cafe.dao.KhachHangDAO;
-import com.cafe.model.Ban;
 import com.cafe.model.KhachHang;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
@@ -375,7 +372,15 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        timKiem();
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
+
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void tblNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNhanVienMouseClicked
@@ -418,7 +423,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     int row = -1;
 
     private void init() {
-        this.fillTable();
+        this.fillAllTable();
         this.row = -1;
         this.updateStatus();
         focusInput();
@@ -433,7 +438,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 KhachHang nv = getForm();
                 try {
                     khdao.insert(nv);
-                    this.fillTable();
+                    this.fillAllTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
@@ -450,7 +455,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             KhachHang kh = getForm();
             try {
                 khdao.update(kh);
-                this.fillTable();
+                this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
@@ -467,7 +472,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             String maKH = txtMaKH.getText();
             try {
                 khdao.delete(maKH);
-                this.fillTable();
+                this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -494,12 +499,11 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         this.updateStatus();
     }
 
-    void fillTable() {
+    void fillAllTable() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
-            String keyWord = txtTimKiem.getText();
-            List<KhachHang> list = khdao.selectByKeyWord(keyWord);
+            List<KhachHang> list = khdao.selectAll();
             for (KhachHang nv : list) {
                 Object[] row = {nv.getMaKH(), nv.getTenKH(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi()};
                 model.addRow(row);
@@ -510,26 +514,42 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         }
     }
 
-    private String checkTrungMaKH(String id) {
-        List<KhachHang> list = khdao.selectAll();
-        Set<String> set = new HashSet<>();
-
-        for (KhachHang kh : list) {
-            set.add(kh.getMaKH());
-        }
-
-        int countTrungMa = 1;
-
-        String ma = id + "0" + countTrungMa;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            if (countTrungMa < 10) {
-                ma = id + "0" + countTrungMa;
+    void fillCheckTimKiem() {
+        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+        model.setRowCount(0);
+        try {
+            String keyWord = txtTimKiem.getText();
+            List<KhachHang> list = khdao.selectByKeyWord(keyWord);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có khách hàng nào!", JOptionPane.WARNING_MESSAGE);
             } else {
-                ma = id + countTrungMa;
+                for (KhachHang nv : list) {
+                    Object[] row = {nv.getMaKH(), nv.getTenKH(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi()};
+                    model.addRow(row);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    private String layMaKH(String id) {
+        List<KhachHang> list = khdao.selectAll();
+        String maKH = id;
+        if (list.isEmpty()) {
+            maKH = maKH + "01";
+        } else {
+            String maKHCuoiList = list.get(list.size() - 1).getMaKH();
+            int sauMaKH = Integer.valueOf(maKHCuoiList.substring(2, maKHCuoiList.length())) + 1;
+            if (sauMaKH < 10) {
+                maKH = maKH + "0" + sauMaKH;
+            } else {
+                maKH = maKH + sauMaKH;
             }
         }
-        return ma;
+        return maKH;
     }
 
     void setForm(KhachHang nv) {
@@ -544,7 +564,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     KhachHang getForm() {
         KhachHang nv = new KhachHang();
-        nv.setMaKH(checkTrungMaKH("KH"));
+        nv.setMaKH(layMaKH("KH"));
         nv.setTenKH(txtHoVaTen.getText());
         nv.setSDT(txtSDT.getText());
         nv.setGioiTinh(!rdoNam.isSelected());
@@ -580,16 +600,27 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Vui lòng chọn giới tính!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        if (!txtSDT.getText().isEmpty()) {
+       if (!txtSDT.getText().isEmpty()) {
+            
             try {
-                int sdt = Integer.parseInt(txtSDT.getText());
+                long sdt = Long.parseLong(txtSDT.getText());
+                if(sdt < 0){
+                    MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
+                return false;
+                }
             } catch (Exception e) {
                 MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
+            String sdt10so = "\\d{10}";
+            if (!txtSDT.getText().matches(sdt10so)) {
+                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            
             String patternSDT = "^(0[3-9])\\d{8}$";
             if (!txtSDT.getText().matches(patternSDT)) {
-                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+                MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
         }
@@ -605,7 +636,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }
 
     private void timKiem() {
-        this.fillTable();
+        this.fillCheckTimKiem();
         this.clearForm();
         this.row = -1;
         updateStatus();

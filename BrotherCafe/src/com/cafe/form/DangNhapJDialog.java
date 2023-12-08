@@ -13,17 +13,16 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -76,6 +75,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         txtMayChu = new javax.swing.JTextField();
         btnKetNoi = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        txtTaiKhoanSQL = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtMatKhauSQL = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -108,7 +111,6 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel5.setText("Mật Khẩu");
 
         txtTaiKhoan.setBackground(new java.awt.Color(235, 225, 213));
-        txtTaiKhoan.setForeground(new java.awt.Color(0, 0, 0));
         txtTaiKhoan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         btnDangNhap.setBackground(new java.awt.Color(191, 158, 117));
@@ -134,7 +136,6 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         });
 
         txtMatKhau.setBackground(new java.awt.Color(235, 225, 213));
-        txtMatKhau.setForeground(new java.awt.Color(0, 0, 0));
         txtMatKhau.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         chkLuuMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -216,11 +217,9 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel6.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         txtDatabase.setBackground(new java.awt.Color(235, 225, 213));
-        txtDatabase.setForeground(new java.awt.Color(0, 0, 0));
         txtDatabase.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         txtMayChu.setBackground(new java.awt.Color(235, 225, 213));
-        txtMayChu.setForeground(new java.awt.Color(0, 0, 0));
         txtMayChu.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         btnKetNoi.setBackground(new java.awt.Color(191, 158, 117));
@@ -236,43 +235,78 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(97, 67, 67));
+        jLabel7.setText("Mật khẩu");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        txtTaiKhoanSQL.setBackground(new java.awt.Color(235, 225, 213));
+        txtTaiKhoanSQL.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(97, 67, 67));
+        jLabel8.setText("Tài khoản");
+        jLabel8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        txtMatKhauSQL.setBackground(new java.awt.Color(235, 225, 213));
+        txtMatKhauSQL.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout pnKetNoiLayout = new javax.swing.GroupLayout(pnKetNoi);
         pnKetNoi.setLayout(pnKetNoiLayout);
         pnKetNoiLayout.setHorizontalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
+            .addGroup(pnKetNoiLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMayChu, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                    .addComponent(txtDatabase))
+                .addGap(27, 27, 27)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTaiKhoanSQL, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(txtMatKhauSQL))
+                .addGap(33, 33, 33))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
-                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnKetNoi, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(93, 93, 93))
+                .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(190, 190, 190))
         );
         pnKetNoiLayout.setVerticalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnKetNoiLayout.createSequentialGroup()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtMayChu, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(29, 29, 29)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnKetNoiLayout.createSequentialGroup()
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnKetNoiLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(pnKetNoiLayout.createSequentialGroup()
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTaiKhoanSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMatKhauSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(btnKetNoi)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(23, 23, 23))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -284,7 +318,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnKetNoi, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE))
-                .addGap(493, 493, 493))
+                .addContainerGap(493, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,8 +326,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 .addGap(157, 157, 157)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(pnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addComponent(pnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -389,6 +423,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
@@ -397,8 +433,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnKetNoi;
     private javax.swing.JTextField txtDatabase;
     private javax.swing.JPasswordField txtMatKhau;
+    private javax.swing.JPasswordField txtMatKhauSQL;
     private javax.swing.JTextField txtMayChu;
     private javax.swing.JTextField txtTaiKhoan;
+    private javax.swing.JTextField txtTaiKhoanSQL;
     // End of variables declaration//GEN-END:variables
     NhanVienDAO dao = new NhanVienDAO();
     int row = - 1;
@@ -452,32 +490,36 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 checkLMK = false;
             }
             if (checkLMK == true) {
-                if (matKhau.equals(tk.getMatKhau()) || maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
-                    if (!chkLuuMatKhau.isSelected()) {
-                        if (list.size() > 2) {
+                if (tk == null) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (matKhau.equals(tk.getMatKhau()) || maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
+                        if (!chkLuuMatKhau.isSelected()) {
+                            if (list.size() > 4) {
+                                xoaTKMKTrongFile();
+                            }
+                        }
+                        if (list.size() > 4) {
                             xoaTKMKTrongFile();
                         }
+                        LuuMatKhau();
+                        Auth.user = tk;
+                        this.dispose();
+                    } else {
+                        MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
                     }
-                    if (list.size() > 2) {
-                        xoaTKMKTrongFile();
-                    }
-                    LuuMatKhau();
-                    Auth.user = tk;
-                    this.dispose();
-                } else {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 1", JOptionPane.WARNING_MESSAGE);
                 }
             } else {
                 if (tk == null) {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 2", JOptionPane.WARNING_MESSAGE);
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
                 } else if (maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau()) || matKhau.equals(tk.getMatKhau())) {
-                    if (list.size() > 2) {
+                    if (list.size() > 4) {
                         xoaTKMKTrongFile();
                     }
                     Auth.user = tk;
                     this.dispose();
                 } else {
-                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng 3", JOptionPane.WARNING_MESSAGE);
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
                 }
             }
         }
@@ -527,9 +569,24 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         List<String> list = new ArrayList<>();
         String maychu = txtMayChu.getText();
         String database = txtDatabase.getText();
+        String taiKhoanSQL = txtTaiKhoanSQL.getText();
+        String matKhauSQL = new String(txtMatKhauSQL.getPassword());
+        String connectionUrl = "jdbc:sqlserver://" + maychu + ":1433;"
+                + "databaseName=" + database + ";"
+                + "user=" + taiKhoanSQL + ";password=" + matKhauSQL + ";"
+                + "encrypt=true;trustServerCertificate=true;";
+        try {
+            Connection connection = DriverManager.getConnection(connectionUrl);
+            MsgBox.alert(this, "Kết nối thành công", JOptionPane.INFORMATION_MESSAGE);
+            connection.close();
+        } catch (SQLException ex) {
+            MsgBox.alert(this, "Kết nối thất bại", JOptionPane.WARNING_MESSAGE);
+        }
 
         list.add(maychu);
         list.add(database);
+        list.add(taiKhoanSQL);
+        list.add(matKhauSQL);
 
         writeLinesToFile(fileName, list);
     }
@@ -555,11 +612,11 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
     private void docLuuMK() {
         List<String> list = readLinesFromFile(fileName);
-        if (list.size() > 2) {
+        if (list.size() > 4) {
             for (int i = 0; i < list.size(); i++) {
-                if (i == 2) {
+                if (i == 4) {
                     txtTaiKhoan.setText(list.get(i));
-                } else if (i == 3) {
+                } else if (i == 5) {
                     txtMatKhau.setText(list.get(i));
                 }
             }
@@ -577,7 +634,12 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                     txtMayChu.setText(list.get(i));
                 } else if (i == 1) {
                     txtDatabase.setText(list.get(i));
+                } else if (i == 2) {
+                    txtTaiKhoanSQL.setText(list.get(i));
+                } else if (i == 3) {
+                    txtMatKhauSQL.setText(list.get(i));
                 }
+
             }
         }
     }
@@ -624,8 +686,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         // Đọc nội dung từ file 
         List<String> lines = readLinesFromFile(fileName);
 
-        // Xóa dòng chứ tài khoản và mật khẩu, dòng 3 và 4
-        removeLines(lines, 2, 3);
+        // Xóa dòng chứ tài khoản và mật khẩu, dòng 5 và 6
+        removeLines(lines, 4, 5);
 
         // Ghi nội dung và file từ danh sách đã xóa 
         writeLinesToFile(fileName, lines);

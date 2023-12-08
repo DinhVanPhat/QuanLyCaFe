@@ -25,6 +25,7 @@ public class HoaDonDAO extends CafeDAO<HoaDon, Integer>{
     String SELECT_BY_ID_SQL = "SELECT * FROM HoaDon WHERE MaHD = ?";
     String UPDATE_TONGTIEN_SQL = "UPDATE HoaDon SET TongTien = ? WHERE MaHD = ?";
     String UPDATE_MABAN_SQL = "UPDATE HoaDon set MaBan = ? Where MaHD = ?";
+    String UPDATE_NgayDB_SQL = "UPDATE HoaDon set NgayDatBan = ? Where MaHD = ?";
     @Override
     public void insert(HoaDon e) {
         jdbcHelper.update(INSERT_SQL,e.getNgayDatBan(),e.getNgayThanhToan(),e.getThoiGianTaoHD(),e.getThoiGianThanhToan(),e.getTongTien(),
@@ -41,6 +42,9 @@ public class HoaDonDAO extends CafeDAO<HoaDon, Integer>{
     }
     public void updateMaBanCuaHD(HoaDon e) {
         jdbcHelper.update(UPDATE_MABAN_SQL,e.getMaBan(),e.getMaHD());
+    }
+    public void updateNgayDBCuaHD(HoaDon e) {
+        jdbcHelper.update(UPDATE_NgayDB_SQL,e.getNgayDatBan(),e.getMaHD());
     }
     @Override
     public void delete(Integer id) {
@@ -74,7 +78,7 @@ public class HoaDonDAO extends CafeDAO<HoaDon, Integer>{
             while (rs.next()) {
                 HoaDon hd = new HoaDon();
                 hd.setMaHD(rs.getInt("MaHD"));
-                hd.setNgayDatBan(rs.getDate("NgayDatBan"));
+                hd.setNgayDatBan(rs.getTimestamp("NgayDatBan"));
                 hd.setNgayThanhToan(rs.getDate("NgayThanhToan"));
                 hd.setThoiGianTaoHD(rs.getString("ThoiGianTaoHD"));
                 hd.setThoiGianThanhToan(rs.getString("ThoiGianThanhToan"));

@@ -314,9 +314,16 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 "Mã SP", "Tên SP", "Loại SP", "Giá", "Giới thiệu"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -423,7 +430,14 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_lblHinhAnhMouseClicked
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        timKiem();
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
@@ -501,7 +515,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     int row = -1;
 
     private void init() {
-        this.fillTable();
+        this.fillAllTable();
         this.row = -1;
         this.updateStatus();
 
@@ -517,12 +531,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 SanPham sp = getForm();
                 try {
                     spdao.insert(sp);
-                    this.fillTable();
+                    this.fillAllTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
-                   // MsgBox.alert(this, "Thêm mới thất bại", javax.swing.JOptionPane.WARNING_MESSAGE);
+                    // MsgBox.alert(this, "Thêm mới thất bại", javax.swing.JOptionPane.WARNING_MESSAGE);
                 }
             }
         }
@@ -534,7 +548,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             SanPham sp = getForm();
             try {
                 spdao.update(sp);
-                this.fillTable();
+                this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
@@ -552,7 +566,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             String maNV = txtMaSP.getText();
             try {
                 spdao.delete(maNV);
-                this.fillTable();
+                this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -570,6 +584,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         tblSanPham.clearSelection();
         txtDonGia.setText("");
         lblHinhAnh.setIcon(null);
+        lblHinhAnh.setToolTipText(null);
 
     }
 
@@ -580,12 +595,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         this.updateStatus();
     }
 
-    void fillTable() {
+    void fillAllTable() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
         try {
-            String keyWord = txtTimKiem.getText();
-            List<SanPham> list = spdao.selectByKeyWord(keyWord);
+            List<SanPham> list = spdao.selectAll();
             for (SanPham sp : list) {
                 Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
                 model.addRow(row);
@@ -596,23 +610,39 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
     }
 
+    void filltimkiemTable() {
+        DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
+        model.setRowCount(0);
+        try {
+            String keyWord = txtTimKiem.getText();
+            List<SanPham> list = spdao.selectByKeyWord(keyWord);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có sản phẩm nào!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (SanPham sp : list) {
+                    Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
     private String checkTrungMaSP(String id) {
         List<SanPham> list = spdao.selectAll();
-        Set<String> set = new HashSet<>();
 
-        for (SanPham sp : list) {
-            set.add(sp.getMaSP());
-        }
-
-        int countTrungMa = 1;
-
-        String ma = id + "0" + countTrungMa;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            if (countTrungMa < 10) {
-                ma = id + "0" + countTrungMa;
+        String ma = id;
+        if (list.isEmpty()) {
+            ma = ma + "01";
+        } else {
+            String maBCuoiList = list.get(list.size() - 1).getMaSP();
+            int sauMaKH = Integer.valueOf(maBCuoiList.substring(2, maBCuoiList.length())) + 1;
+            if (sauMaKH < 10) {
+                ma = ma + "0" + sauMaKH;
             } else {
-                ma = id + countTrungMa;
+                ma = ma + sauMaKH;
             }
         }
         return ma;
@@ -637,7 +667,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         txtMaSP.setText(sp.getMaSP());
         txtTenSP.setText(sp.getTenSP());
         txtLoaiSP.setText(sp.getLoaiSP());
-        txtDonGia.setText(sp.getGia() + "");
+        txtDonGia.setText(Integer.valueOf((int) sp.getGia()) + "");
         txtGioiThieu.setText(sp.getGioiThieu());
         if (sp.getHinhAnh() != null) {
             ImageIcon imageIcon = XImage.read(sp.getHinhAnh());
@@ -701,16 +731,20 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             return false;
         }
         try {
-            long sdt = Long.parseLong(txtDonGia.getText());
+            long gia = Long.parseLong(txtDonGia.getText());
+            if(gia<= 0){
+                 MsgBox.alert(this, "Đơn giá phải > 0!", javax.swing.JOptionPane.WARNING_MESSAGE);
+                 return false;
+            }
         } catch (Exception e) {
-            MsgBox.alert(this, "Đơn giá phải là số!", javax.swing.JOptionPane.WARNING_MESSAGE);
+            MsgBox.alert(this, "Đơn giá phải là số nguyên!", javax.swing.JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
     }
 
     private void timKiem() {
-        this.fillTable();
+        this.filltimkiemTable();
         this.clearForm();
         this.row = -1;
         updateStatus();
@@ -724,10 +758,15 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             String giaLon = txtKhoangGiaLon.getText();
             try {
                 List<SanPham> list = spdao.locGiaSP(giaNho, giaLon);
-                for (SanPham sp : list) {
-                    Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
-                    model.addRow(row);
+                if (list.isEmpty()) {
+                    MsgBox.alert(this, "Không có sản phẩm nào giá từ " + giaNho + " -> " + giaLon, JOptionPane.WARNING_MESSAGE);
+                } else {
+                    for (SanPham sp : list) {
+                        Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getLoaiSP(), sp.getGia(), sp.getGioiThieu()};
+                        model.addRow(row);
+                    }
                 }
+
             } catch (Exception e) {
                 MsgBox.alert(this, "Lỗi truy vấn dữ liệu!", JOptionPane.WARNING_MESSAGE);
             }
@@ -757,6 +796,9 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             return false;
         } else if (Integer.valueOf(txtKhoangGiaLon.getText()) < 0) {
             MsgBox.alert(this, "Khoảng giá lớn phải lớn hơn 0", JOptionPane.WARNING_MESSAGE);
+            return false;
+        } else if (Integer.valueOf(txtKhoangGiaLon.getText()) < Integer.valueOf(txtKhoangGiaNho.getText())) {
+            MsgBox.alert(this, "Khoảng giá lớn phải lớn hơn khoảng giá nhỏ", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 

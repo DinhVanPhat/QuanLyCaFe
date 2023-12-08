@@ -21,13 +21,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ACER
  */
 public class BanJPanel extends javax.swing.JPanel {
 
- 
     /**
      * Creates new form BanJPanel
      */
@@ -292,7 +292,15 @@ public class BanJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-        timKiem();
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
+
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void cboChonKhuVucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChonKhuVucActionPerformed
@@ -304,7 +312,7 @@ public class BanJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        if(row != -1){
+        if (row != -1) {
             row = -1;
             updateStatus();
             btnThem.setText("Lưu");
@@ -314,9 +322,9 @@ public class BanJPanel extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         String src = evt.getActionCommand();
-        if(src.equalsIgnoreCase("Thêm")){
+        if (src.equalsIgnoreCase("Thêm")) {
             insert();
-        } else if(src.equalsIgnoreCase("Lưu")){
+        } else if (src.equalsIgnoreCase("Lưu")) {
             update();
         }
     }//GEN-LAST:event_btnThemActionPerformed
@@ -354,11 +362,13 @@ public class BanJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 
-BanDAO banDao = new BanDAO() {};
+    BanDAO banDao = new BanDAO() {
+    };
     KhuVucDAO kvdao = new KhuVucDAO();
     int row = -1;
+
     private void init() {
-        this.fillTable();
+        this.fillAllTable();
         this.row = -1;
         this.updateStatus();
         fillComboBoxKhuVuc();
@@ -391,7 +401,7 @@ BanDAO banDao = new BanDAO() {};
                 Ban ban = getForm();
                 try {
                     banDao.insert(ban);
-                    this.fillTable();
+                    this.fillAllTable();
                     this.clearForm();
                     MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception e) {
@@ -408,7 +418,7 @@ BanDAO banDao = new BanDAO() {};
             Ban ban = getForm();
             try {
                 banDao.update(ban);
-                this.fillTable();
+                this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
             } catch (Exception e) {
@@ -419,14 +429,13 @@ BanDAO banDao = new BanDAO() {};
     }
 
     void delete() {
-//        if (!Auth.isManager()) {
-//            MsgBox.alert(this, "Bạn không có quyền xóa bàn!", JOptionPane.WARNING_MESSAGE);
-//        } else 
-            if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
+        if (!Auth.isManager()) {
+            MsgBox.alert(this, "Bạn không có quyền xóa bàn!", JOptionPane.WARNING_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
             String maKH = txtMaBan.getText();
             try {
                 banDao.delete(maKH);
-                this.fillTable();
+                this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -451,23 +460,44 @@ BanDAO banDao = new BanDAO() {};
         this.setForm(ban);
         this.updateStatus();
     }
-    void fillComboBoxKhuVuc(){
+
+    void fillComboBoxKhuVuc() {
         List<KhuVuc> kv = kvdao.selectAll();
         cboChonKhuVuc.removeAllItems();
         for (KhuVuc khuVuc : kv) {
             cboChonKhuVuc.addItem(khuVuc.getTenKV());
         }
     }
-    void fillTable() {
+
+    void fillAllTable() {
+        DefaultTableModel model = (DefaultTableModel) tblBan.getModel();
+        model.setRowCount(0);
+        try {
+            List<Ban> list = banDao.selectAll();
+            for (Ban ban : list) {
+                KhuVuc kv = kvdao.selectById(ban.getKhuVuc());
+                Object[] row = {ban.getMaBan(), ban.getTenBan(), kv.getTenKV(), ban.getTrangThai()};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void filltimkiemTable() {
         DefaultTableModel model = (DefaultTableModel) tblBan.getModel();
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
             List<Ban> list = banDao.selectByKeyWord(keyWord);
-            for (Ban ban : list) {
-                KhuVuc kv = kvdao.selectById(ban.getKhuVuc());
-                Object[] row = {ban.getMaBan(), ban.getTenBan(),kv.getTenKV(), ban.getTrangThai()};
-                model.addRow(row);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có bàn nào!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (Ban ban : list) {
+                    KhuVuc kv = kvdao.selectById(ban.getKhuVuc());
+                    Object[] row = {ban.getMaBan(), ban.getTenBan(), kv.getTenKV(), ban.getTrangThai()};
+                    model.addRow(row);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -480,15 +510,14 @@ BanDAO banDao = new BanDAO() {};
     }
 
     Ban getForm() {
-        Ban ban = new Ban();   
-        ban.setMaBan(checkTrungMaB("B"));
+        Ban ban = new Ban();
+        ban.setMaBan(layMaBan("B"));
         ban.setTenBan(txtTenban.getText());
         ban.setTrangThai("Trống");
         String tenKV = (String) cboChonKhuVuc.getSelectedItem();
         List<KhuVuc> list = kvdao.selectByTenKV(tenKV);
         for (KhuVuc kv : list) {
             ban.setKhuVuc(kv.getMaKV());
-            System.out.println(kv.getMaKV());
         }
         return ban;
     }
@@ -498,7 +527,6 @@ BanDAO banDao = new BanDAO() {};
         //Trạng thái form
         txtMaBan.setEditable(false);
         txtTenban.setEditable(!edit);
-
 
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
@@ -512,8 +540,9 @@ BanDAO banDao = new BanDAO() {};
             MsgBox.alert(this, "Vui lòng nhập tên bàn!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        if (!cboChonKhuVuc.isEnabled()) {
-            MsgBox.alert(this, "Vui lòng chọn giới tính!", JOptionPane.WARNING_MESSAGE);
+        System.out.println(String.valueOf(cboChonKhuVuc.getSelectedItem()));
+        if (cboChonKhuVuc.getSelectedItem()== null) {
+            MsgBox.alert(this, "Vui lòng thêm khu vực trước!", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -521,32 +550,28 @@ BanDAO banDao = new BanDAO() {};
     }
 
     private void timKiem() {
-        this.fillTable();
+        this.filltimkiemTable();
         this.clearForm();
         this.row = -1;
         updateStatus();
     }
-    
-     private String checkTrungMaB(String id) {
+
+    private String layMaBan(String id) {
         List<Ban> list = banDao.selectAll();
-        Set<String> set = new HashSet<>();
-
-        for (Ban b : list) {
-            set.add(b.getMaBan());
-        }
-
-        int countTrungMa = 1;
-        
-        String ma = id+"0"+countTrungMa;
-        while (set.contains(ma)) {
-            countTrungMa++;
-            if(countTrungMa < 10){
-                ma = id +"0"+ countTrungMa;
-            } else {  
-                ma = id + countTrungMa;
+        String ma = id;
+        if (list.isEmpty()) {
+            ma = ma + "01";
+        } else {
+            String maBCuoiList = list.get(list.size() - 1).getMaBan();
+            int sauMaKH = Integer.valueOf(maBCuoiList.substring(1, maBCuoiList.length())) + 1;
+            if (sauMaKH < 10) {
+                ma = ma + "0" + sauMaKH;
+            } else {
+                ma = ma + sauMaKH;
             }
         }
         return ma;
+
     }
 
     private void focusInput() {
