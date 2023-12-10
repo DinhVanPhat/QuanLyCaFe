@@ -7,8 +7,6 @@ package com.cafe.form;
 import com.cafe.dao.HoaDonDAO;
 import com.cafe.model.HoaDon;
 import java.util.List;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**

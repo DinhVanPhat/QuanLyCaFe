@@ -5,7 +5,7 @@
             <url>src/com/cafe/form/TrangChuJPanel.java</url>
             <bookmark id="1">
                 <name/>
-                <line>762</line>
+                <line>768</line>
                 <key/>
             </bookmark>
         </file>
@@ -19,13 +19,6 @@
         </group>
         <group name="ASM1_MOB1023_DangVinhKy">
             <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/TrangChuJPanel.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/utils/jdbcHelper.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/dao/SanPhamDAO.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/DangNhapJDialog.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/NhanVienJPanel.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/dao/NhanVienDAO.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/SanPhamJPanel.java</file>
-            <file>file:/C:/Users/NGHIA/Documents/HOC%20KY%204/Du%20an%201%20-%20PRO1041/QuanLyCaFe/BrotherCafe/src/com/cafe/form/DoiMatKhauJPanel.java</file>
         </group>
     </open-files>
 </project-private>

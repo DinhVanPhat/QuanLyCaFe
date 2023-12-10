@@ -7,8 +7,6 @@ package com.cafe.form;
 import com.cafe.dao.NhanVienDAO;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**

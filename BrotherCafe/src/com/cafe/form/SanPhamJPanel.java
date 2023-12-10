@@ -5,7 +5,6 @@
 package com.cafe.form;
 
 import com.cafe.dao.SanPhamDAO;
-import com.cafe.model.KhachHang;
 import com.cafe.model.SanPham;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
@@ -15,15 +14,12 @@ import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 

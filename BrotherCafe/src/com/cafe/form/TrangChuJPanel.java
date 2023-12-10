@@ -33,17 +33,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -51,15 +46,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -170,14 +162,14 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã SP", "Tên SP", "Số lượng", "Giá", "Tổng tiền SP"
+                "Mã SP", "Tên SP", "Số lượng", "Giá", "Tổng tiền SP", "Ghi chú"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -191,8 +183,8 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         tblHoaDon.setFocusable(false);
         tblHoaDon.setOpaque(false);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblHoaDonMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tblHoaDon);
@@ -455,12 +447,6 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         new LichSuHoaDonJDialog(null, true).setVisible(true);
     }//GEN-LAST:event_btnLichSuHoaDonActionPerformed
 
-    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        if (evt.getClickCount() == 2) {
-            xoaSPtrongCTHD();
-        }
-    }//GEN-LAST:event_tblHoaDonMouseClicked
-
     private void mnChuyenBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnChuyenBanActionPerformed
         chonChuyenBan();
         System.out.println(tenBan);
@@ -477,6 +463,22 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private void mnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnThanhToanActionPerformed
         thanhToan();
     }//GEN-LAST:event_mnThanhToanActionPerformed
+
+    private void tblHoaDonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseReleased
+        if (evt.isPopupTrigger()) {
+            xoaSPtrongCTHD();
+        }
+        if (evt.getClickCount() == 2) {
+            intOkSuaSL = tblHoaDon.getSelectedRow();
+            int sl = (int) tblHoaDon.getValueAt(intOkSuaSL, 2);
+            String ghiChu = (String) tblHoaDon.getValueAt(intOkSuaSL, 5);
+            suaSLSPtrongCTHD(sl, ghiChu);
+        }
+    }//GEN-LAST:event_tblHoaDonMouseReleased
+    private void btnOKSuaSoLuongActionPerformed(java.awt.event.ActionEvent evt) {
+        okSuaSoLuongCTHD();
+    }
+
     private void btnKhuVucActionPerformed(java.awt.event.ActionEvent evt) {
         String src = evt.getActionCommand();
         pn_MenuKV.setVisible(false);
@@ -624,6 +626,10 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private JDateChooser dateNgayDen;
     private JTextField txtGioiDen;
     private JButton btnChonGio;
+    private JDialog dgSuaSL;
+    private JTextField txtSuaGhiChu;
+    private JTextField txtSuaSoLuong;
+    private JButton btnOkSuaSoLuong;
 
     KhuVucDAO kvdao = new KhuVucDAO();
     SanPhamDAO spdao = new SanPhamDAO();
@@ -645,7 +651,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     int setlblrong = -1;
     static String tenBan = null;
     String tenSP = null;
-    int intOkChonSL = -1;
+    int intOkSuaSL = -1;
     boolean checkFillDuoiTable = true;
     boolean checkTableRong = false;
     String maKH = null;
@@ -852,7 +858,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 List<ChiTietHoaDon> cthdList = cthddao.selectByMaHD(hd.getMaHD());
                 for (ChiTietHoaDon cthd : cthdList) {
                     SanPham sp = spdao.selectByMaSPTraVeTenSP(cthd.getMaSP());
-                    model.addRow(new Object[]{cthd.getMaSP(), sp.getTenSP(), cthd.getSoLuong(), sp.getGia(), cthd.getSoLuong() * sp.getGia()});
+                    model.addRow(new Object[]{cthd.getMaSP(), sp.getTenSP(), cthd.getSoLuong(), sp.getGia(), cthd.getSoLuong() * sp.getGia(), cthd.getGhiChu() == null ? "" : cthd.getGhiChu()});
                 }
                 checkFillDuoiTable = true;
             }
@@ -999,7 +1005,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             if (checkTableRong) {
                 hddao.insert(hdForm);
             } else {
-                HoaDon hdUpate = new HoaDon(idHoaDon(tenBan), hdid.getTongTien() + Double.valueOf(txtSoLuong.getText()));
+                HoaDon hdUpate = new HoaDon(idHoaDon(tenBan), hdid.getTongTien() + Double.valueOf(txtSoLuong.getText()) * sp.getGia());
                 hddao.updateTongTien(hdUpate);
             }
             if (trungSPKhiOrder()) {
@@ -1138,32 +1144,32 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void thanhToan() {
-        if(tenBan == null) { 
+        if (tenBan == null) {
             MsgBox.alert(this, "Vui lòng chọn bàn để thanh toán", JOptionPane.WARNING_MESSAGE);
-        } else { 
-            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
-        if (b.getTrangThai().equals("Có khách")) {
-            if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
-                thoiGianTT = 1;
-                checkFillDuoiTable = false;
-                HoaDon hd = getFormHD();
-                hddao.update(hd);
-                updateBanKhiOrderVaTT();
-                setlblrong = 1;
-                clickBan();
-                fillTable();
-                pnCenter.setVisible(true);
-                pn_MenuSP.setVisible(false);
-                tenBan = null;
-                fillBan(b.getKhuVuc());
-                setlblrong = -1;
-                xuatHoaDon xhd = new xuatHoaDon();
-                xhd.XuatHoaDon(hd.getMaHD());
-                xhd.setVisible(true);
-            }
         } else {
-            MsgBox.alert(this, "Vui lòng chọn bàn có khách để thanh toán", JOptionPane.WARNING_MESSAGE);
-        }
+            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+            if (b.getTrangThai().equals("Có khách")) {
+                if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
+                    thoiGianTT = 1;
+                    checkFillDuoiTable = false;
+                    HoaDon hd = getFormHD();
+                    hddao.update(hd);
+                    updateBanKhiOrderVaTT();
+                    setlblrong = 1;
+                    clickBan();
+                    fillTable();
+                    pnCenter.setVisible(true);
+                    pn_MenuSP.setVisible(false);
+                    tenBan = null;
+                    fillBan(b.getKhuVuc());
+                    setlblrong = -1;
+                    xuatHoaDon xhd = new xuatHoaDon();
+                    xhd.XuatHoaDon(hd.getMaHD());
+                    xhd.setVisible(true);
+                }
+            } else {
+                MsgBox.alert(this, "Vui lòng chọn bàn có khách để thanh toán", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
@@ -1489,6 +1495,15 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                     hddao.updateTongTien(hd);
                 }
             }
+            List<ChiTietHoaDon> listct = cthddao.selectByMaHD(maHD);
+            if (listct.size() == 0) {
+                hddao.delete(maHD);
+                Ban bUp = updateBanTrong();
+                bdao.update(bUp);
+                fillBan(bUp.getKhuVuc());
+                checkFillDuoiTable = false;
+                clickBan();
+            }
         }
     }
 
@@ -1755,7 +1770,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private String checkTrungMaKH(String id) {
-       List<KhachHang> list = khdao.selectAll();
+        List<KhachHang> list = khdao.selectAll();
         String maKH = id;
         if (list.isEmpty()) {
             maKH = maKH + "01";
@@ -1781,27 +1796,27 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             return false;
         }
         try {
-                long sdt = Long.parseLong(txtSoDT.getText());
-                if(sdt < 0){
-                    MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
-                return false;
-                }
-            } catch (Exception e) {
-                MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+            long sdt = Long.parseLong(txtSoDT.getText());
+            if (sdt < 0) {
+                MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
-            String sdt10so = "\\d{10}";
-            if (!txtSoDT.getText().matches(sdt10so)) {
-                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-            
-            String patternSDT = "^(0[3-9])\\d{8}$";
-            if (!txtSoDT.getText().matches(patternSDT)) {
-                MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-        
+        } catch (Exception e) {
+            MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        String sdt10so = "\\d{10}";
+        if (!txtSoDT.getText().matches(sdt10so)) {
+            MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        String patternSDT = "^(0[3-9])\\d{8}$";
+        if (!txtSoDT.getText().matches(patternSDT)) {
+            MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
             MsgBox.alert(this, "Vui lòng chọn giới tính!", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -1881,5 +1896,122 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
         });
         t.start();
+    }
+
+    private void suaSLSPtrongCTHD(int sl, String ghichu) {
+
+        dgSuaSL = new JDialog();
+        dgSuaSL.setUndecorated(true);
+        dgSuaSL.setPreferredSize(new Dimension(500, 250));
+        dgSuaSL.setSize(500, 250);
+
+        JPanel pannel = new JPanel();
+        pannel.setLayout(null);
+        pannel.setPreferredSize(new Dimension(500, 250));
+        pannel.setSize(500, 250);
+        pannel.setBackground(Color.WHITE);
+
+        JLabel jLabelSL = new JLabel("Số lượng:");
+        jLabelSL.setPreferredSize(new Dimension(90, 35));
+        jLabelSL.setSize(90, 40);
+        jLabelSL.setFont(new Font("Roboto", Font.PLAIN, 20));
+        jLabelSL.setForeground(new Color(0, 0, 0));
+        jLabelSL.setLocation(30, 40);
+
+        JLabel jLabelGC = new JLabel("Ghi chú:");
+        jLabelGC.setPreferredSize(new Dimension(90, 35));
+        jLabelGC.setSize(90, 40);
+        jLabelGC.setFont(new Font("Roboto", Font.PLAIN, 20));
+        jLabelGC.setForeground(new Color(0, 0, 0));
+        jLabelGC.setLocation(30, 88);
+
+        txtSuaSoLuong = new JTextField();
+        txtSuaSoLuong.setPreferredSize(new Dimension(340, 40));
+        txtSuaSoLuong.setBackground(new Color(227, 188, 140));
+        txtSuaSoLuong.setOpaque(true);
+        txtSuaSoLuong.setFont(new Font("Roboto", Font.PLAIN, 20));
+        txtSuaSoLuong.setHorizontalAlignment(SwingConstants.RIGHT);
+        Border border = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
+        txtSuaSoLuong.setSize(340, 40);
+        txtSuaSoLuong.setLocation(120, 40);
+        txtSuaSoLuong.setBorder(border);
+        txtSuaSoLuong.setText(sl + "");
+
+        txtSuaGhiChu = new JTextField();
+        txtSuaGhiChu.setPreferredSize(new Dimension(340, 40));
+        txtSuaGhiChu.setBackground(new Color(227, 188, 140));
+        txtSuaGhiChu.setFont(new Font("Roboto", Font.PLAIN, 20));
+        txtSuaGhiChu.setOpaque(true);
+        txtSuaGhiChu.setSize(340, 40);
+        txtSuaGhiChu.setLocation(120, 90);
+        txtSuaGhiChu.setText(ghichu);
+        txtSuaGhiChu.setBorder(border);
+
+        btnOkSuaSoLuong = new JButton("OK");
+        btnOkSuaSoLuong.setPreferredSize(new Dimension(150, 40));
+        btnOkSuaSoLuong.setSize(150, 40);
+        btnOkSuaSoLuong.setBackground(new Color(191, 158, 117));
+        btnOkSuaSoLuong.setFont(new Font("Roboto", Font.BOLD, 20));
+        btnOkSuaSoLuong.setForeground(new Color(255, 255, 255));
+        btnOkSuaSoLuong.setLocation(95, 160);
+        btnOkSuaSoLuong.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnOKSuaSoLuongActionPerformed(e);
+            }
+        });
+
+        JButton btnHuySuaSoLuong = new JButton("Hủy");
+        btnHuySuaSoLuong.setPreferredSize(new Dimension(150, 40));
+        btnHuySuaSoLuong.setSize(150, 40);
+        btnHuySuaSoLuong.setBackground(new Color(191, 158, 117));
+        btnHuySuaSoLuong.setFont(new Font("Roboto", Font.BOLD, 20));
+        btnHuySuaSoLuong.setForeground(new Color(255, 255, 255));
+        btnHuySuaSoLuong.setLocation(255, 160);
+        btnHuySuaSoLuong.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dgSuaSL.setVisible(false);
+            }
+        });
+
+        pannel.add(jLabelSL);
+        pannel.add(txtSuaSoLuong);
+        pannel.add(jLabelGC);
+        pannel.add(txtSuaGhiChu);
+        pannel.add(btnOkSuaSoLuong);
+        pannel.add(btnHuySuaSoLuong);
+        dgSuaSL.add(pannel);
+        dgSuaSL.setVisible(true);
+        dgSuaSL.setLocationRelativeTo(null);
+    }
+
+    public void okSuaSoLuongCTHD() {
+        if (checkValidateFormChonSL()) {
+            List<ChiTietHoaDon> list = cthddao.selectByMaHD(idHoaDon(tenBan));
+            String maSP = (String) tblHoaDon.getValueAt(intOkSuaSL, 0);
+            for (ChiTietHoaDon cthd : list) {
+                if (cthd.getMaSP().equals(maSP)) {
+                    SanPham sp = spdao.selectById(cthd.getMaSP());
+                    ChiTietHoaDon cthdnew = new ChiTietHoaDon();
+                    cthdnew.setMaCTHD(cthd.getMaCTHD());
+                    cthdnew.setMaHD(cthd.getMaHD());
+                    cthdnew.setMaSP(cthd.getMaSP());
+                    cthdnew.setSoLuong(Integer.valueOf(txtSuaSoLuong.getText()));
+                    cthdnew.setTongTienSP(Integer.valueOf(txtSuaSoLuong.getText()) * sp.getGia());
+                    cthddao.update(cthdnew);
+                    dgSuaSL.setVisible(false);
+                    fillTable();
+                    clickBan();
+                }
+            }
+            double tongTien = 0;
+            List<ChiTietHoaDon> listnew = cthddao.selectByMaHD(idHoaDon(tenBan));
+            for (ChiTietHoaDon chiTietHoaDon : listnew) {
+                tongTien += chiTietHoaDon.getTongTienSP();
+            }
+            HoaDon hdUpate = new HoaDon(idHoaDon(tenBan), tongTien);
+            hddao.updateTongTien(hdUpate);
+        }
     }
 }
