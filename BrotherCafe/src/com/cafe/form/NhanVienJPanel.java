@@ -705,6 +705,14 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Email! không hợp lệ", JOptionPane.WARNING_MESSAGE);
             return false;
         }
+        List<NhanVien> listNV = nvdao.selectAll();
+        for (NhanVien nv : listNV) {
+            if(txtEmail.getText().equals(nv.getEmail())){ 
+                MsgBox.alert(this, "Email đã tồn tại", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        }
+        
         if (!txtSDT.getText().isEmpty()) {
 
             try {
@@ -761,7 +769,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             }
         }
         String maNV = ten + ho + tenLot;
-        String ma = layMaNV(fullName, maNV);
+        String ma = layMaNV(maNV);
         return ma;
     }
 
@@ -774,8 +782,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         return chuyenD;
     }
 
-    private String layMaNV(String tenNV, String maNV) {
-        List<NhanVien> list = nvdao.selectByTenNV(tenNV);
+    private String layMaNV(String maNV) {
+        List<NhanVien> list = nvdao.selectByMaNV(maNV);
         String maBCuoiList = null;
         if (list.size() == 0) {
             maBCuoiList = maNV;
