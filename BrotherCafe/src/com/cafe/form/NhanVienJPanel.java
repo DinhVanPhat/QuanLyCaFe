@@ -486,17 +486,21 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
     void insert() {
         if (checkValidateForm()) {
-            NhanVien nv = getForm();
-            try {
-                nvdao.insert(nv);
-                this.fillAllTable();
-                this.clearForm();
-                MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-                //MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);
-            }
+            if (nvdao.chechTrungEmail(txtEmail.getText())) {
+                NhanVien nv = getForm();
+                try {
+                    nvdao.insert(nv);
+                    this.fillAllTable();
+                    this.clearForm();
+                    MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                    //MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
 
+                MsgBox.alert(this, "Email đã tồn tại", JOptionPane.WARNING_MESSAGE);
+            }
         }
 
     }
@@ -705,14 +709,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Email! không hợp lệ", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        List<NhanVien> listNV = nvdao.selectAll();
-        for (NhanVien nv : listNV) {
-            if(txtEmail.getText().equals(nv.getEmail())){ 
-                MsgBox.alert(this, "Email đã tồn tại", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-        }
-        
+
         if (!txtSDT.getText().isEmpty()) {
 
             try {
