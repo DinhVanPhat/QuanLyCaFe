@@ -15,7 +15,7 @@ import java.util.Date;
  *
  * @author ASUS
  */
-public class SanPhamDAO {
+public class SanPhamDAO extends CafeDAO<SanPham, String>{
 
     String INSERT_SQL = "INSERT INTO SanPham (MaSP, TenSP, LoaiSP, Gia, HinhAnh, GioiThieu) VALUES (?, ?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE SanPham SET TenSP = ?, LoaiSP = ?, Gia = ?, HinhAnh = ?, GioiThieu = ? WHERE MaSP = ?";
@@ -24,18 +24,22 @@ public class SanPhamDAO {
     String SELECT_BY_ID_SQL = "SELECT * FROM SanPham WHERE MaSP = ?";
     String SELECT_ALL_LOC_GIA_SQL = "SELECT * FROM SanPham WHERE Gia BETWEEN ? AND ?";
 
+    @Override
     public void insert(SanPham e) {
         jdbcHelper.update(INSERT_SQL, e.getMaSP(), e.getTenSP(), e.getLoaiSP(), e.getGia(), e.getHinhAnh(), e.getGioiThieu());
     }
 
+    @Override
     public void update(SanPham e) {
         jdbcHelper.update(UPDATE_SQL, e.getTenSP(), e.getLoaiSP(), e.getGia(), e.getHinhAnh(), e.getGioiThieu(), e.getMaSP());
     }
 
+    @Override
     public void delete(String id) {
         jdbcHelper.update(DELETE_SQL, id);
     }
 
+    @Override
     public SanPham selectById(String id) {
         List<SanPham> list = this.selectBySql(SELECT_BY_ID_SQL, id);
         if (list.isEmpty()) {
@@ -49,6 +53,7 @@ public class SanPhamDAO {
         return list.get(0);
     }
 
+    @Override
     public List<SanPham> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }

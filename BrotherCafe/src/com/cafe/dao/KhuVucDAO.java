@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author ADMIN
  */
-public class KhuVucDAO { 
+public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
 
     String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa) VALUES (?, ?, ?)";
     String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ? WHERE MaKV = ?";
@@ -22,19 +22,22 @@ public class KhuVucDAO {
     String SELECT_ALL_SQL = "SELECT * FROM KhuVuc";
     String SELECT_BY_ID_SQL = "SELECT * FROM KhuVuc WHERE MaKV = ?";
 
-
+    @Override
     public void insert(KhuVuc e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaKV(),e.getTenKV(),e.getMoTa());
+        jdbcHelper.update(INSERT_SQL, e.getMaKV(), e.getTenKV(), e.getMoTa());
     }
 
+    @Override
     public void update(KhuVuc e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenKV(),e.getMoTa(), e.getMaKV());
+        jdbcHelper.update(UPDATE_SQL, e.getTenKV(), e.getMoTa(), e.getMaKV());
     }
 
+    @Override
     public void delete(String id) {
         jdbcHelper.update(DELETE_SQL, id);
     }
 
+    @Override
     public KhuVuc selectById(String id) {
         List<KhuVuc> list = this.selectBySql(SELECT_BY_ID_SQL, id);
         if (list.isEmpty()) {
@@ -48,10 +51,12 @@ public class KhuVucDAO {
         return list.get(0);
     }
 
+    @Override
     public List<KhuVuc> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }
 
+    @Override
     protected List<KhuVuc> selectBySql(String sql, Object... args) {
         List<KhuVuc> list = new ArrayList<KhuVuc>();
         try {
@@ -74,10 +79,12 @@ public class KhuVucDAO {
         String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? OR MaKV LIKE ? OR MoTa LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
-public List<KhuVuc> selectByTenKV(String keyword) {
+
+    public List<KhuVuc> selectByTenKV(String keyword) {
         String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%");
     }
+
     public boolean chechTrungMa(String ma) {
         List<KhuVuc> list = this.selectAll();
         for (KhuVuc nv : list) {

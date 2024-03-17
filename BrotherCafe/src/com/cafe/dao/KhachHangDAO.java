@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author ADMIN
  */
-public class KhachHangDAO { 
+public class KhachHangDAO extends CafeDAO<KhachHang, String>{ 
 
     String INSERT_SQL = "INSERT INTO KhachHang (MaKH, TenKH, Email, SDT, GioiTinh, DiaChi) VALUES (?, ?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE KhachHang SET TenKH = ?, Email = ?, SDT = ?, GioiTinh = ?,  DiaChi = ? WHERE MaKH = ?";
@@ -23,18 +23,22 @@ public class KhachHangDAO {
     String SELECT_BY_ID_SQL = "SELECT * FROM KhachHang WHERE MaKH = ?";
 
 
+    @Override
     public void insert(KhachHang e) {
         jdbcHelper.update(INSERT_SQL, e.getMaKH(),e.getTenKH(),e.getEmail(),e.getSDT(),e.isGioiTinh(), e.getDiaChi());
     }
 
+    @Override
     public void update(KhachHang e) {
         jdbcHelper.update(UPDATE_SQL, e.getTenKH(), e.getEmail(),  e.getSDT(), e.isGioiTinh(), e.getDiaChi(), e.getMaKH());
     }
 
+    @Override
     public void delete(String id) {
         jdbcHelper.update(DELETE_SQL, id);
     }
 
+    @Override
     public KhachHang selectById(String id) {
         List<KhachHang> list = this.selectBySql(SELECT_BY_ID_SQL, id);
         if (list.isEmpty()) {
@@ -48,10 +52,12 @@ public class KhachHangDAO {
         return list.get(0);
     }
 
+    @Override
     public List<KhachHang> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
     }
 
+    @Override
     protected List<KhachHang> selectBySql(String sql, Object... args) {
         List<KhachHang> list = new ArrayList<KhachHang>();
         try {

@@ -311,6 +311,7 @@ public class BanJPanel extends javax.swing.JPanel {
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         if (row != -1) {
             row = -1;
+            rowUpdate = 1;
             updateStatus();
             btnThem.setText("Lưu");
             txtMaBan.setEditable(false);
@@ -363,10 +364,12 @@ public class BanJPanel extends javax.swing.JPanel {
     };
     KhuVucDAO kvdao = new KhuVucDAO();
     int row = -1;
+    int rowUpdate = -1;
 
     private void init() {
         this.fillAllTable();
         this.row = -1;
+        this.rowUpdate = -1;
         this.updateStatus();
         fillComboBoxKhuVuc();
         focusInput();
@@ -446,6 +449,7 @@ public class BanJPanel extends javax.swing.JPanel {
         Ban ban = new Ban();
         this.setForm(ban);
         this.row = -1;
+        this.rowUpdate = -1;
         this.updateStatus();
         tblBan.clearSelection();
 
@@ -504,11 +508,18 @@ public class BanJPanel extends javax.swing.JPanel {
     void setForm(Ban b) {
         txtMaBan.setText(b.getMaBan());
         txtTenban.setText(b.getTenBan());
+        KhuVuc kv = kvdao.selectById(b.getKhuVuc());
+        cboChonKhuVuc.setSelectedItem(kv.getTenKV());
     }
 
     Ban getForm() {
         Ban ban = new Ban();
-        ban.setMaBan(layMaBan("B"));
+        if (rowUpdate == -1) {
+            ban.setMaBan(layMaBan("B"));
+        } else {
+            ban.setMaBan(txtMaBan.getText());
+        }
+
         ban.setTenBan(txtTenban.getText());
         ban.setTrangThai("Trống");
         String tenKV = (String) cboChonKhuVuc.getSelectedItem();
@@ -538,7 +549,7 @@ public class BanJPanel extends javax.swing.JPanel {
             return false;
         }
         System.out.println(String.valueOf(cboChonKhuVuc.getSelectedItem()));
-        if (cboChonKhuVuc.getSelectedItem()== null) {
+        if (cboChonKhuVuc.getSelectedItem() == null) {
             MsgBox.alert(this, "Vui lòng thêm khu vực trước!", JOptionPane.WARNING_MESSAGE);
             return false;
         }

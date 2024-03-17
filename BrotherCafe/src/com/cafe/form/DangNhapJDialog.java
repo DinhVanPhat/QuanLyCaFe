@@ -473,7 +473,14 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             MsgBox.alert(this, "Vui lòng nhập database", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
+        if (txtTaiKhoanSQL.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập tài khoản", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (new String(txtMatKhauSQL.getPassword()).isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập mật khẩu", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
         return true;
     }
 
@@ -579,16 +586,17 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             Connection connection = DriverManager.getConnection(connectionUrl);
             MsgBox.alert(this, "Kết nối thành công", JOptionPane.INFORMATION_MESSAGE);
             connection.close();
+            
+            list.add(maychu);
+            list.add(database);
+            list.add(taiKhoanSQL);
+            list.add(matKhauSQL);
+
+            writeLinesToFile(fileName, list);
         } catch (SQLException ex) {
             MsgBox.alert(this, "Kết nối thất bại", JOptionPane.WARNING_MESSAGE);
         }
 
-        list.add(maychu);
-        list.add(database);
-        list.add(taiKhoanSQL);
-        list.add(matKhauSQL);
-
-        writeLinesToFile(fileName, list);
     }
 
     private void LuuMatKhau() {

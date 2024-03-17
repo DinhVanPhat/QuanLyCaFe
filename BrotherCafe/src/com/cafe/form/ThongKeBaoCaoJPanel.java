@@ -385,7 +385,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 for (ChiTietHoaDon chiTietHoaDon : listcthd) {
                     if (chiTietHoaDon.getMaSP().equals(sanPham.getMaSP())) {
                         model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
-                            hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Chưa Thanh Toán" : "Đã Thanh Toán"});
+                            hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Đã Thanh Toán" : "Chưa Thanh Toán"});
                     }
                 }
 
@@ -487,7 +487,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 MsgBox.alert(this, "Không có danh sách hóa đơn nào từ " + tuNgay + " -> " + denNgay, JOptionPane.WARNING_MESSAGE);
             } else {
                 for (Object[] hoaDon : listHoaDon) {
-                    modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6], hoaDon[7], hoaDon[8]});
+                    modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6], hoaDon[7], Boolean.parseBoolean(String.valueOf(hoaDon[8])) ? "Đã thanh toán" : "Chưa thanh toán"});
 
                 }
             }

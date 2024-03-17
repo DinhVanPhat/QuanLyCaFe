@@ -18,8 +18,14 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -447,7 +453,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         if (row != -1) {
-            row = -1;
+            this.row = -1;
+            this.rowUpdate = 1;
             updateStatus();
             btnThem.setText("Lưu");
             txtMaSP.setEditable(false);
@@ -509,10 +516,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     SanPhamDAO spdao = new SanPhamDAO();
     int row = -1;
+    int rowUpdate = -1;
 
     private void init() {
         this.fillAllTable();
         this.row = -1;
+        this.rowUpdate = -1;
         this.updateStatus();
 
         setBorderInput();
@@ -576,6 +585,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         SanPham sp = new SanPham();
         this.setForm(sp);
         this.row = -1;
+        this.rowUpdate = -1;
         this.updateStatus();
         tblSanPham.clearSelection();
         txtDonGia.setText("");
@@ -681,7 +691,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     SanPham getForm() {
         SanPham sp = new SanPham();
-        sp.setMaSP(checkTrungMaSP("SP"));
+        if (rowUpdate == -1) {
+            sp.setMaSP(checkTrungMaSP("SP"));
+        } else {
+            sp.setMaSP(txtMaSP.getText());
+        }
         sp.setTenSP(txtTenSP.getText());
         sp.setLoaiSP(txtLoaiSP.getText());
         sp.setGia(Double.valueOf(txtDonGia.getText()));
@@ -728,9 +742,9 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
         try {
             long gia = Long.parseLong(txtDonGia.getText());
-            if(gia<= 0){
-                 MsgBox.alert(this, "Đơn giá phải > 0!", javax.swing.JOptionPane.WARNING_MESSAGE);
-                 return false;
+            if (gia <= 0) {
+                MsgBox.alert(this, "Đơn giá phải > 0!", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return false;
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Đơn giá phải là số nguyên!", javax.swing.JOptionPane.WARNING_MESSAGE);

@@ -9,6 +9,7 @@ import com.cafe.event.EventMenuSelected;
 import com.cafe.form.BanJPanel;
 import com.cafe.form.DangNhapJDialog;
 import com.cafe.form.DoiMatKhauJPanel;
+import com.cafe.form.DonViJPanel;
 import com.cafe.form.GiaoDienChaoJDialog;
 import com.cafe.form.KhachHangJPanel;
 import com.cafe.form.KhuVucJPanel;
@@ -98,7 +99,6 @@ public class MainJFrame extends javax.swing.JFrame {
                         MsgBox.alert(null, "Bạn không có quyền xem nhân viên!", JOptionPane.WARNING_MESSAGE);
        
                     }
-                    
                 }
                 if (index == 3) {
                     showForm(new KhachHangJPanel());
@@ -116,16 +116,17 @@ public class MainJFrame extends javax.swing.JFrame {
                         MsgBox.alert(null, "Bạn không có quyền xem thống kê!", JOptionPane.WARNING_MESSAGE);
        
                     }
-                }
-                    
+                }   
                 if (index == 7) {
                     showForm(new DoiMatKhauJPanel());
                 }
-
                 if (index == 8) {
+                    showForm(new DonViJPanel());
+                }
+                if (index == 9) {
                     new MainJFrame();
                 }
-                if  (index == 9){ 
+                if  (index == 10){ 
                     System.exit(0);
                 }
             }
@@ -139,6 +140,7 @@ public class MainJFrame extends javax.swing.JFrame {
         menu.addMenu(new ModelMenu("Khu vực", new ImageIcon(getClass().getResource("/com/cafe/icon/khuvuc.png"))));
         menu.addMenu(new ModelMenu("Thông kê và báo cáo", new ImageIcon(getClass().getResource("/com/cafe/icon/analytics.png"))));
         menu.addMenu(new ModelMenu("Đổi mật khẩu", new ImageIcon(getClass().getResource("/com/cafe/icon/refresh.png"))));
+        menu.addMenu(new ModelMenu("Đơn vị", new ImageIcon(getClass().getResource("/com/cafe/icon/donvi.png"))));
         menu.addMenu(new ModelMenu("Đăng xuất", new ImageIcon(getClass().getResource("/com/cafe/icon/logout.png"))));
         menu.addMenu(new ModelMenu("Thoát", new ImageIcon(getClass().getResource("/com/cafe/icon/exit.png"))));
         body.add(menu, "w 55!");

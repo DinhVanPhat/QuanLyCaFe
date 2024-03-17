@@ -13,7 +13,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
@@ -302,7 +308,8 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         if (row != -1) {
-            row = -1;
+            this.row = -1;
+            this.rowUpdate = 1;
             updateStatus();
             btnThem.setText("Lưu");
             txtMaKV.setEditable(false);
@@ -352,12 +359,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     KhuVucDAO kvdao = new KhuVucDAO();
     int row = -1;
+    int rowUpdate = -1;
 
     private void init() {
         this.fillAllTable();
         this.row = -1;
         this.updateStatus();
-
+        this.rowUpdate = -1;
         setBorderInput();
         focusInput();
     }
@@ -400,7 +408,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     void delete() {
         if (!Auth.isManager()) {
             MsgBox.alert(this, "Bạn không có quyền xóa khu vực!", JOptionPane.WARNING_MESSAGE);
-        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa bàn này?")) {
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa khu vực này?")) {
             String maKH = txtMaKV.getText();
             try {
                 kvdao.delete(maKH);
@@ -418,6 +426,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         KhuVuc nv = new KhuVuc();
         this.setForm(nv);
         this.row = -1;
+        this.rowUpdate = -1;
         this.updateStatus();
         tblKhuVuc.clearSelection();
 
@@ -491,7 +500,11 @@ public class KhuVucJPanel extends javax.swing.JPanel {
 
     KhuVuc getForm() {
         KhuVuc nv = new KhuVuc();
-        nv.setMaKV(layMaKV("KV"));
+        if(rowUpdate == -1){
+            nv.setMaKV(layMaKV("KV"));           
+        } else {
+            nv.setMaKV(txtMaKV.getText());
+        }
         nv.setTenKV(txtTenKV.getText());
         nv.setMoTa(txtMoTa.getText());
         return nv;

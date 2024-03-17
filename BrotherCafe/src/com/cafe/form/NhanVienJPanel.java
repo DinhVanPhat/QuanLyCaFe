@@ -507,9 +507,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
     void update() {
         if (checkValidateForm()) {
-            NhanVien kh = getForm();
+            NhanVien nv = getForm();
             try {
-                nvdao.update(kh);
+                nvdao.update(nv);
                 this.fillAllTable();
                 MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
                 this.clearForm();
