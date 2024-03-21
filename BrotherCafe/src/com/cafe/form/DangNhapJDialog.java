@@ -10,6 +10,19 @@ import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -30,9 +43,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         int screenHeight = screenSize.height;
 
         this.setSize(screenWidth, screenHeight - 50);
-        System.out.println(screenWidth+"|"+screenHeight);
-   
-       
+
         init();
     }
 
@@ -53,10 +64,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txtTaiKhoan = new javax.swing.JTextField();
         btnDangNhap = new javax.swing.JButton();
-        btnHuy = new javax.swing.JButton();
+        btnThoat = new javax.swing.JButton();
         txtMatKhau = new javax.swing.JPasswordField();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel2 = new javax.swing.JLabel();
+        chkLuuMatKhau = new javax.swing.JCheckBox();
+        lblQuenMatKhau = new javax.swing.JLabel();
         pnKetNoi = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -64,10 +75,13 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         txtMayChu = new javax.swing.JTextField();
         btnKetNoi = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        txtTaiKhoanSQL = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtMatKhauSQL = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1536, 864));
 
         jPanel1.setBackground(new java.awt.Color(230, 213, 193));
         jPanel1.setPreferredSize(new java.awt.Dimension(1536, 864));
@@ -97,12 +111,12 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel5.setText("Mật Khẩu");
 
         txtTaiKhoan.setBackground(new java.awt.Color(235, 225, 213));
-        txtTaiKhoan.setForeground(new java.awt.Color(0, 0, 0));
         txtTaiKhoan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         btnDangNhap.setBackground(new java.awt.Color(191, 158, 117));
         btnDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnDangNhap.setForeground(new java.awt.Color(255, 255, 255));
+        btnDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/dangnhap.png"))); // NOI18N
         btnDangNhap.setText("Đăng Nhập");
         btnDangNhap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -110,27 +124,32 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             }
         });
 
-        btnHuy.setBackground(new java.awt.Color(191, 158, 117));
-        btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnHuy.setForeground(new java.awt.Color(255, 255, 255));
-        btnHuy.setText("Hủy");
-        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+        btnThoat.setBackground(new java.awt.Color(191, 158, 117));
+        btnThoat.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnThoat.setForeground(new java.awt.Color(255, 255, 255));
+        btnThoat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/thoat.png"))); // NOI18N
+        btnThoat.setText("Thoát");
+        btnThoat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHuyActionPerformed(evt);
+                btnThoatActionPerformed(evt);
             }
         });
 
         txtMatKhau.setBackground(new java.awt.Color(235, 225, 213));
-        txtMatKhau.setForeground(new java.awt.Color(0, 0, 0));
         txtMatKhau.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        jCheckBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jCheckBox1.setForeground(new java.awt.Color(97, 67, 67));
-        jCheckBox1.setText("Lưu mật khẩu");
+        chkLuuMatKhau.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        chkLuuMatKhau.setForeground(new java.awt.Color(97, 67, 67));
+        chkLuuMatKhau.setText("Lưu mật khẩu");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 5, 125));
-        jLabel2.setText("Quên mật khẩu?");
+        lblQuenMatKhau.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        lblQuenMatKhau.setForeground(new java.awt.Color(0, 5, 125));
+        lblQuenMatKhau.setText("Quên mật khẩu?");
+        lblQuenMatKhau.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblQuenMatKhauMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -144,18 +163,19 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtMatKhau)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(chkLuuMatKhau)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                                    .addComponent(lblQuenMatKhau)))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtTaiKhoan, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMatKhau)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 32, Short.MAX_VALUE))))
+                                .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnThoat, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 20, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,12 +193,12 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                         .addComponent(txtMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jLabel2))
+                            .addComponent(chkLuuMatKhau)
+                            .addComponent(lblQuenMatKhau))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDangNhap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnDangNhap)
+                            .addComponent(btnThoat)))
                     .addComponent(lbLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(53, Short.MAX_VALUE))
         );
@@ -197,16 +217,15 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         jLabel6.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         txtDatabase.setBackground(new java.awt.Color(235, 225, 213));
-        txtDatabase.setForeground(new java.awt.Color(0, 0, 0));
         txtDatabase.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         txtMayChu.setBackground(new java.awt.Color(235, 225, 213));
-        txtMayChu.setForeground(new java.awt.Color(0, 0, 0));
         txtMayChu.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         btnKetNoi.setBackground(new java.awt.Color(191, 158, 117));
         btnKetNoi.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnKetNoi.setForeground(new java.awt.Color(255, 255, 255));
+        btnKetNoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cafe/icon/ketnoi.png"))); // NOI18N
         btnKetNoi.setText("Kết Nối");
         btnKetNoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,42 +235,78 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(97, 67, 67));
+        jLabel7.setText("Mật khẩu");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        txtTaiKhoanSQL.setBackground(new java.awt.Color(235, 225, 213));
+        txtTaiKhoanSQL.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(97, 67, 67));
+        jLabel8.setText("Tài khoản");
+        jLabel8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+
+        txtMatKhauSQL.setBackground(new java.awt.Color(235, 225, 213));
+        txtMatKhauSQL.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+
         javax.swing.GroupLayout pnKetNoiLayout = new javax.swing.GroupLayout(pnKetNoi);
         pnKetNoi.setLayout(pnKetNoiLayout);
         pnKetNoiLayout.setHorizontalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator1)
+            .addGroup(pnKetNoiLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtMayChu, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                    .addComponent(txtDatabase))
+                .addGap(27, 27, 27)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTaiKhoanSQL, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(txtMatKhauSQL))
+                .addGap(33, 33, 33))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnKetNoiLayout.createSequentialGroup()
-                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(93, 93, 93))
-            .addComponent(jSeparator1)
+                .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(190, 190, 190))
         );
         pnKetNoiLayout.setVerticalGroup(
             pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnKetNoiLayout.createSequentialGroup()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addGap(29, 29, 29)
                 .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnKetNoiLayout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnKetNoiLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnKetNoiLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(pnKetNoiLayout.createSequentialGroup()
-                        .addComponent(txtMayChu, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTaiKhoanSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(txtDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(btnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                        .addGroup(pnKetNoiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtMatKhauSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(btnKetNoi)
+                .addGap(23, 23, 23))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -263,7 +318,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnKetNoi, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE))
-                .addGap(493, 493, 493))
+                .addContainerGap(493, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,8 +326,8 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 .addGap(157, 157, 157)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(pnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
+                .addComponent(pnKetNoi, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(147, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -294,20 +349,26 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKetNoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKetNoiActionPerformed
-
+        if (checkValidateFormKetNoi()) {
+            luuThongTinKetNoi();
+        }
     }//GEN-LAST:event_btnKetNoiActionPerformed
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
         dangNhap();
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
-    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
         ketThuc();
-    }//GEN-LAST:event_btnHuyActionPerformed
+    }//GEN-LAST:event_btnThoatActionPerformed
 
     private void lbLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLogoMouseClicked
         clickLogo();
     }//GEN-LAST:event_lbLogoMouseClicked
+
+    private void lblQuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuenMatKhauMouseClicked
+        new QuenMatKhauJDialog(null, true).setVisible(true);
+    }//GEN-LAST:event_lblQuenMatKhauMouseClicked
 
     /**
      * @param args the command line arguments
@@ -354,40 +415,70 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangNhap;
-    private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnKetNoi;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton btnThoat;
+    private javax.swing.JCheckBox chkLuuMatKhau;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbLogo;
+    private javax.swing.JLabel lblQuenMatKhau;
     private javax.swing.JPanel pnKetNoi;
     private javax.swing.JTextField txtDatabase;
     private javax.swing.JPasswordField txtMatKhau;
+    private javax.swing.JPasswordField txtMatKhauSQL;
     private javax.swing.JTextField txtMayChu;
     private javax.swing.JTextField txtTaiKhoan;
+    private javax.swing.JTextField txtTaiKhoanSQL;
     // End of variables declaration//GEN-END:variables
     NhanVienDAO dao = new NhanVienDAO();
     int row = - 1;
+    String fileName;
+    boolean checkLMK;
 
     private void init() {
+        checkLMK = false;
+        fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        this.docLuuMK();
+        this.docthongTin();
         pnKetNoi.setVisible(false);
     }
 
     boolean checkValidateForm() {
         if (txtTaiKhoan.getText().isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập tài khoản");
+            MsgBox.alert(this, "Vui lòng nhập tài khoản", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         String matKhau = new String(txtMatKhau.getPassword());
         if (matKhau.isEmpty()) {
-            MsgBox.alert(this, "Vui lòng nhập mât khẩu");
+            MsgBox.alert(this, "Vui lòng nhập mât khẩu", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    boolean checkValidateFormKetNoi() {
+        if (txtMayChu.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập máy chủ", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (txtDatabase.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập database", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (txtTaiKhoanSQL.getText().isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập tài khoản", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (new String(txtMatKhauSQL.getPassword()).isEmpty()) {
+            MsgBox.alert(this, "Vui lòng nhập mật khẩu", JOptionPane.WARNING_MESSAGE);
             return false;
         }
         return true;
@@ -398,19 +489,75 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             String manv = txtTaiKhoan.getText();
             String matKhau = new String(txtMatKhau.getPassword());
             NhanVien tk = dao.selectById(manv);
-            if (tk == null) {
-                MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng");
-            } else if (!matKhau.equals(tk.getMatKhau())) {
-                MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng");
+            List<String> list = readLinesFromFile(fileName);
+
+            if (chkLuuMatKhau.isSelected()) {
+                checkLMK = true;
             } else {
-                Auth.user = tk;
-                this.dispose();
+                checkLMK = false;
+            }
+            if (checkLMK == true) {
+                if (tk == null) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    if (matKhau.equals(tk.getMatKhau()) || maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau())) {
+                        if (!chkLuuMatKhau.isSelected()) {
+                            if (list.size() > 4) {
+                                xoaTKMKTrongFile();
+                            }
+                        }
+                        if (list.size() > 4) {
+                            xoaTKMKTrongFile();
+                        }
+                        LuuMatKhau();
+                        Auth.user = tk;
+                        this.dispose();
+                    } else {
+                        MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            } else {
+                if (tk == null) {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
+                } else if (maHoaMatKhauMD5(matKhau).equals(tk.getMatKhau()) || matKhau.equals(tk.getMatKhau())) {
+                    if (list.size() > 4) {
+                        xoaTKMKTrongFile();
+                    }
+                    Auth.user = tk;
+                    this.dispose();
+                } else {
+                    MsgBox.alert(this, "Tài khoản hoặc mật khẩu không đúng", JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }
 
+    public static String maHoaMatKhauMD5(String password) {
+        try {
+            // Tạo đối tượng MessageDigest với thuật toán MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Cập nhật message digest với byte của mật khẩu
+            md.update(password.getBytes());
+
+            // Lấy bản băm (digest) từ message digest
+            byte[] byteData = md.digest();
+
+            // Chuyển đổi byte thành định dạng hex
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : byteData) {
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     void ketThuc() {
-        if (MsgBox.confirm(this, "Bạn muốn kết thúc ứng dụng?")) {
+        if (MsgBox.confirm(this, "Bạn muốn thoát ứng dụng?")) {
             System.exit(0);
         }
     }
@@ -424,4 +571,135 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             row = -1;
         }
     }
+
+    private void luuThongTinKetNoi() {
+        List<String> list = new ArrayList<>();
+        String maychu = txtMayChu.getText();
+        String database = txtDatabase.getText();
+        String taiKhoanSQL = txtTaiKhoanSQL.getText();
+        String matKhauSQL = new String(txtMatKhauSQL.getPassword());
+        String connectionUrl = "jdbc:sqlserver://" + maychu + ":1433;"
+                + "databaseName=" + database + ";"
+                + "user=" + taiKhoanSQL + ";password=" + matKhauSQL + ";"
+                + "encrypt=true;trustServerCertificate=true;";
+        try {
+            Connection connection = DriverManager.getConnection(connectionUrl);
+            MsgBox.alert(this, "Kết nối thành công", JOptionPane.INFORMATION_MESSAGE);
+            connection.close();
+            
+            list.add(maychu);
+            list.add(database);
+            list.add(taiKhoanSQL);
+            list.add(matKhauSQL);
+
+            writeLinesToFile(fileName, list);
+        } catch (SQLException ex) {
+            MsgBox.alert(this, "Kết nối thất bại", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
+    private void LuuMatKhau() {
+        List<String> listMk = readLinesFromFile(fileName);
+        String taiKhoan = txtTaiKhoan.getText();
+
+        listMk.add(taiKhoan);
+
+        String matKhau;
+        NhanVien nv = dao.selectById(taiKhoan);
+        if ((new String(txtMatKhau.getPassword())).equals(nv.getMatKhau())) {
+            matKhau = nv.getMatKhau();
+        } else {
+            matKhau = maHoaMatKhauMD5(new String(txtMatKhau.getPassword()));
+        }
+
+        listMk.add(matKhau);
+
+        writeLinesToFile(fileName, listMk);
+    }
+
+    private void docLuuMK() {
+        List<String> list = readLinesFromFile(fileName);
+        if (list.size() > 4) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 4) {
+                    txtTaiKhoan.setText(list.get(i));
+                } else if (i == 5) {
+                    txtMatKhau.setText(list.get(i));
+                }
+            }
+            chkLuuMatKhau.setSelected(true);
+            checkLMK = true;
+        }
+    }
+
+    private void docthongTin() {
+        List<String> list = readLinesFromFile(fileName);
+        File file = new File(fileName);
+        if (file.length() != 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 0) {
+                    txtMayChu.setText(list.get(i));
+                } else if (i == 1) {
+                    txtDatabase.setText(list.get(i));
+                } else if (i == 2) {
+                    txtTaiKhoanSQL.setText(list.get(i));
+                } else if (i == 3) {
+                    txtMatKhauSQL.setText(list.get(i));
+                }
+
+            }
+        }
+    }
+
+    // Đọc dữ liệu từ file
+    private static List<String> readLinesFromFile(String filePath) {
+        List<String> list = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(filePath);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                list.add(line);
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    //Ghi dư liệu vào file
+    private static void writeLinesToFile(String filePath, List<String> list) {
+        try {
+            FileWriter fw = new FileWriter(filePath);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for (String line : list) {
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.flush();
+            bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Xóa từng dòng trong file 
+    private void removeLines(List<String> list, int lineIndex1, int lineIndex2) {
+        list.remove(lineIndex1);
+        list.remove(lineIndex2 - 1);
+    }
+
+    private void xoaTKMKTrongFile() {
+        // Đọc nội dung từ file 
+        List<String> lines = readLinesFromFile(fileName);
+
+        // Xóa dòng chứ tài khoản và mật khẩu, dòng 5 và 6
+        removeLines(lines, 4, 5);
+
+        // Ghi nội dung và file từ danh sách đã xóa 
+        writeLinesToFile(fileName, lines);
+    }
+
 }

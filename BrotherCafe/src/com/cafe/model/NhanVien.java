@@ -12,7 +12,7 @@ public class NhanVien {
     private String maNV;
     private String tenNV;
     private String matKhau;
-    private String queQuan;
+    private String diaChi;
     private String SDT;
     private String email;
     private boolean gioiTinh;
@@ -21,16 +21,17 @@ public class NhanVien {
     public NhanVien() {
     }
 
-    public NhanVien(String maNV, String tenNV, String matKhau, String queQuan, String SDT, String email, boolean gioiTinh, boolean chucVu) {
+    public NhanVien(String maNV, String tenNV, String matKhau, String diaChi, String SDT, String email, boolean gioiTinh, boolean chucVu) {
         this.maNV = maNV;
         this.tenNV = tenNV;
         this.matKhau = matKhau;
-        this.queQuan = queQuan;
+        this.diaChi = diaChi;
         this.SDT = SDT;
         this.email = email;
         this.gioiTinh = gioiTinh;
         this.chucVu = chucVu;
     }
+    
 
     public String getMaNV() {
         return maNV;
@@ -56,12 +57,12 @@ public class NhanVien {
         this.matKhau = matKhau;
     }
 
-    public String getQueQuan() {
-        return queQuan;
+    public String getDiaChi() {
+        return diaChi;
     }
 
-    public void setQueQuan(String queQuan) {
-        this.queQuan = queQuan;
+    public void setDiaChi(String diaChi) {
+        this.diaChi = diaChi;
     }
 
     public String getSDT() {
