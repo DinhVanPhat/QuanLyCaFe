@@ -4,6 +4,21 @@
  */
 package com.cafe.form;
 
+import com.cafe.dao.NhanVienDAO;
+import com.cafe.dao.PhanCongDAO;
+import com.cafe.model.NhanVien;
+import com.cafe.model.PhanCong;
+import com.cafe.utils.Auth;
+import com.cafe.utils.MsgBox;
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author VICTUSS
@@ -15,6 +30,7 @@ public class PhanCongJPanel extends javax.swing.JPanel {
      */
     public PhanCongJPanel() {
         initComponents();
+        init();
     }
 
     /**
@@ -40,12 +56,12 @@ public class PhanCongJPanel extends javax.swing.JPanel {
         jLabel41 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
-        txtGhiChu = new javax.swing.JTextField();
         jLabel44 = new javax.swing.JLabel();
         dateGioKetThuc = new com.toedter.calendar.JDateChooser();
         dateGioBatDau = new com.toedter.calendar.JDateChooser();
         dateNgayLam = new com.toedter.calendar.JDateChooser();
         cboMaNV = new javax.swing.JComboBox<>();
+        txtGhiChu = new javax.swing.JTextField();
         btnXoa = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
@@ -96,6 +112,11 @@ public class PhanCongJPanel extends javax.swing.JPanel {
         jLabel40.setText("Tên ca*");
 
         txtTenCa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtTenCa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTenCaActionPerformed(evt);
+            }
+        });
 
         jLabel41.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel41.setForeground(new java.awt.Color(97, 67, 67));
@@ -109,11 +130,9 @@ public class PhanCongJPanel extends javax.swing.JPanel {
         jLabel43.setForeground(new java.awt.Color(97, 67, 67));
         jLabel43.setText("Ghi chú *");
 
-        txtGhiChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-
         jLabel44.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel44.setForeground(new java.awt.Color(97, 67, 67));
-        jLabel44.setText("Mã nhân viên*");
+        jLabel44.setText("Tên nhân viên*");
 
         dateGioKetThuc.setDateFormatString("yyyy-MM-dd");
 
@@ -122,6 +141,8 @@ public class PhanCongJPanel extends javax.swing.JPanel {
         dateNgayLam.setDateFormatString("yyyy-MM-dd");
 
         cboMaNV.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        txtGhiChu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -155,9 +176,9 @@ public class PhanCongJPanel extends javax.swing.JPanel {
                                     .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(dateGioKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel43, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtGhiChu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -338,49 +359,53 @@ public class PhanCongJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
-//        if (txtTimKiem.getText().isEmpty()) {
-//            fillAllTable();
-//            this.clearForm();
-//            this.row = -1;
-//            updateStatus();
-//        } else {
-//            timKiem();
-//        }
+        if (txtTimKiem.getText().isEmpty()) {
+            fillAllTable();
+            this.clearForm();
+            this.row = -1;
+            updateStatus();
+        } else {
+            timKiem();
+        }
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-//        delete();
+        delete();
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-//        if (row != -1) {
-//            row = -1;
-//            rowUpdate = 1;
-//            updateStatus();
-//            btnThem.setText("Lưu");
-//            txtMaPC.setEditable(false);
-//        }
+        if (row != -1) {
+            row = -1;
+            rowUpdate = 1;
+            updateStatus();
+            btnThem.setText("Lưu");
+            txtMaPC.setEditable(false);
+        }
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-//        String src = evt.getActionCommand();
-//        if (src.equalsIgnoreCase("Thêm")) {
-//            insert();
-//        } else if (src.equalsIgnoreCase("Lưu")) {
-//            update();
-//        }
+        String src = evt.getActionCommand();
+        if (src.equalsIgnoreCase("Thêm")) {
+            insert();
+        } else if (src.equalsIgnoreCase("Lưu")) {
+            update();
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
-//        clearForm();
+        clearForm();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void tblPhanCongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPhanCongMouseClicked
-//        if (evt.getClickCount() == 1) {
-//            this.row = tblPhanCong.getSelectedRow();
-//            this.edit();
-//        }
+        if (evt.getClickCount() == 1) {
+            this.row = tblPhanCong.getSelectedRow();
+            this.edit();
+        }
     }//GEN-LAST:event_tblPhanCongMouseClicked
+
+    private void txtTenCaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenCaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTenCaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -411,6 +436,383 @@ public class PhanCongJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtTenCa;
     private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
+     PhanCongDAO pcdao = new PhanCongDAO();
+    NhanVienDAO nvdao = new NhanVienDAO();
+    int row = -1;
+    int rowUpdate = -1;
 
+    private void init() {
+//        this.fillAllTable();
+        fillComboBoxNhanVien();
+        this.row = -1;
+        this.rowUpdate = -1;
+        this.updateStatus();
+        
+        setBorderInput();
+        focusInput();
+    }
+
+    void insert() {
+//        if (checkValidateForm()) {
+        PhanCong pc = getForm();
+        try {
+            pcdao.insert(pc);
+            this.fillAllTable();
+            this.clearForm();
+            MsgBox.alert(this, "Thêm mới thành công!", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+//            MsgBox.alert(this, "Thêm mới thất bại", JOptionPane.WARNING_MESSAGE);\
+
+        }
+
+//        }
+    }
+
+    void update() {
+//        if (checkValidateForm()) {
+        PhanCong pc = getForm();
+        try {
+            pcdao.update(pc);
+            this.fillAllTable();
+            MsgBox.alert(this, "Cập nhật thành công!", JOptionPane.INFORMATION_MESSAGE);
+            this.clearForm();
+        } catch (Exception e) {
+            //throw new RuntimeException(e);
+            MsgBox.alert(this, "Cập nhật thất bại", JOptionPane.WARNING_MESSAGE);
+        }
+//        }
+    }
+
+    void delete() {
+        if (!Auth.isManager()) {
+            MsgBox.alert(this, "Bạn không có quyền xóa đơn vị!", JOptionPane.WARNING_MESSAGE);
+        } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa đơn vị này?")) {
+            String maPC = txtMaPC.getText();
+            try {
+                pcdao.delete(maPC);
+                this.fillAllTable();
+                this.clearForm();
+                MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                //throw new RuntimeException(e);
+                MsgBox.alert(this, "Xóa thất bại", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    void clearForm() {
+        PhanCong pc = new PhanCong();
+        this.setForm(pc);
+        this.row = -1;
+        this.rowUpdate = -1;
+        this.updateStatus();
+        tblPhanCong.clearSelection();
+
+    }
+
+    void edit() {
+        String pcString = (String) tblPhanCong.getValueAt(this.row, 0);
+        PhanCong pc = pcdao.selectById(pcString);
+        this.setForm(pc);
+        this.updateStatus();
+    }
+
+    void fillAllTable() {
+        DefaultTableModel model = (DefaultTableModel) tblPhanCong.getModel();
+        model.setRowCount(0);
+        try {
+            String keyWord = txtTimKiem.getText();
+            List<PhanCong> list = pcdao.selectAll();
+            for (PhanCong pc : list) {
+                Object[] row = {pc.getMaPC(), pc.getNgayLam(), pc.getTenCa(), pc.getGioBatDau(), pc.getGioKetThuc(), pc.getGhiChu(), pc.getMaNV()};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    void filltimkiemtable() {
+        DefaultTableModel model = (DefaultTableModel) tblPhanCong.getModel();
+        model.setRowCount(0);
+        try {
+            String keyWord = txtTimKiem.getText();
+            List<PhanCong> list = pcdao.selectByKeyWord(keyWord);
+            if (list.isEmpty()) {
+                MsgBox.alert(this, "Không có phân công nào!", JOptionPane.WARNING_MESSAGE);
+            } else {
+                for (PhanCong pc : list) {
+                    Object[] row = {pc.getMaPC(), pc.getNgayLam(), pc.getTenCa(), pc.getGioBatDau(), pc.getGioKetThuc(), pc.getGhiChu(), pc.getMaNV()};
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+            // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    private String layMaPC(String id) {
+        List<PhanCong> list = pcdao.selectAll();
+        String ma = id;
+        if (list.isEmpty()) {
+            ma = ma + "01";
+        } else {
+            String maBCuoiList = list.get(list.size() - 1).getMaPC();
+            int sauMaPC = Integer.valueOf(maBCuoiList.substring(2, maBCuoiList.length())) + 1;
+            if (sauMaPC < 10) {
+                ma = ma + "0" + sauMaPC;
+            } else {
+                ma = ma + sauMaPC;
+            }
+        }
+        return ma;
+    }
+
+    void setForm(PhanCong pc) {
+        txtMaPC.setText(pc.getMaPC());
+        dateNgayLam.setDate(pc.getNgayLam());
+        dateGioBatDau.setDateFormatString(pc.getGioBatDau());
+        dateGioKetThuc.setDateFormatString(pc.getGioKetThuc());
+        txtGhiChu.setText(pc.getGhiChu());
+        cboMaNV.setSelectedIndex(String(pc.getMaNV()));
+        if (pc.getMaNV() == null) {
+            cboMaNV.setSelectedIndex(0);
+        } else {
+            NhanVien nv = nvdao.selectById(pc.getMaNV());
+            cboMaNV.setSelectedItem(nv.getTenNV());
+        }
+    }
+
+    PhanCong getForm() {
+        PhanCong pc = new PhanCong();
+        if (rowUpdate == -1) {
+            // Insert
+            pc.setMaPC(layMaPC("PC"));
+        } else {
+            // Update
+            pc.setMaPC(txtMaPC.getText());
+        }
+        pc.setTenCa(Integer.parseInt(txtTenCa.getText()));
+        pc.setNgayLam(dateNgayLam.getDate());
+        pc.setGioBatDau(dateGioBatDau.getDateFormatString());
+        pc.setGioKetThuc(dateGioKetThuc.getDateFormatString());
+        pc.setGhiChu(pc.getGhiChu());
+
+        List<NhanVien> list = nvdao.selectByTenNV((String) cboMaNV.getSelectedItem());
+        for (NhanVien nv : list) {
+            pc.setMaNV(nv.getMaNV());
+        }
+        return pc;
+    }
+
+    void updateStatus() {
+        boolean edit = (this.row >= 0);
+        //Trạng thái form
+        txtMaPC.setEditable(false);
+        dateNgayLam.setEnabled(!edit);
+        txtTenCa.setEditable(!edit);
+        dateGioBatDau.setEnabled(!edit);
+        dateGioKetThuc.setEnabled(!edit);
+        txtGhiChu.setEditable(!edit);
+        cboMaNV.setEditable(!edit);
+
+        btnThem.setEnabled(!edit);
+        btnSua.setEnabled(edit);
+        btnXoa.setEnabled(edit);
+        btnThem.setText("Thêm");
+
+    }
+
+//    boolean checkValidateForm() {
+//        if (txtTenDV.getText().isEmpty()) {
+//            MsgBox.alert(this, "Vui lòng nhập tên đơn vị!", JOptionPane.WARNING_MESSAGE);
+//            return false;
+//        }
+//        if (txtDiaChi.getText().isEmpty()) {
+//            MsgBox.alert(this, "Vui lòng nhập địa chỉ!", JOptionPane.WARNING_MESSAGE);
+//            return false;
+//        }
+//        if (txtSDT.getText().isEmpty()) {
+//            MsgBox.alert(this, "Vui lòng nhập số điện thoại!", JOptionPane.WARNING_MESSAGE);
+//            return false;
+//        } else {
+//            try {
+//                long sdt = Long.parseLong(txtSDT.getText());
+//                if (sdt < 0) {
+//                    MsgBox.alert(this, "Số điện thoại không được là số âm!", JOptionPane.WARNING_MESSAGE);
+//                    return false;
+//                }
+//            } catch (Exception e) {
+//                MsgBox.alert(this, "Số điện thoại phải là số!", JOptionPane.WARNING_MESSAGE);
+//                return false;
+//            }
+//            String sdt10so = "\\d{10}";
+//            if (!txtSDT.getText().matches(sdt10so)) {
+//                MsgBox.alert(this, "Số điện thoại phải là 10 số!", JOptionPane.WARNING_MESSAGE);
+//                return false;
+//            }
+//
+//            String patternSDT = "^(0[3-9])\\d{8}$";
+//            if (!txtSDT.getText().matches(patternSDT)) {
+//                MsgBox.alert(this, "Số điện thoại không đúng định dạng!", JOptionPane.WARNING_MESSAGE);
+//                return false;
+//            }
+//        }
+//        if (txtEmail.getText().isEmpty()) {
+//            MsgBox.alert(this, "Vui lòng nhập email!", JOptionPane.WARNING_MESSAGE);
+//            return false;
+//        } else {
+//            String patternEmail = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+(\\.[A-Za-z]{2,}){1,2}$";
+//            if (!txtEmail.getText().matches(patternEmail)) {
+//                MsgBox.alert(this, "Email! không hợp lệ", JOptionPane.WARNING_MESSAGE);
+//                return false;
+//            }
+//        }
+//        if (txtWebsite.getText().isEmpty()) {
+//            MsgBox.alert(this, "Vui lòng nhập website!", JOptionPane.WARNING_MESSAGE);
+//            return false;
+//        }
+//        return true;
+//    }
+    private void timKiem() {
+        this.filltimkiemtable();
+        this.clearForm();
+        this.row = -1;
+        updateStatus();
+    }
+
+    private void focusInput() {
+        Border borderNhanVao = BorderFactory.createLineBorder(new Color(227, 188, 140), 10, true);
+        Border borderKhongNhan = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
+        txtMaPC.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtMaPC.setBackground(new Color(227, 188, 140));
+                txtMaPC.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                txtMaPC.setBackground(new Color(255, 255, 255));
+                txtMaPC.setBorder(borderKhongNhan);
+            }
+        });
+        dateNgayLam.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                dateNgayLam.setBackground(new Color(227, 188, 140));
+                dateNgayLam.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                dateNgayLam.setBackground(new Color(255, 255, 255));
+                dateNgayLam.setBorder(borderKhongNhan);
+            }
+        });
+        txtTenCa.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtTenCa.setBackground(new Color(227, 188, 140));
+                txtTenCa.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                txtTenCa.setBackground(new Color(255, 255, 255));
+                txtTenCa.setBorder(borderKhongNhan);
+            }
+        });
+        dateGioBatDau.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                dateGioBatDau.setBackground(new Color(227, 188, 140));
+                dateGioBatDau.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                dateGioBatDau.setBackground(new Color(255, 255, 255));
+                dateGioBatDau.setBorder(borderKhongNhan);
+            }
+        });
+        dateGioKetThuc.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                dateGioKetThuc.setBackground(new Color(227, 188, 140));
+                dateGioKetThuc.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                dateGioKetThuc.setBackground(new Color(255, 255, 255));
+                dateGioKetThuc.setBorder(borderKhongNhan);
+            }
+        });
+        txtGhiChu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtGhiChu.setBackground(new Color(227, 188, 140));
+                txtGhiChu.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                txtGhiChu.setBackground(new Color(255, 255, 255));
+                txtGhiChu.setBorder(borderKhongNhan);
+            }
+        });
+        cboMaNV.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                cboMaNV.setBackground(new Color(227, 188, 140));
+                cboMaNV.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                cboMaNV.setBackground(new Color(255, 255, 255));
+                cboMaNV.setBorder(borderKhongNhan);
+            }
+        });
+        txtTimKiem.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                txtTimKiem.setBackground(new Color(227, 188, 140));
+                txtTimKiem.setBorder(borderNhanVao);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                txtTimKiem.setBackground(new Color(255, 255, 255));
+                txtTimKiem.setBorder(borderKhongNhan);
+            }
+        });
+    }
+
+    private void setBorderInput() {
+        Border border = BorderFactory.createLineBorder(new Color(255, 255, 255), 10, true);
+        txtTenCa.setBorder(border);
+        txtGhiChu.setBorder(border);
+        txtTimKiem.setBorder(border);
+
+    }
+
+    private int String(String maNV) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    void fillComboBoxNhanVien() {
+        List<NhanVien> nv = nvdao.selectAll();
+        cboMaNV.removeAllItems();
+        for (NhanVien NhanVien : nv) {
+            cboMaNV.addItem(NhanVien.getTenNV());
+            System.out.println(NhanVien.getTenNV());
+        }
+        System.out.println(nv);
+    }
 
 }

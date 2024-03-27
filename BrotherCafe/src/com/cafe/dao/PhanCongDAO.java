@@ -4,6 +4,7 @@
  */
 package com.cafe.dao;
 
+import com.cafe.model.NhanVien;
 import com.cafe.model.PhanCong;
 import com.cafe.utils.jdbcHelper;
 import java.sql.ResultSet;
@@ -80,4 +81,5 @@ public class PhanCongDAO extends CafeDAO<PhanCong, String> {
         String sql = "SELECT * FROM PhanCong WHERE MaNV LIKE ? OR TenCa LIKE ? OR NgayLam LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
     }
-}
+    
+    }
