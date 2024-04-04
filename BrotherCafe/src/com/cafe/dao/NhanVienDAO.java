@@ -4,6 +4,7 @@
  */
 package com.cafe.dao;
 
+import com.cafe.model.DonVi;
 import com.cafe.model.NhanVien;
 import com.cafe.utils.jdbcHelper;
 import java.sql.ResultSet;
@@ -16,20 +17,20 @@ import java.util.List;
  */
 public class NhanVienDAO extends CafeDAO<NhanVien, String> {
 
-    String INSERT_SQL = "INSERT INTO NhanVien (MaNV, TenNV, MatKhau, DiaChi, SDT, Email, GioiTinh, ChucVu) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE NhanVien SET TenNV = ?, MatKhau = ?, DiaChi =?, SDT = ?, Email = ?, GioiTinh = ?, ChucVu = ? WHERE MaNV = ?";
+    String INSERT_SQL = "INSERT INTO NhanVien (MaNV, TenNV, MatKhau, DiaChi, SDT, Email, GioiTinh, ChucVu, MaDV) VALUES (?, ?, ?, ?, ?, ?, ?, ?. ?)";
+    String UPDATE_SQL = "UPDATE NhanVien SET TenNV = ?, MatKhau = ?, DiaChi =?, SDT = ?, Email = ?, GioiTinh = ?, ChucVu = ?, MaDV = ? WHERE MaNV = ?";
     String DELETE_SQL = "DELETE FROM NhanVien WHERE MaNV = ?";
     String SELECT_ALL_SQL = "SELECT * FROM NhanVien";
     String SELECT_BY_ID_SQL = "SELECT * FROM NhanVien WHERE MaNV = ?";
 
     @Override
     public void insert(NhanVien e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaNV(), e.getTenNV(), e.getMatKhau(), e.getDiaChi(), e.getSDT(), e.getEmail(), e.isGioiTinh(), e.isChucVu());
+        jdbcHelper.update(INSERT_SQL, e.getMaNV(), e.getTenNV(), e.getMatKhau(), e.getDiaChi(), e.getSDT(), e.getEmail(), e.isGioiTinh(), e.isChucVu(), e.getMaDV());
     }
 
     @Override
     public void update(NhanVien e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenNV(), e.getMatKhau(), e.getDiaChi(), e.getSDT(), e.getEmail(), e.isGioiTinh(), e.isChucVu(), e.getMaNV());
+        jdbcHelper.update(UPDATE_SQL, e.getTenNV(), e.getMatKhau(), e.getDiaChi(), e.getSDT(), e.getEmail(), e.isGioiTinh(), e.isChucVu(), e.getMaDV(), e.getMaNV());
     }
 
     @Override
@@ -71,6 +72,7 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
                 entity.setMatKhau(rs.getString("MatKhau"));
                 entity.setGioiTinh(rs.getBoolean("GioiTinh"));
                 entity.setChucVu(rs.getBoolean("ChucVu"));
+                entity.setMaDV(rs.getString("MaDV"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -88,6 +90,7 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
         String sql = "SELECT * FROM NhanVien WHERE MaNV LIKE ? ";
         return this.selectBySql(sql, keyword+"%");
     }
+   
     public boolean chechTrungMa(String ma) {
         List<NhanVien> list = this.selectAll();
         for (NhanVien nv : list) {

@@ -83,5 +83,8 @@ public class DonViDao extends CafeDAO<DonVi, String> {
         String sql = "SELECT * FROM DonVi WHERE TenDV LIKE ? OR DiaChi LIKE ? OR SDT LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%","%" + keyword + "%" );
     }
-    
+     public List<DonVi> selectByTenDV(String keyword) {
+        String sql = "SELECT * FROM DonVi WHERE tenDV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%");
+    }
 }
