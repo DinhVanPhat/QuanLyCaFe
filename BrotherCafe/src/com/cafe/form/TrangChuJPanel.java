@@ -33,22 +33,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -552,6 +557,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private void btnOkChuyenBanActionPerformed(java.awt.event.ActionEvent evt) {
         chuyenBanNhanOk();
         dgChuyenBan.setVisible(false);
+
     }
 
     private void btnOkGopBanActionPerformed(java.awt.event.ActionEvent evt) {
@@ -562,6 +568,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private void btnOkDatBanActionPerformed(java.awt.event.ActionEvent evt) {
         datBanOK();
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChuyenBan;
@@ -630,6 +637,10 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private JTextField txtSuaGhiChu;
     private JTextField txtSuaSoLuong;
     private JButton btnOkSuaSoLuong;
+    private JDialog dgBill;
+    private JButton btnInBill;
+    private JButton btbHuyInBill;
+    private JEditorPane ed_Page;
 
     KhuVucDAO kvdao = new KhuVucDAO();
     SanPhamDAO spdao = new SanPhamDAO();
@@ -1163,8 +1174,8 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                     tenBan = null;
                     fillBan(b.getKhuVuc());
                     setlblrong = -1;
-                    xuatHoaDon xhd = new xuatHoaDon();
-                    xhd.XuatHoaDon(hd.getMaHD());
+                    XuatHoaDon xhd = new XuatHoaDon();
+                    xhd.XHDLayDuLieu(hd.getMaHD());
                     xhd.setVisible(true);
                 }
             } else {
