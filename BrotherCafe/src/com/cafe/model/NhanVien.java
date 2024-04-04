@@ -17,11 +17,12 @@ public class NhanVien {
     private String email;
     private boolean gioiTinh;
     private boolean chucVu;
+    private String maDV;
 
     public NhanVien() {
     }
 
-    public NhanVien(String maNV, String tenNV, String matKhau, String diaChi, String SDT, String email, boolean gioiTinh, boolean chucVu) {
+    public NhanVien(String maNV, String tenNV, String matKhau, String diaChi, String SDT, String email, boolean gioiTinh, boolean chucVu, String maDV) {
         this.maNV = maNV;
         this.tenNV = tenNV;
         this.matKhau = matKhau;
@@ -30,7 +31,10 @@ public class NhanVien {
         this.email = email;
         this.gioiTinh = gioiTinh;
         this.chucVu = chucVu;
+        this.maDV = maDV;
     }
+
+    
     
 
     public String getMaNV() {
@@ -96,5 +100,15 @@ public class NhanVien {
     public void setChucVu(boolean chucVu) {
         this.chucVu = chucVu;
     }
+
+    public String getMaDV() {
+        return maDV;
+    }
+
+    public void setMaDV(String maDV) {
+        this.maDV = maDV;
+    }
+    
+    
     
 }
