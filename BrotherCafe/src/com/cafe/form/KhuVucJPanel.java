@@ -499,15 +499,16 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }
 
     KhuVuc getForm() {
-        KhuVuc nv = new KhuVuc();
+        KhuVuc kv = new KhuVuc();
         if(rowUpdate == -1){
-            nv.setMaKV(layMaKV("KV"));           
+            kv.setMaKV(layMaKV("KV"));           
         } else {
-            nv.setMaKV(txtMaKV.getText());
+            kv.setMaKV(txtMaKV.getText());
         }
-        nv.setTenKV(txtTenKV.getText());
-        nv.setMoTa(txtMoTa.getText());
-        return nv;
+        kv.setTenKV(txtTenKV.getText());
+        kv.setMoTa(txtMoTa.getText());
+        kv.setMaDV(Auth.user.getMaDV());
+        return kv;
     }
 
     void updateStatus() {

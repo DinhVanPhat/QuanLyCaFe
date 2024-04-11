@@ -15,6 +15,7 @@ import com.cafe.model.ChiTietHoaDon;
 import com.cafe.model.HoaDon;
 import com.cafe.model.KhachHang;
 import com.cafe.model.KhuVuc;
+import com.cafe.model.NhanVien;
 import com.cafe.model.SanPham;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
@@ -33,15 +34,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -53,7 +51,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
@@ -507,7 +504,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         tenBan = text.substring(dau + 10, cuoi);
         fillTable();
         clickBan();
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         pn_MenuKV.setVisible(false);
         fillBan(b.getKhuVuc());
         if (b.getTrangThai().equals("Đã đặt")) {
@@ -702,24 +699,25 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         // Thêm button trên thanh khu vực
         int xKhuVuc = 15;
         int yKhuVuc = 15;
-
         for (KhuVuc kv : listKV) {
-            btnKhuVuc = new JButton(kv.getTenKV());
-            btnKhuVuc.setLocation(xKhuVuc, yKhuVuc);
-            xKhuVuc = xKhuVuc + 145;
-            btnKhuVuc.setPreferredSize(new Dimension(130, 50));
-            btnKhuVuc.setSize(130, 50);
-            btnKhuVuc.setBackground(new Color(255, 255, 255));
-            btnKhuVuc.setForeground(new Color(97, 67, 67));
-            btnKhuVuc.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            btnKhuVuc.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    btnKhuVucActionPerformed(e);
-                }
-            });
+            if (kv.getMaDV().equals(Auth.user.getMaDV())) {
+                btnKhuVuc = new JButton(kv.getTenKV());
+                btnKhuVuc.setLocation(xKhuVuc, yKhuVuc);
+                xKhuVuc = xKhuVuc + 145;
+                btnKhuVuc.setPreferredSize(new Dimension(130, 50));
+                btnKhuVuc.setSize(130, 50);
+                btnKhuVuc.setBackground(new Color(255, 255, 255));
+                btnKhuVuc.setForeground(new Color(97, 67, 67));
+                btnKhuVuc.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                btnKhuVuc.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        btnKhuVucActionPerformed(e);
+                    }
+                });
 
-            pn_KhuVuc.add(btnKhuVuc);
+                pn_KhuVuc.add(btnKhuVuc);
+            }
         }
 
         DecimalFormat formatTienVND = new DecimalFormat("###,###.###");
@@ -749,8 +747,10 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         }
         String list = "";
         for (KhuVuc khuVuc : listKV) {
-            list = khuVuc.getTenKV();
-            break;
+            if (khuVuc.getMaDV().equals(Auth.user.getMaDV())) {
+                list = khuVuc.getTenKV();
+                break;
+            }
         }
         if (list != null) {
             pn_MenuKV.setVisible(false);
@@ -760,6 +760,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     public void fillBan(String keyWord) {
+
         for (Ban b : listBan) {
             if (!b.getKhuVuc().equals(keyWord)) {
                 pn_MenuKV.removeAll();
@@ -768,7 +769,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
         List<Ban> listB = null;
         for (KhuVuc khuVuc : list) {
-            listB = bdao.selectByKeyWord(khuVuc.getMaKV());
+            listB = bdao.selectByMaKVTraVeBan(khuVuc.getMaKV());
         }
         if (listB != null) {
             for (Ban ban : listB) {
@@ -860,7 +861,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     public void fillTable() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         List<HoaDon> listHD = hddao.selectByMaBan(b.getMaBan());
         if (b.getTrangThai().equals("Có khách")) {
             for (HoaDon hd : listHD) {
@@ -881,7 +882,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     public Ban updateBanTrong() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         Ban bnew = new Ban();
         bnew.setMaBan(b.getMaBan());
         bnew.setKhuVuc(b.getKhuVuc());
@@ -899,7 +900,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 pnCenter.setVisible(false);
                 pn_MenuSP.setVisible(true);
                 clickOrder = 1;
-                Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+                Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
                 if (b.getTrangThai().equals("Trống") || b.getTrangThai().equals("Đã đặt")) {
                     listCTHD = new ArrayList<>();
                 } else {
@@ -1007,7 +1008,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void OrderChonSL() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         SanPham sp = spdao.selectByTenSPTraveMaSP(tenSP);
         if (b.getTrangThai().equals("Trống") || b.getTrangThai().equals("Có khách")) {
             HoaDon hdForm = getFormHD();
@@ -1059,7 +1060,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
     private boolean trungSPKhiOrder() {
         SanPham sp = spdao.selectByTenSPTraveMaSP(tenSP);
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         List<ChiTietHoaDon> listcthd = cthddao.selectByMaBan(b.getMaBan());
 
         for (ChiTietHoaDon cthdList : listcthd) {
@@ -1072,7 +1073,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private int idHoaDon(String keyWord) {
-        Ban b = bdao.selectByTenBanTraVeBan(keyWord);
+        Ban b = bdao.selectByTenBanTraVeBan(keyWord,Auth.user.getMaDV());
         List<HoaDon> hd = hddao.selectAll();
         for (HoaDon hoaDon : hd) {
             if (hoaDon.getMaBan().equals(b.getMaBan())) {
@@ -1085,7 +1086,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void updateBanKhiOrderVaTT() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         Ban bUp = new Ban();
         bUp.setMaBan(b.getMaBan());
         bUp.setTenBan(b.getTenBan());
@@ -1129,7 +1130,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
 
         hd.setMaNV(Auth.user.getMaNV());
         //hd.setMaNV("nghiatv");
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         hd.setMaBan(b.getMaBan());
         if (b.getTrangThai().equals("Đã đặt")) {
             List<HoaDon> listhd = hddao.selectByMaBan(tenBan);
@@ -1158,7 +1159,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         if (tenBan == null) {
             MsgBox.alert(this, "Vui lòng chọn bàn để thanh toán", JOptionPane.WARNING_MESSAGE);
         } else {
-            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+            Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
             if (b.getTrangThai().equals("Có khách")) {
                 if (MsgBox.confirm(this, "Bạn có muốn thanh toán cho " + tenBan)) {
                     thoiGianTT = 1;
@@ -1185,7 +1186,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void chonChuyenBan() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         if (tenBan == null) {
             MsgBox.alert(null, "Vui lòng chọn bàn cần chuyển", JOptionPane.WARNING_MESSAGE);
         } else if (b.getTrangThai().equals("Trống") || b.getTrangThai().equals("Đã đặt")) {
@@ -1264,7 +1265,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         Ban b = updateBanTrong();
         bdao.update(b);
 
-        Ban banDuocChuyen = bdao.selectByTenBanTraVeBan(tenBanDuocChuyen);
+        Ban banDuocChuyen = bdao.selectByTenBanTraVeBan(tenBanDuocChuyen,Auth.user.getMaDV());
         banDuocChuyen.setMaBan(banDuocChuyen.getMaBan());
         banDuocChuyen.setTenBan(banDuocChuyen.getTenBan());
         banDuocChuyen.setKhuVuc(banDuocChuyen.getKhuVuc());
@@ -1281,7 +1282,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     }
 
     private void chonGopBan() {
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         if (tenBan == null) {
             MsgBox.alert(null, "Vui lòng chọn bàn cần gộp", JOptionPane.WARNING_MESSAGE);
         } else if (b.getTrangThai().equals("Trống") || b.getTrangThai().equals("Đã đặt")) {
@@ -1361,8 +1362,8 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private void gopBanNhanOK() {
         String tenBanDuocGop = (String) cboGopBan.getSelectedItem();
 
-        Ban bGopChinh = bdao.selectByTenBanTraVeBan(tenBanDuocGop);
-        Ban bGopPhu = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban bGopChinh = bdao.selectByTenBanTraVeBan(tenBanDuocGop,Auth.user.getMaDV());
+        Ban bGopPhu = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
 
         List<ChiTietHoaDon> cthdGopPhu = cthddao.selectByMaBan(bGopPhu.getMaBan());
         int idhd = idHoaDon(bGopChinh.getTenBan());
@@ -1399,7 +1400,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
     private void chonDatBan() {
         if (btnDatBan.getText().equals("Đặt bàn")) {
             if (tenBan != null) {
-                Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+                Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
                 if (b.getTrangThai().equals("Trống")) {
                     giaoDienDatBan();
                 } else {
@@ -1440,7 +1441,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             } catch (Exception e) {
             }
             dgDatBan.setVisible(false);
-            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+            Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
             Ban bUpdate = new Ban();
             bUpdate.setMaBan(b.getMaBan());
             bUpdate.setTenBan(b.getTenBan());
@@ -1448,7 +1449,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
             bUpdate.setTrangThai("Đã đặt");
             bdao.update(bUpdate);
 
-            Ban bfill = bdao.selectByTenBanTraVeBan(tenBan);
+            Ban bfill = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
             pn_MenuKV.setVisible(false);
             fillBan(bfill.getKhuVuc());
             clickBan();
@@ -1486,7 +1487,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         }
         if (MsgBox.confirm(null, "Bạn muốn xóa sản phẩm " + tenSP)) {
             int maHD = 0;
-            Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+            Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
 
             List<HoaDon> list = hddao.selectByMaBan(b.getMaBan());
             for (HoaDon hoaDon : list) {
@@ -1773,7 +1774,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
         hd.setTongTien(0.0);
         hd.setTrangThai(false);
         hd.setMaNV("nghiatv");
-        Ban b = bdao.selectByTenBanTraVeBan(tenBan);
+        Ban b = bdao.selectByTenBanTraVeBan(tenBan,Auth.user.getMaDV());
         hd.setMaBan(b.getMaBan());
         hd.setMaKH(maKH);
 

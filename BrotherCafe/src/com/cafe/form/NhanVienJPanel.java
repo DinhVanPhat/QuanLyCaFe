@@ -590,7 +590,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
-            List<NhanVien> list = nvdao.selectAll();
+            List<NhanVien> list = nvdao.selectAllByMaDV(Auth.user.getMaDV());
             for (NhanVien nv : list) {
                 DonVi dv = dvdao.selectById(nv.getMaDV());
                 Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên",dv.getTenDV()};
@@ -607,7 +607,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<NhanVien> list = nvdao.selectByKeyWord(keyWord);
+            List<NhanVien> list = nvdao.selectByKeyWordAndMaDV(Auth.user.getMaDV(),keyWord);
             if (list.isEmpty()) {   
                 MsgBox.alert(this, "Không có nhân viên nào!", JOptionPane.WARNING_MESSAGE);
             } else {

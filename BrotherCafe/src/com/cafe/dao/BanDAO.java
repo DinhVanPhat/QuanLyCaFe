@@ -79,12 +79,20 @@ public class BanDAO extends CafeDAO<Ban, String>{
         }
     }
 
-    public List<Ban> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM Ban WHERE MaBan LIKE ? OR Tenban LIKE ? OR MaKV LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
+    public List<Ban> selectByMaKVTraVeBan(String keyword) {
+        String sql = "SELECT * FROM Ban WHERE MaKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%");
+    }
+    public List<Ban> selectByKeyWordAndDV(String maDV ,String keyword) {
+        String sql = "SELECT B.* FROM Ban B INNER JOIN KhuVuc K ON B.MaKV = K.MaKV WHERE K.MaDV LIKE ? AND Tenban LIKE ? ";
+        return this.selectBySql(sql, "%" +maDV, "%" + keyword + "%");
     }
     public List<Ban> selectByTenBan(String keyword) {
         String sql = "SELECT * FROM Ban WHERE Tenban LIKE ?";
+        return this.selectBySql(sql,keyword);
+    }
+    public List<Ban> selectByMaDV(String keyword) {
+        String sql = "SELECT B.* FROM Ban B INNER JOIN KhuVuc K ON B.MaKV = K.MaKV WHERE K.MaDV = ?";
         return this.selectBySql(sql,keyword);
     }
     public boolean chechTrungMa(String ma) {
@@ -96,9 +104,9 @@ public class BanDAO extends CafeDAO<Ban, String>{
         }
         return true;
     }
-    public Ban selectByTenBanTraVeBan(String id) {
-        String sql = "SELECT * FROM Ban WHERE Tenban LIKE ?";
-        List<Ban> list = this.selectBySql(sql, id);
+    public Ban selectByTenBanTraVeBan(String tenBan, String maKV) {
+        String sql = "SELECT b.* FROM Ban b INNER JOIN KhuVuc kv ON b.MaKV = kv.MaKV WHERE b.Tenban LIKE ? AND kv.MaDV LIKE ?";
+        List<Ban> list = this.selectBySql(sql, tenBan,maKV);
         if (list.isEmpty()) {
             return null;
         }

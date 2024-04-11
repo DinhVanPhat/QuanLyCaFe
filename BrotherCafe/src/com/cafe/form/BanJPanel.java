@@ -381,8 +381,7 @@ public class BanJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            System.out.println(keyWord);
-            List<Ban> list = banDao.selectByKeyWord(keyWord);
+            List<Ban> list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
             for (Ban ban : list) {
                 Object[] row = {ban.getMaBan(), ban.getTenBan(), ban.getTrangThai(), ban.getKhuVuc()};
                 model.addRow(row);
@@ -474,7 +473,7 @@ public class BanJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblBan.getModel();
         model.setRowCount(0);
         try {
-            List<Ban> list = banDao.selectAll();
+            List<Ban> list = banDao.selectByMaDV(Auth.user.getMaDV());
             for (Ban ban : list) {
                 KhuVuc kv = kvdao.selectById(ban.getKhuVuc());
                 Object[] row = {ban.getMaBan(), ban.getTenBan(), kv.getTenKV(), ban.getTrangThai()};
@@ -490,7 +489,9 @@ public class BanJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<Ban> list = banDao.selectByKeyWord(keyWord);
+            System.out.println(keyWord+"|"+Auth.user.getMaDV());
+            List<Ban> list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            
             if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có bàn nào!", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -508,8 +509,13 @@ public class BanJPanel extends javax.swing.JPanel {
     void setForm(Ban b) {
         txtMaBan.setText(b.getMaBan());
         txtTenban.setText(b.getTenBan());
-        KhuVuc kv = kvdao.selectById(b.getKhuVuc());
-        cboChonKhuVuc.setSelectedItem(kv.getTenKV());
+        System.out.println(b.getKhuVuc());
+        if(b.getKhuVuc() == null){
+            cboChonKhuVuc.setSelectedIndex(0);
+        } else {
+            KhuVuc kv = kvdao.selectById(b.getKhuVuc());
+            cboChonKhuVuc.setSelectedItem(kv.getTenKV());   
+        }
     }
 
     Ban getForm() {

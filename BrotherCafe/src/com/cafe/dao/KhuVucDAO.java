@@ -16,20 +16,20 @@ import java.util.List;
  */
 public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
 
-    String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa) VALUES (?, ?, ?)";
-    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ? WHERE MaKV = ?";
+    String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa, MaDV) VALUES (?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ?, MaDV = ? WHERE MaKV = ?";
     String DELETE_SQL = "DELETE FROM KhuVuc WHERE MaKV = ?";
     String SELECT_ALL_SQL = "SELECT * FROM KhuVuc";
     String SELECT_BY_ID_SQL = "SELECT * FROM KhuVuc WHERE MaKV = ?";
 
     @Override
     public void insert(KhuVuc e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaKV(), e.getTenKV(), e.getMoTa());
+        jdbcHelper.update(INSERT_SQL, e.getMaKV(), e.getTenKV(), e.getMoTa(), e.getMaDV());
     }
 
     @Override
     public void update(KhuVuc e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenKV(), e.getMoTa(), e.getMaKV());
+        jdbcHelper.update(UPDATE_SQL, e.getTenKV(), e.getMoTa(), e.getMaDV(), e.getMaKV());
     }
 
     @Override
@@ -66,6 +66,7 @@ public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
                 entity.setMaKV(rs.getString("MaKV"));
                 entity.setTenKV(rs.getString("TenKV"));
                 entity.setMoTa(rs.getString("MoTa"));
+                entity.setMaDV(rs.getString("MaDV"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

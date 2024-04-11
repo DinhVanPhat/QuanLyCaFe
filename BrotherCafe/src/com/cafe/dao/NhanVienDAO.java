@@ -86,6 +86,14 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
         String sql = "SELECT * FROM NhanVien WHERE TenNV LIKE ? OR MaNV LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%");
     }
+     public List<NhanVien> selectByKeyWordAndMaDV(String maDV , String keyword) {
+        String sql = "SELECT * FROM NhanVien WHERE MaDV LIKE ? TenNV LIKE ? OR MaNV LIKE ? OR Email LIKE ? OR SDT LIKE ? OR DiaChi LIKE ?";
+        return this.selectBySql(sql, maDV , "%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%","%" + keyword + "%");
+    }
+    public List<NhanVien> selectAllByMaDV(String keyword) {
+        String sql = "SELECT * FROM NhanVien WHERE MaDV LIKE ? ";
+        return this.selectBySql(sql, keyword+"%");
+    }
     public List<NhanVien> selectByMaNV(String keyword) {
         String sql = "SELECT * FROM NhanVien WHERE MaNV LIKE ? ";
         return this.selectBySql(sql, keyword+"%");
