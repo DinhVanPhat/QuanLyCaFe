@@ -444,7 +444,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectAll();
+            List<KhuVuc> list = kvdao.selectByMaDV(Auth.user.getMaDV());
             for (KhuVuc nv : list) {
                 Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
                 model.addRow(row);
@@ -460,7 +460,7 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
+            List<KhuVuc> list = kvdao.selectByKeyWord(Auth.user.getMaDV(),keyWord);
             if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có khu vực nào!", JOptionPane.WARNING_MESSAGE);
             } else {

@@ -84,7 +84,7 @@ public class BanDAO extends CafeDAO<Ban, String>{
         return this.selectBySql(sql, "%" + keyword + "%");
     }
     public List<Ban> selectByKeyWordAndDV(String maDV ,String keyword) {
-        String sql = "SELECT B.* FROM Ban B INNER JOIN KhuVuc K ON B.MaKV = K.MaKV WHERE K.MaDV LIKE ? AND Tenban LIKE ? ";
+        String sql = "SELECT B.* FROM Ban B INNER JOIN KhuVuc K ON B.MaKV = K.MaKV WHERE K.MaDV LIKE ? AND Tenban LIKE ? OR";
         return this.selectBySql(sql, "%" +maDV, "%" + keyword + "%");
     }
     public List<Ban> selectByTenBan(String keyword) {

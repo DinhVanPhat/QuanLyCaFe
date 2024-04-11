@@ -766,7 +766,7 @@ public class TrangChuJPanel extends javax.swing.JPanel {
                 pn_MenuKV.removeAll();
             }
         }
-        List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
+        List<KhuVuc> list = kvdao.selectByTenKV(keyWord);
         List<Ban> listB = null;
         for (KhuVuc khuVuc : list) {
             listB = bdao.selectByMaKVTraVeBan(khuVuc.getMaKV());

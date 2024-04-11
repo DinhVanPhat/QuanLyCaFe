@@ -27,7 +27,7 @@ public class jdbcHelper {
     static String matkhau;
 
     private static void docthongTin() {
-        String fileName = "C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
+        String fileName = "C:\\Users\\ADMIN\\Documents\\GitHub\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongtin.txt";
         List<String> list = list = new ArrayList<>();
         try {
             FileReader fileReader = new FileReader(fileName);

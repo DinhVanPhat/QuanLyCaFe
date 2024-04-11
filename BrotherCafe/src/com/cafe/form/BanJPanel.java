@@ -489,7 +489,6 @@ public class BanJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            System.out.println(keyWord+"|"+Auth.user.getMaDV());
             List<Ban> list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
             
             if (list.isEmpty()) {

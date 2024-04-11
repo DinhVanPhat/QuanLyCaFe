@@ -5,6 +5,7 @@
 package com.cafe.main;
 
 import com.cafe.component.Menu;
+import com.cafe.dao.DonViDao;
 import com.cafe.event.EventMenuSelected;
 import com.cafe.form.BanJPanel;
 import com.cafe.form.DangNhapJDialog;
@@ -17,6 +18,7 @@ import com.cafe.form.NhanVienJPanel;
 import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.ThongKeBaoCaoJPanel;
 import com.cafe.form.TrangChuJPanel;
+import com.cafe.model.DonVi;
 import com.cafe.model.ModelMenu;
 import com.cafe.utils.Auth;
 import com.cafe.utils.MsgBox;
@@ -62,8 +64,6 @@ public class MainJFrame extends javax.swing.JFrame {
         this.setSize(screenWidth, screenHeight - 50);
 //        System.out.println(screenWidth + "|" + screenHeight);
         init();
-        
-        
 
     }
 
@@ -93,40 +93,51 @@ public class MainJFrame extends javax.swing.JFrame {
                     showForm(new SanPhamJPanel());
                 }
                 if (index == 2) {
-                    if(Auth.isManager()){ 
+                    if (Auth.isManager()) {
                         showForm(new NhanVienJPanel());
-                    } else { 
+                    } else {
                         MsgBox.alert(null, "Bạn không có quyền xem nhân viên!", JOptionPane.WARNING_MESSAGE);
-       
                     }
                 }
                 if (index == 3) {
-                    showForm(new KhachHangJPanel());
+                    if (Auth.isManager()) {
+                        showForm(new KhachHangJPanel());
+                    } else {
+                        MsgBox.alert(null, "Bạn không có quyền xem khu vực!", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
                 if (index == 4) {
-                    showForm(new BanJPanel());
+                    if (Auth.isManager()) {
+                        showForm(new BanJPanel());
+                    } else {
+                        MsgBox.alert(null, "Bạn không có quyền xem bàn!", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
                 if (index == 5) {
                     showForm(new KhuVucJPanel());
                 }
-                if (index == 6){ 
-                    if(Auth.isManager()){ 
+                if (index == 6) {
+                    if (Auth.isManager()) {
                         showForm(new ThongKeBaoCaoJPanel());
-                    } else { 
+                    } else {
                         MsgBox.alert(null, "Bạn không có quyền xem thống kê!", JOptionPane.WARNING_MESSAGE);
-       
                     }
-                }   
+                }
                 if (index == 7) {
                     showForm(new DoiMatKhauJPanel());
                 }
                 if (index == 8) {
-                    showForm(new DonViJPanel());
+                    if (Auth.isManager()) {
+                        showForm(new DonViJPanel());
+                    } else {
+                        MsgBox.alert(null, "Bạn không có quyền xem đơn vị!", JOptionPane.WARNING_MESSAGE);
+
+                    }
                 }
                 if (index == 9) {
                     new MainJFrame();
                 }
-                if  (index == 10){ 
+                if (index == 10) {
                     System.exit(0);
                 }
             }
@@ -141,8 +152,15 @@ public class MainJFrame extends javax.swing.JFrame {
         menu.addMenu(new ModelMenu("Thông kê và báo cáo", new ImageIcon(getClass().getResource("/com/cafe/icon/analytics.png"))));
         menu.addMenu(new ModelMenu("Đổi mật khẩu", new ImageIcon(getClass().getResource("/com/cafe/icon/refresh.png"))));
         menu.addMenu(new ModelMenu("Đơn vị", new ImageIcon(getClass().getResource("/com/cafe/icon/donvi.png"))));
+        menu.addMenu(new ModelMenu("Phân công", new ImageIcon(getClass().getResource("/com/cafe/icon/phancong.png"))));
         menu.addMenu(new ModelMenu("Đăng xuất", new ImageIcon(getClass().getResource("/com/cafe/icon/logout.png"))));
         menu.addMenu(new ModelMenu("Thoát", new ImageIcon(getClass().getResource("/com/cafe/icon/exit.png"))));
+        
+        DonViDao dvdao = new DonViDao();
+        DonVi dv = dvdao.selectById(Auth.user.getMaDV());
+        menu.addMenu(new ModelMenu(" ",null));
+        menu.addMenu(new ModelMenu(" ",null));
+        menu.addMenu(new ModelMenu("Đơn vị: " + dv.getTenDV(),null));
         body.add(menu, "w 55!");
         body.add(main, "w 100%");
         TimingTarget target = new TimingTargetAdapter() {

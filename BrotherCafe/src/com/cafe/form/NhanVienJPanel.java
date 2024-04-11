@@ -618,7 +618,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }

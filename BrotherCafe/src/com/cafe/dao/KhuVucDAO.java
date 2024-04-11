@@ -9,6 +9,7 @@ import com.cafe.utils.jdbcHelper;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.xmlbeans.impl.jam.JPackage;
 
 /**
  *
@@ -76,9 +77,14 @@ public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
         }
     }
 
-    public List<KhuVuc> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? OR MaKV LIKE ? OR MoTa LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
+    public List<KhuVuc> selectByKeyWord(String maDV, String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE MaDV LIKE ? AND TenKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
+    }
+
+    public List<KhuVuc> selectByMaDV(String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE MaDV = ?";
+        return this.selectBySql(sql, keyword);
     }
 
     public List<KhuVuc> selectByTenKV(String keyword) {

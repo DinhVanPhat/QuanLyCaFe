@@ -106,7 +106,7 @@
                                       <Component id="txtMatKhau" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Component id="chkLuuMatKhau" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="47" max="32767" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
                                           <Component id="lblQuenMatKhau" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
