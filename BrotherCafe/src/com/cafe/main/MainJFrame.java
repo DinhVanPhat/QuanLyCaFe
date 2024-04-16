@@ -15,6 +15,7 @@ import com.cafe.form.GiaoDienChaoJDialog;
 import com.cafe.form.KhachHangJPanel;
 import com.cafe.form.KhuVucJPanel;
 import com.cafe.form.NhanVienJPanel;
+import com.cafe.form.PhanCongJPanel;
 import com.cafe.form.SanPhamJPanel;
 import com.cafe.form.ThongKeBaoCaoJPanel;
 import com.cafe.form.TrangChuJPanel;
@@ -135,9 +136,17 @@ public class MainJFrame extends javax.swing.JFrame {
                     }
                 }
                 if (index == 9) {
-                    new MainJFrame();
+                    if (Auth.isManager()) {
+                        showForm(new PhanCongJPanel());
+                    } else {
+                        MsgBox.alert(null, "Bạn không có quyền xem phân công!", JOptionPane.WARNING_MESSAGE);
+
+                    }
                 }
                 if (index == 10) {
+                    new MainJFrame();
+                }
+                if (index == 11) {
                     System.exit(0);
                 }
             }
