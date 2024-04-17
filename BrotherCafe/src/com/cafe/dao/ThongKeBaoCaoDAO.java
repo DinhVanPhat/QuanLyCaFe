@@ -58,10 +58,9 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
             ResultSet rs = jdbcHelper.query(sql, args);
             while (rs.next()) {
                 ThongKeBaoCao b = new ThongKeBaoCao();
-                b.setNgayThanhToan(rs.getDate("NgayThanhToan"));
-                b.setTenSP(rs.getString("TenSP"));
-                b.setSoLuongBan(rs.getInt("SoLuong"));
-                b.setTongTien(rs.getDouble("TongTien"));
+                b.setMaDV(rs.getString("MaDV"));
+                b.setMaHD(rs.getInt("TenDV"));
+                b.setTongTien(rs.getDouble("TongDoanhThu"));
                 list.add(b);
             }
             rs.getStatement().getConnection().close();
@@ -88,12 +87,20 @@ public class ThongKeBaoCaoDAO extends CafeDAO<ThongKeBaoCao, String>{
             throw new RuntimeException(e);
         }
     }
-    public List<Object[]> getThongKe(Date tuNgay, Date DenNgay) {
-        String sql = "{CALL Proc_ThongKe(?,?)}";
-        String[] cols= {"NgayThanhToan", "TenSP" ,"SoLuong", "TongTien" };
+
+        public List<Object[]> getThongKe(Date tuNgay, Date DenNgay ) {
+        String sql = "{CALL Proc_ThongKe_DonVi_Ngay(?,?)}";
+        String[] cols= {"MaDV","TenDV", "TongDoanhThu" };
         return getListOfArray(sql, cols, tuNgay,DenNgay);
         
     }
+        public List<Object[]> getThongKeDonVi() {
+        String sql = "{CALL Proc_ThongKe_DonVi()}";
+        String[] cols= {"MaDV","TenDV", "TongDoanhThu" };
+        return getListOfArray(sql, cols);
+        
+    }
+       
     public List<ThongKeBaoCao> selectByLoaiSP(String keyWord) {
          String sql = "SELECT NgayThanhToan AS NgayThanhToan,TenSP, SUM(SoLuong) AS SoLuong , SUM(Gia*SoLuong) AS TongTien\n" +
 "		FROM ChiTietHoaDon A\n" +

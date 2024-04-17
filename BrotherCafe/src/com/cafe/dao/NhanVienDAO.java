@@ -9,6 +9,7 @@ import com.cafe.model.NhanVien;
 import com.cafe.utils.jdbcHelper;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -124,4 +125,38 @@ public class NhanVienDAO extends CafeDAO<NhanVien, String> {
        String UPDATE_MK_NV = "UPDATE NhanVien SET MatKhau = ? WHERE EMAIL = ?";
         jdbcHelper.update(UPDATE_MK_NV, e.getMatKhau(),e.getEmail());
     }
+   
+   
+       private List<Object[]> getListOfArray(String sql, String[] cols, Object... args) {
+        try {
+            List<Object[]> list = new ArrayList<>();
+            ResultSet rs = jdbcHelper.query(sql, args);
+            while (rs.next()) {
+                Object[] vals = new Object[cols.length];
+                for (int i = 0; i < cols.length; i++) {
+                    vals[i] = rs.getObject(cols[i]);
+                }
+                list.add(vals);
+            }
+            rs.getStatement().getConnection().close();
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+   
+    public List<Object[]> getNhanVien() {
+        String sql = "{CALL Proc_NhanVien}";
+        String[] cols = {"MaDV", "MaNV", "TenNV", "DoanhSo"};
+        return getListOfArray(sql, cols);
+
+    }
+    
+        public List<Object[]> getNhanVienNgay(Date tuNgay, Date DenNgay) {
+        String sql = "{CALL Proc_NhanVien_Ngay(?,?)}";
+        String[] cols = {"MaDV", "MaNV", "TenNV", "DoanhSo"};
+        return getListOfArray(sql, cols,tuNgay,DenNgay);
+
+    }
+
 }
