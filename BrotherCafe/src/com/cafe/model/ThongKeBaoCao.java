@@ -12,7 +12,9 @@ import java.util.Date;
  */
 public class ThongKeBaoCao {
 
-    
+     private String maDV;
+    private String maNV;
+    private int maHD;
     private String tenSP;
     private int soLuongBan;
     private Double tongTien;
@@ -24,7 +26,10 @@ public class ThongKeBaoCao {
     public ThongKeBaoCao() {
     }
 
-    public ThongKeBaoCao(String tenSP, int soLuongBan, Double tongTien, Date tuNgay, Date denNgay, Date NgayThanhToan, String theoSanPham) {
+    public ThongKeBaoCao(String maDV, String maNV, int maHD, String tenSP, int soLuongBan, Double tongTien, Date tuNgay, Date denNgay, Date NgayThanhToan, String theoSanPham) {
+        this.maDV = maDV;
+        this.maNV = maNV;
+        this.maHD = maHD;
         this.tenSP = tenSP;
         this.soLuongBan = soLuongBan;
         this.tongTien = tongTien;
@@ -32,6 +37,30 @@ public class ThongKeBaoCao {
         this.denNgay = denNgay;
         this.NgayThanhToan = NgayThanhToan;
         this.theoSanPham = theoSanPham;
+    }
+
+    public String getMaDV() {
+        return maDV;
+    }
+
+    public void setMaDV(String maDV) {
+        this.maDV = maDV;
+    }
+
+    public String getMaNV() {
+        return maNV;
+    }
+
+    public void setMaNV(String maNV) {
+        this.maNV = maNV;
+    }
+
+    public int getMaHD() {
+        return maHD;
+    }
+
+    public void setMaHD(int maHD) {
+        this.maHD = maHD;
     }
 
     public String getTenSP() {

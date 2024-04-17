@@ -6,6 +6,7 @@ package com.cafe.form;
 
 import com.cafe.dao.ChiTietHoaDonDAO;
 import com.cafe.dao.HoaDonDAO;
+import com.cafe.dao.NhanVienDAO;
 import com.cafe.dao.SanPhamDAO;
 import com.cafe.dao.ThongKeBaoCaoDAO;
 import com.cafe.model.ChiTietHoaDon;
@@ -129,20 +130,20 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
         tblThongKe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Ngày thanh toán", "Tên SP", "Số lượng", "Tổng tiền"
+                "Đơn Vị", "Tên Đơn Vị", "Tổng Doanh Thu"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -160,24 +161,24 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane4.setViewportView(tblThongKe);
 
-        jTabbedPane1.addTab("Thống Kê Doanh Thu", jScrollPane4);
+        jTabbedPane1.addTab("Thống Kê Theo Đơn Vị", jScrollPane4);
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã HD", "Mã bàn", "Ngày đặt bàn", "Thời gian tạo HD", "Ngày thanh toán", "Thời gian thanh toán", "Mã NV", "Tổng tiền", "Trạng thái"
+                "Mã Đơn Vị", "Mã Nhân Viên", "Tên Nhân Viên", "Doanh Số"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -190,7 +191,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblHoaDon);
 
-        jTabbedPane1.addTab("Danh Sách Hóa Đơn", jScrollPane1);
+        jTabbedPane1.addTab("Thống Kê Theo Nhân Viên", jScrollPane1);
 
         tblDoanhThuSP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -200,7 +201,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã SP", "Tên SP", "Loại SP", "Đơn giá", "Số lượng bán", "Tổng tiền"
+                "Mã Sản Phẩm", "Tên Sản Phẩm", "Loại Sản Phẩm", "Đơn Giá", "Số Lượng Bán", "Tổng Tiền"
             }
         ) {
             Class[] types = new Class [] {
@@ -220,7 +221,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tblDoanhThuSP);
 
-        jTabbedPane1.addTab("Doanh Thu Sản Phẩm", jScrollPane2);
+        jTabbedPane1.addTab("Thống Kê Theo Sản Phẩm", jScrollPane2);
 
         dateTuNgay.setDateFormatString("yyyy-MM-dd");
 
@@ -307,10 +308,6 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnXemThongKeActionPerformed
 
-    private void tblThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThongKeMouseClicked
-
-    }//GEN-LAST:event_tblThongKeMouseClicked
-
     private void cboTheoSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTheoSanPhamActionPerformed
         String loai = (String) cboTheoSanPham.getSelectedItem();
         fillToThongKeTable();
@@ -318,10 +315,14 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             fillHoaDonToTable();
             fillDoanhThuSPToTable();
         } else {
-            fillHoaDonToTableTheoLoai();
+//            fillHoaDonToTableTheoLoai();
             fillDoanhThuSPToTableTheoLoai();
         }
     }//GEN-LAST:event_cboTheoSanPhamActionPerformed
+
+    private void tblThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblThongKeMouseClicked
+
+    }//GEN-LAST:event_tblThongKeMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -351,6 +352,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     HoaDonDAO hddao = new HoaDonDAO();
     ThongKeBaoCao tK = new ThongKeBaoCao();
     ChiTietHoaDonDAO cthddao = new ChiTietHoaDonDAO();
+    NhanVienDAO nvdao = new NhanVienDAO();
     ArrayList<ThongKeBaoCao> thongKe = new ArrayList();
     int row = -1;
 
@@ -366,33 +368,31 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     public void fillHoaDonToTable() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
-        List<HoaDon> list = hddao.selectAll();
-        for (HoaDon hd : list) {
-            model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
-                hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Chưa Thanh Toán" : "Đã Thanh Toán"});
+        List<Object[]> list = nvdao.getNhanVien();
+        for (Object[] nv : list) {
+            model.addRow(nv);
         }
-
     }
 
-    public void fillHoaDonToTableTheoLoai() {
-        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
-        model.setRowCount(0);
-        List<SanPham> splist = spdao.selectByKeyWord((String) cboTheoSanPham.getSelectedItem());
-        for (SanPham sanPham : splist) {
-            List<HoaDon> list = hddao.selectAll();
-            for (HoaDon hd : list) {
-                List<ChiTietHoaDon> listcthd = cthddao.selectByMaHD(hd.getMaHD());
-                for (ChiTietHoaDon chiTietHoaDon : listcthd) {
-                    if (chiTietHoaDon.getMaSP().equals(sanPham.getMaSP())) {
-                        model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
-                            hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Đã Thanh Toán" : "Chưa Thanh Toán"});
-                    }
-                }
-
-            }
-        }
-
-    }
+//    public void fillHoaDonToTableTheoLoai() {
+//        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+//        model.setRowCount(0);
+//        List<SanPham> splist = spdao.selectByKeyWord((String) cboTheoSanPham.getSelectedItem());
+//        for (SanPham sanPham : splist) {
+//            List<HoaDon> list = hddao.selectAll();
+//            for (HoaDon hd : list) {
+//                List<ChiTietHoaDon> listcthd = cthddao.selectByMaHD(hd.getMaHD());
+//                for (ChiTietHoaDon chiTietHoaDon : listcthd) {
+//                    if (chiTietHoaDon.getMaSP().equals(sanPham.getMaSP())) {
+//                        model.addRow(new Object[]{hd.getMaHD(), hd.getMaBan(), hd.getNgayDatBan(), hd.getThoiGianTaoHD(), hd.getNgayThanhToan(),
+//                            hd.getThoiGianThanhToan(), hd.getMaNV(), hd.getTongTien(), hd.isTrangThai() ? "Đã Thanh Toán" : "Chưa Thanh Toán"});
+//                    }
+//                }
+//
+//            }
+//        }
+//
+//    }
 
     public void fillDoanhThuSPToTable() {
         DefaultTableModel model = (DefaultTableModel) tblDoanhThuSP.getModel();
@@ -424,26 +424,13 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         String loaiSP = (String) cboTheoSanPham.getSelectedItem();
         DefaultTableModel model = (DefaultTableModel) tblThongKe.getModel();
         model.setRowCount(0);
-        if (loaiSP.equalsIgnoreCase("Tất cả")) {
-            try {
-                List<ThongKeBaoCao> list = thongKeDAO.selectAll();
-                for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(), thongKe.getSoLuongBan(), thongKe.getTongTien()};
-                    model.addRow(row);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        try {
+            List<Object[]> list = thongKeDAO.getThongKeDonVi();
+            for (Object[] thongKe : list) {
+                model.addRow(thongKe);
             }
-        } else {
-            try {
-                List<ThongKeBaoCao> list = thongKeDAO.selectByLoaiSP(loaiSP);
-                for (ThongKeBaoCao thongKe : list) {
-                    Object[] row = {thongKe.getNgayThanhToan(), thongKe.getTenSP(), thongKe.getSoLuongBan(), thongKe.getTongTien()};
-                    model.addRow(row);
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -477,21 +464,21 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 MsgBox.alert(this, "Không có thống kê doanh thu nào từ " + tuNgay + " -> " + denNgay, JOptionPane.WARNING_MESSAGE);
             } else {
                 for (Object[] thongKe : listThongKe) {
-                    modelThongKe.addRow(new Object[]{thongKe[0], thongKe[1], thongKe[2], thongKe[3]});
+                   modelThongKe.addRow(new Object[]{thongKe[0], thongKe[1], thongKe[2]});
                 }
             }
 
-            HoaDonDAO hd = new HoaDonDAO();
-            List<Object[]> listHoaDon = hd.getHoaDon(tuNgay2, denNgay2);
-            if (listHoaDon.isEmpty()) {
+                        NhanVienDAO nv = new NhanVienDAO();
+            List<Object[]> listNhanVien = nv.getNhanVienNgay(tuNgay2, denNgay2);
+            if (listNhanVien.isEmpty()) {
                 MsgBox.alert(this, "Không có danh sách hóa đơn nào từ " + tuNgay + " -> " + denNgay, JOptionPane.WARNING_MESSAGE);
             } else {
-                for (Object[] hoaDon : listHoaDon) {
-                    modelHoaDon.addRow(new Object[]{hoaDon[0], hoaDon[1], hoaDon[2], hoaDon[3], hoaDon[4], hoaDon[5], hoaDon[6], hoaDon[7], Boolean.parseBoolean(String.valueOf(hoaDon[8])) ? "Đã thanh toán" : "Chưa thanh toán"});
+                for (Object[] nhanVien : listNhanVien) {
+                    modelHoaDon.addRow(new Object[]{nhanVien[0], nhanVien[1], nhanVien[2], nhanVien[3]});
 
                 }
             }
-            List<Object[]> listSanPham = spdao.getSanPham(tuNgay2, denNgay2);
+             List<Object[]> listSanPham = spdao.getDoanhThuSPNgay(tuNgay2, denNgay2);
             if (listSanPham.isEmpty()) {
                 MsgBox.alert(this, "Không có danh sách sản phẩm nào từ " + tuNgay + " -> " + denNgay, JOptionPane.WARNING_MESSAGE);
             } else {
@@ -540,53 +527,38 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
     }
 
     public void xuatFile() {
-        try {
+       try {
             XSSFWorkbook workbook = new XSSFWorkbook();
-            XSSFSheet sheetThongKe = workbook.createSheet("Thống Kê");
-            XSSFSheet sheetHoaDon = workbook.createSheet("Hóa Đơn");
-            XSSFSheet sheetSanPham = workbook.createSheet("Sản Phẩm");
+            XSSFSheet sheetThongKe = workbook.createSheet("Thống Kê Theo Đơn Vị");
+            XSSFSheet sheetHoaDon = workbook.createSheet("Thống Kê Theo Nhân Viên");
+            XSSFSheet sheetSanPham = workbook.createSheet("Thống Kê Theo Sản Phẩm");
 
             XSSFRow row = null;
             Cell cell = null;
             row = sheetThongKe.createRow(1);
 
             cell = row.createCell(0, CellType.STRING);
-            cell.setCellValue("Ngày Thanh Toán");
+            cell.setCellValue("Mã Đơn Vị");
 
             cell = row.createCell(1, CellType.STRING);
-            cell.setCellValue("Tên Sản Phẩm");
+            cell.setCellValue("Tên Đơn Vị");
 
             cell = row.createCell(2, CellType.STRING);
-            cell.setCellValue("Số Lượng Bán Ra");
+            cell.setCellValue("Tổng Doanh Thu");
 
-            cell = row.createCell(3, CellType.STRING);
-            cell.setCellValue("Tổng Tiền");
-
-            //hoa don
+            //nhan vien
             row = sheetHoaDon.createRow(1);
             cell = row.createCell(0, CellType.STRING);
-            cell.setCellValue("Mã Hóa Đơn");
+            cell.setCellValue("Mã Đơn Vị");
 
             cell = row.createCell(1, CellType.STRING);
-            cell.setCellValue("Mã Bàn");
+            cell.setCellValue("Mã Nhân Viên");
 
             cell = row.createCell(2, CellType.STRING);
-            cell.setCellValue("Ngày Đặt Bàn");
+            cell.setCellValue("Tên Nhân Viên");
 
             cell = row.createCell(3, CellType.STRING);
-            cell.setCellValue("Thời Gian Tạo Hóa Đơn");
-
-            cell = row.createCell(4, CellType.STRING);
-            cell.setCellValue("Ngày thanh toán");
-
-            cell = row.createCell(5, CellType.STRING);
-            cell.setCellValue("Thời gian thanh toán");
-            cell = row.createCell(6, CellType.STRING);
-            cell.setCellValue("Mã Nhân Viên");
-            cell = row.createCell(7, CellType.STRING);
-            cell.setCellValue("Tổng Tiền");
-            cell = row.createCell(8, CellType.STRING);
-            cell.setCellValue("Trạng Thái");
+            cell.setCellValue("Doanh Số");
 
             // san pham
             row = sheetSanPham.createRow(1);
@@ -618,18 +590,15 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                     cell = row.createCell(1, CellType.STRING);
                     cell.setCellValue((String) tblThongKe.getValueAt(i, 1));
 
-                    cell = row.createCell(2, CellType.NUMERIC);
-                    cell.setCellValue((Integer) tblThongKe.getValueAt(i, 2));
-
-                    cell = row.createCell(3, CellType.NUMERIC);
-                    cell.setCellValue((Double) tblThongKe.getValueAt(i, 3));
+                    cell = row.createCell(2, CellType.STRING);
+                    cell.setCellValue((Double) tblThongKe.getValueAt(i, 2));
                 }
 
                 for (int i = 0; i < tblHoaDon.getRowCount(); i++) {
                     row = sheetHoaDon.createRow(2 + i);
 
-                    cell = row.createCell(0, CellType.NUMERIC);
-                    cell.setCellValue((Integer) tblHoaDon.getValueAt(i, 0));
+                    cell = row.createCell(0, CellType.STRING);
+                    cell.setCellValue(String.valueOf( tblHoaDon.getValueAt(i, 0)));
 
                     cell = row.createCell(1, CellType.STRING);
                     cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 1)));
@@ -639,21 +608,6 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
 
                     cell = row.createCell(3, CellType.STRING);
                     cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 3)));
-
-                    cell = row.createCell(4, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 4)));
-
-                    cell = row.createCell(5, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 5)));
-
-                    cell = row.createCell(6, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 6)));
-
-                    cell = row.createCell(7, CellType.NUMERIC);
-                    cell.setCellValue((Double) tblHoaDon.getValueAt(i, 7));
-
-                    cell = row.createCell(8, CellType.STRING);
-                    cell.setCellValue(String.valueOf(tblHoaDon.getValueAt(i, 8)));
 
                 }
                 for (int i = 0; i < tblDoanhThuSP.getRowCount(); i++) {
@@ -683,7 +637,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 throw new RuntimeException(e);
             }
 
-            File f = new File("C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
+            File f = new File("D:\\Mon Hoc\\Xuong JAVA\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
             try {
                 FileOutputStream fis = new FileOutputStream(f);
                 workbook.write(fis);
@@ -701,5 +655,6 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
             MsgBox.alert(this, "Lỗi xuất file", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
 
 }

@@ -167,9 +167,10 @@ public class SanPhamDAO extends CafeDAO<SanPham, String>{
         }
     }
 
-    public List<Object[]> getSanPham(Date tuNgay, Date DenNgay) {
-        String sql = "{CALL Proc_SanPham(?,?)}";
-        String[] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongTien"};
+    
+    public List<Object[]> getDoanhThuSPNgay(Date tuNgay, Date DenNgay) {
+        String sql = "{CALL Proc_DoanhThuSP_Ngay(?,?)}";
+        String[] cols = {"MaSP", "TenSP", "LoaiSP", "Gia", "SoLuong", "TongDoanhThu"};
         return getListOfArray(sql, cols, tuNgay, DenNgay);
 
     }
