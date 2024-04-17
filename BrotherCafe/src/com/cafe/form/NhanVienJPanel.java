@@ -579,21 +579,29 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         this.setForm(nv);
         this.updateStatus();
     }
-     void fillComboBoxDonVi() {
-        List<DonVi> dv =dvdao.selectAll();
+
+    void fillComboBoxDonVi() {
+        List<DonVi> dv = dvdao.selectAll();
         cboDonVi.removeAllItems();
         for (DonVi DonVi : dv) {
             cboDonVi.addItem(DonVi.getTenDV());
         }
     }
+
     void fillAllTable() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
-            List<NhanVien> list = nvdao.selectAll();
+            List<NhanVien> list;
+            if (Auth.user.getMaDV().equals("DV01")) {
+                list = nvdao.selectAll();
+            } else {
+                list = nvdao.selectAllByMaDV(Auth.user.getMaDV());
+            }
+
             for (NhanVien nv : list) {
                 DonVi dv = dvdao.selectById(nv.getMaDV());
-                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên",dv.getTenDV()};
+                Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên", dv.getTenDV()};
                 model.addRow(row);
             }
         } catch (Exception e) {
@@ -607,23 +615,31 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<NhanVien> list = nvdao.selectByKeyWord(keyWord);
-            if (list.isEmpty()) {   
+            List<NhanVien> list;
+
+            if (Auth.user.getMaDV().equals("DV01")) {
+                list = nvdao.selectByKeyWord(keyWord);
+            } else {
+                list = nvdao.selectByKeyWordAndMaDV(Auth.user.getMaDV(), keyWord);
+            }
+
+            if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có nhân viên nào!", JOptionPane.WARNING_MESSAGE);
             } else {
                 for (NhanVien nv : list) {
                     DonVi dv = dvdao.selectById(nv.getMaDV());
-                    Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên",dv.getTenDV()};
+                    Object[] row = {nv.getMaNV(), nv.getTenNV(), nv.isGioiTinh() ? "Nữ" : "Nam", nv.getSDT(), nv.getEmail(), nv.getDiaChi(), nv.isChucVu() ? "Quản lý" : "Nhân viên", dv.getTenDV()};
                     model.addRow(row);
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
             // MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
 
-    void setForm(NhanVien nv) {
+    void setForm(NhanVien nv
+    ) {
         txtMaNV.setText(nv.getMaNV());
         txtHoVaTen.setText(nv.getTenNV());
         txtDiaChi.setText(nv.getDiaChi());
@@ -633,13 +649,13 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         txtEmail.setText(nv.getEmail());
         txtSDT.setText(nv.getSDT());
         cboChucVu.setSelectedIndex(nv.isChucVu() ? 1 : 0);
-         if(nv.getMaNV()== null){
+        if (nv.getMaNV() == null) {
             cboDonVi.setSelectedIndex(0);
-        }else{
+        } else {
             DonVi dv = dvdao.selectById(nv.getMaDV());
             cboDonVi.setSelectedItem(dv.getTenDV());
         }
-        
+
     }
 
     NhanVien getForm() {
@@ -672,8 +688,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         } else if (cboChucVu.getSelectedItem().equals("Nhân viên")) {
             nv.setChucVu(false);
         }
-          List<DonVi> list = dvdao.selectByTenDV((String) cboDonVi.getSelectedItem());
-        for(DonVi dv: list){
+        List<DonVi> list = dvdao.selectByTenDV((String) cboDonVi.getSelectedItem());
+        for (DonVi dv : list) {
             nv.setMaDV(dv.getMaDV());
         }
         return nv;

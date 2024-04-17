@@ -127,4 +127,8 @@ public class HoaDonDAO extends CafeDAO<HoaDon, Integer>{
         String sql = "SELECT * FROM HoaDon WHERE MaSP LIKE ?";
         return this.selectBySql(sql,keyword);
     }
+     public List<HoaDon> selectByByDV(String keyword) {
+        String sql = "SELECT hd.* FROM HoaDon hd INNER JOIN NhanVien nv ON hd.MaNV = nv.MaNV WHERE nv.MaDV LIKE ?";
+        return this.selectBySql(sql,keyword);
+    }
 }

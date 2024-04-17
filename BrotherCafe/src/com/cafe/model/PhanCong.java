@@ -4,6 +4,7 @@
  */
 package com.cafe.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -75,5 +76,12 @@ public class PhanCong {
         this.maNV = maNV;
     }
     
+    @Override
+    public String toString() {
+        return "PhanCong [maPC=" + maPC + ", ngayLam=" + ngayLam + ", tenCa=" + tenCa
+                + ", gioBatDau=" + new SimpleDateFormat("HH:mm").format(gioBatDau)
+                + ", gioKetThuc=" + new SimpleDateFormat("HH:mm").format(gioKetThuc)
+                + ", ghiChu=" + ghiChu + ", maNV=" + maNV + "]";
+    }
     
 }

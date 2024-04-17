@@ -456,9 +456,12 @@ public class DonViJPanel extends javax.swing.JPanel {
         if (!Auth.isManager()) {
             MsgBox.alert(this, "Bạn không có quyền xóa đơn vị!", JOptionPane.WARNING_MESSAGE);
         } else if (MsgBox.confirm(this, "Bạn thực sự muốn xóa đơn vị này?")) {
-            String maKH = txtMaDV.getText();
-            try {
-                dvdao.delete(maKH);
+            String maDV = txtMaDV.getText();
+            if(maDV.equals("DV01")){ 
+                MsgBox.alert(this, "Bạn không có quyền xóa đơn vị! "+maDV, JOptionPane.WARNING_MESSAGE);
+            } else { 
+                try {
+                dvdao.delete(maDV);
                 this.fillAllTable();
                 this.clearForm();
                 MsgBox.alert(this, "Xóa thành công", JOptionPane.INFORMATION_MESSAGE);
@@ -466,6 +469,7 @@ public class DonViJPanel extends javax.swing.JPanel {
                 //throw new RuntimeException(e);
                 MsgBox.alert(this, "Xóa thất bại", JOptionPane.WARNING_MESSAGE);
             }
+            }    
         }
     }
 

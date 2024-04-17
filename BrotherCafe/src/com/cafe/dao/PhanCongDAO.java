@@ -78,8 +78,8 @@ public class PhanCongDAO extends CafeDAO<PhanCong, String> {
     }
 
     public List<PhanCong> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM PhanCong WHERE MaNV LIKE ? OR TenCa LIKE ? OR NgayLam LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
+        String sql = "SELECT * FROM PhanCong WHERE MaNV LIKE ? OR TenCa LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
     }
     
     }

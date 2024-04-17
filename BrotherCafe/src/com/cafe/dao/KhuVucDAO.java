@@ -9,6 +9,7 @@ import com.cafe.utils.jdbcHelper;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.xmlbeans.impl.jam.JPackage;
 
 /**
  *
@@ -16,20 +17,20 @@ import java.util.List;
  */
 public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
 
-    String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa) VALUES (?, ?, ?)";
-    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ? WHERE MaKV = ?";
+    String INSERT_SQL = "INSERT INTO KhuVuc (MaKV, TenKV, MoTa, MaDV) VALUES (?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE KhuVuc SET TenKV = ?, MoTa = ?, MaDV = ? WHERE MaKV = ?";
     String DELETE_SQL = "DELETE FROM KhuVuc WHERE MaKV = ?";
     String SELECT_ALL_SQL = "SELECT * FROM KhuVuc";
     String SELECT_BY_ID_SQL = "SELECT * FROM KhuVuc WHERE MaKV = ?";
 
     @Override
     public void insert(KhuVuc e) {
-        jdbcHelper.update(INSERT_SQL, e.getMaKV(), e.getTenKV(), e.getMoTa());
+        jdbcHelper.update(INSERT_SQL, e.getMaKV(), e.getTenKV(), e.getMoTa(), e.getMaDV());
     }
 
     @Override
     public void update(KhuVuc e) {
-        jdbcHelper.update(UPDATE_SQL, e.getTenKV(), e.getMoTa(), e.getMaKV());
+        jdbcHelper.update(UPDATE_SQL, e.getTenKV(), e.getMoTa(), e.getMaDV(), e.getMaKV());
     }
 
     @Override
@@ -66,6 +67,7 @@ public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
                 entity.setMaKV(rs.getString("MaKV"));
                 entity.setTenKV(rs.getString("TenKV"));
                 entity.setMoTa(rs.getString("MoTa"));
+                entity.setMaDV(rs.getString("MaDV"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -75,16 +77,27 @@ public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
         }
     }
 
+    public List<KhuVuc> selectByKeyWordAndDV(String maDV, String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE MaDV LIKE ? AND TenKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
+    }
     public List<KhuVuc> selectByKeyWord(String keyword) {
-        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? OR MaKV LIKE ? OR MoTa LIKE ?";
-        return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%", "%" + keyword + "%");
+        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%");
+    }
+    public List<KhuVuc> selectByMaDV(String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE MaDV = ?";
+        return this.selectBySql(sql, keyword);
     }
 
+    public List<KhuVuc> selectByTenKVandDV(String keyword, String maDV) {
+        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? AND MaDV LIKE ? ";
+        return this.selectBySql(sql, "%" + keyword + "%","%" + maDV + "%");
+    }
     public List<KhuVuc> selectByTenKV(String keyword) {
         String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%");
     }
-
     public boolean chechTrungMa(String ma) {
         List<KhuVuc> list = this.selectAll();
         for (KhuVuc nv : list) {

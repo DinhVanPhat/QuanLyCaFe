@@ -443,8 +443,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblKhuVuc.getModel();
         model.setRowCount(0);
         try {
-            String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectAll();
+            List<KhuVuc> list;
+            if(Auth.user.getMaDV().equals("DV01")){ 
+                list = kvdao.selectAll();
+            } else {
+                list = kvdao.selectByMaDV(Auth.user.getMaDV());
+            }
+            
             for (KhuVuc nv : list) {
                 Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
                 model.addRow(row);
@@ -460,7 +465,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectByKeyWord(keyWord);
+            List<KhuVuc> list;
+            if(Auth.user.getMaDV().equals("DV01")){  
+                list = kvdao.selectByKeyWord(keyWord);
+            } else {
+                list = kvdao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            }
+            
             if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có khu vực nào!", JOptionPane.WARNING_MESSAGE);
             } else {
@@ -499,15 +510,16 @@ public class KhuVucJPanel extends javax.swing.JPanel {
     }
 
     KhuVuc getForm() {
-        KhuVuc nv = new KhuVuc();
+        KhuVuc kv = new KhuVuc();
         if(rowUpdate == -1){
-            nv.setMaKV(layMaKV("KV"));           
+            kv.setMaKV(layMaKV("KV"));           
         } else {
-            nv.setMaKV(txtMaKV.getText());
+            kv.setMaKV(txtMaKV.getText());
         }
-        nv.setTenKV(txtTenKV.getText());
-        nv.setMoTa(txtMoTa.getText());
-        return nv;
+        kv.setTenKV(txtTenKV.getText());
+        kv.setMoTa(txtMoTa.getText());
+        kv.setMaDV(Auth.user.getMaDV());
+        return kv;
     }
 
     void updateStatus() {
