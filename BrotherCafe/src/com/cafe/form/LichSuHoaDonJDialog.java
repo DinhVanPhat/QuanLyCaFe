@@ -6,6 +6,7 @@ package com.cafe.form;
 
 import com.cafe.dao.HoaDonDAO;
 import com.cafe.model.HoaDon;
+import com.cafe.utils.Auth;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -186,7 +187,12 @@ public class LichSuHoaDonJDialog extends javax.swing.JDialog {
     public void fiillHoaDonToTable(){ 
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
-        List<HoaDon> list = hddao.selectAll();
+        List<HoaDon> list;
+        if(Auth.user.getMaDV().equals("DV01")) {
+            list = hddao.selectAll();
+        } else {
+            list = hddao.selectByByDV(Auth.user.getMaDV());
+        }
         for (HoaDon hd : list) {
             model.addRow(new Object[]{hd.getMaHD(),hd.getMaNV(),hd.getMaBan(),hd.getNgayDatBan(),hd.getNgayThanhToan(),
                        hd.getThoiGianTaoHD(),hd.getThoiGianThanhToan(),hd.getTongTien(), hd.isTrangThai() ? "Đã Thanh Toán":"Chưa Thanh Toán"});

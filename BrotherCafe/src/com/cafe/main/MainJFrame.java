@@ -128,11 +128,10 @@ public class MainJFrame extends javax.swing.JFrame {
                     showForm(new DoiMatKhauJPanel());
                 }
                 if (index == 8) {
-                    if (Auth.isManager()) {
-                        showForm(new DonViJPanel());
+                    if (Auth.isManager() && Auth.user.getMaDV().equals("DV01")) {
+                        showForm(new DonViJPanel());   
                     } else {
                         MsgBox.alert(null, "Bạn không có quyền xem đơn vị!", JOptionPane.WARNING_MESSAGE);
-
                     }
                 }
                 if (index == 9) {

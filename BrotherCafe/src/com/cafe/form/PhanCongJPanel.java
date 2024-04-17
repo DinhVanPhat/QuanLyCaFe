@@ -624,7 +624,6 @@ public class PhanCongJPanel extends javax.swing.JPanel {
         boolean edit = (this.row >= 0);
         //Trạng thái form
         txtMaPC.setEditable(false);
-        cboMaNV.setEditable(!edit);
 
         btnThem.setEnabled(!edit);
         btnSua.setEnabled(edit);
@@ -767,19 +766,6 @@ public class PhanCongJPanel extends javax.swing.JPanel {
             public void focusLost(FocusEvent e) {
                 txtGhiChu.setBackground(new Color(255, 255, 255));
                 txtGhiChu.setBorder(borderKhongNhan);
-            }
-        });
-        cboMaNV.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                cboMaNV.setBackground(new Color(227, 188, 140));
-                cboMaNV.setBorder(borderNhanVao);
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                cboMaNV.setBackground(new Color(255, 255, 255));
-                cboMaNV.setBorder(borderKhongNhan);
             }
         });
         txtTimKiem.addFocusListener(new FocusListener() {

@@ -77,21 +77,27 @@ public class KhuVucDAO extends CafeDAO<KhuVuc, String> {
         }
     }
 
-    public List<KhuVuc> selectByKeyWord(String maDV, String keyword) {
+    public List<KhuVuc> selectByKeyWordAndDV(String maDV, String keyword) {
         String sql = "SELECT * FROM KhuVuc WHERE MaDV LIKE ? AND TenKV LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%", "%" + keyword + "%");
     }
-
+    public List<KhuVuc> selectByKeyWord(String keyword) {
+        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
+        return this.selectBySql(sql, "%" + keyword + "%");
+    }
     public List<KhuVuc> selectByMaDV(String keyword) {
         String sql = "SELECT * FROM KhuVuc WHERE MaDV = ?";
         return this.selectBySql(sql, keyword);
     }
 
+    public List<KhuVuc> selectByTenKVandDV(String keyword, String maDV) {
+        String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ? AND MaDV LIKE ? ";
+        return this.selectBySql(sql, "%" + keyword + "%","%" + maDV + "%");
+    }
     public List<KhuVuc> selectByTenKV(String keyword) {
         String sql = "SELECT * FROM KhuVuc WHERE TenKV LIKE ?";
         return this.selectBySql(sql, "%" + keyword + "%");
     }
-
     public boolean chechTrungMa(String ma) {
         List<KhuVuc> list = this.selectAll();
         for (KhuVuc nv : list) {

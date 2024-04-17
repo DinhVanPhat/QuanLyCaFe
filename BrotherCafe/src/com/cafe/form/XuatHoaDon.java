@@ -124,11 +124,6 @@ public class XuatHoaDon extends javax.swing.JFrame {
             + "        </table>\n"
             + "        <div style=\"text-align: center;font-weight: normal;\">--------------------------------</div>\n"
             + "        <h4 style=\"text-align: center; margin: 7pt 0px 0px 0px;font-size: 8px;\">XIN CẢM ƠN - HẸN GẶP LẠI!<br></h4> \n"
-            + "  <div style=\"width: 300px;\">\n" 
-            + "    <div style=\"max-width: 50px; margin: 0 auto;\">\n" 
-            + "      <img style=\"max-width:50px; \" src=\"https://img.upanh.tv/2024/04/02/qrcode_106481488_11c17dca6fdf778cb0897f108fad897f.pnghttps://img.upanh.tv/2024/04/02/qrcode_106481488_11c17dca6fdf778cb0897f108fad897f-1.png\" alt=\"\">\n" 
-            + "    </div>\n" 
-            + "  </div>"
             + "</body>\n"
             + "</html>";
         ed_Page.setContentType("text/html");
@@ -139,6 +134,7 @@ public class XuatHoaDon extends javax.swing.JFrame {
      */
     public XuatHoaDon() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -150,8 +146,7 @@ public class XuatHoaDon extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnLoad = new javax.swing.JButton();
-        btnLoad1 = new javax.swing.JButton();
+        btnHuy = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtLoad = new javax.swing.JTextArea();
         btn_Print = new javax.swing.JButton();
@@ -160,17 +155,10 @@ public class XuatHoaDon extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnLoad.setText("Preview");
-        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+        btnHuy.setText("Hủy");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoadActionPerformed(evt);
-            }
-        });
-
-        btnLoad1.setText("Load");
-        btnLoad1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoad1ActionPerformed(evt);
+                btnHuyActionPerformed(evt);
             }
         });
 
@@ -196,10 +184,8 @@ public class XuatHoaDon extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(btnLoad1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(160, 160, 160)
+                .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_Print, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -219,9 +205,7 @@ public class XuatHoaDon extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btn_Print, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnLoad1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -232,17 +216,6 @@ public class XuatHoaDon extends javax.swing.JFrame {
     
 
 String html = "";
-    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        ed_Page.setContentType("text/html");
-        html = txtLoad.getText();
-        ed_Page.setText(html);
-//        ed_Page.setSize(800, 600
-    }//GEN-LAST:event_btnLoadActionPerformed
-
-    private void btnLoad1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoad1ActionPerformed
-        txtLoad.setText(html);
-    }//GEN-LAST:event_btnLoad1ActionPerformed
-
     private void btn_PrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_PrintActionPerformed
         try {
             ed_Page.print();
@@ -251,6 +224,10 @@ String html = "";
         }
 
     }//GEN-LAST:event_btn_PrintActionPerformed
+
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnHuyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,8 +272,7 @@ String html = "";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLoad;
-    private javax.swing.JButton btnLoad1;
+    private javax.swing.JButton btnHuy;
     private javax.swing.JButton btn_Print;
     private javax.swing.JEditorPane ed_Page;
     private javax.swing.JScrollPane jScrollPane2;

@@ -381,7 +381,12 @@ public class BanJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<Ban> list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            List<Ban> list;
+            if(Auth.user.getMaDV().equals("DV01")){
+                list = banDao.selectByKeyWord(keyWord);
+            } else { 
+                list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            }
             for (Ban ban : list) {
                 Object[] row = {ban.getMaBan(), ban.getTenBan(), ban.getTrangThai(), ban.getKhuVuc()};
                 model.addRow(row);
@@ -473,7 +478,13 @@ public class BanJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblBan.getModel();
         model.setRowCount(0);
         try {
-            List<Ban> list = banDao.selectByMaDV(Auth.user.getMaDV());
+             List<Ban> list;
+            if(Auth.user.getMaDV().equals("DV01")){
+                list = banDao.selectAll();
+            } else { 
+                list = banDao.selectByMaDV(Auth.user.getMaDV());
+            }
+             
             for (Ban ban : list) {
                 KhuVuc kv = kvdao.selectById(ban.getKhuVuc());
                 Object[] row = {ban.getMaBan(), ban.getTenBan(), kv.getTenKV(), ban.getTrangThai()};
@@ -489,8 +500,12 @@ public class BanJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<Ban> list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
-            
+             List<Ban> list;
+            if(Auth.user.getMaDV().equals("DV01")){
+                list = banDao.selectByKeyWord(keyWord);
+            } else { 
+                list = banDao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            }
             if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có bàn nào!", JOptionPane.WARNING_MESSAGE);
             } else {

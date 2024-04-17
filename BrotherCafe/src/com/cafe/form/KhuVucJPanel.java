@@ -443,8 +443,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblKhuVuc.getModel();
         model.setRowCount(0);
         try {
-            String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectByMaDV(Auth.user.getMaDV());
+            List<KhuVuc> list;
+            if(Auth.user.getMaDV().equals("DV01")){ 
+                list = kvdao.selectAll();
+            } else {
+                list = kvdao.selectByMaDV(Auth.user.getMaDV());
+            }
+            
             for (KhuVuc nv : list) {
                 Object[] row = {nv.getMaKV(), nv.getTenKV(), nv.getMoTa()};
                 model.addRow(row);
@@ -460,7 +465,13 @@ public class KhuVucJPanel extends javax.swing.JPanel {
         model.setRowCount(0);
         try {
             String keyWord = txtTimKiem.getText();
-            List<KhuVuc> list = kvdao.selectByKeyWord(Auth.user.getMaDV(),keyWord);
+            List<KhuVuc> list;
+            if(Auth.user.getMaDV().equals("DV01")){  
+                list = kvdao.selectByKeyWord(keyWord);
+            } else {
+                list = kvdao.selectByKeyWordAndDV(Auth.user.getMaDV(),keyWord);
+            }
+            
             if (list.isEmpty()) {
                 MsgBox.alert(this, "Không có khu vực nào!", JOptionPane.WARNING_MESSAGE);
             } else {
