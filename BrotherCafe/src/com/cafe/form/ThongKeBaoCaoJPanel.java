@@ -161,7 +161,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane4.setViewportView(tblThongKe);
 
-        jTabbedPane1.addTab("Thống Kê Doanh Thu", jScrollPane4);
+        jTabbedPane1.addTab("Thống Kê Theo Đơn Vị", jScrollPane4);
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -191,7 +191,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblHoaDon);
 
-        jTabbedPane1.addTab("Danh Sách Hóa Đơn", jScrollPane1);
+        jTabbedPane1.addTab("Thống Kê Theo Nhân Viên", jScrollPane1);
 
         tblDoanhThuSP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -221,7 +221,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tblDoanhThuSP);
 
-        jTabbedPane1.addTab("Doanh Thu Sản Phẩm", jScrollPane2);
+        jTabbedPane1.addTab("Thống Kê Theo Sản Phẩm", jScrollPane2);
 
         dateTuNgay.setDateFormatString("yyyy-MM-dd");
 
