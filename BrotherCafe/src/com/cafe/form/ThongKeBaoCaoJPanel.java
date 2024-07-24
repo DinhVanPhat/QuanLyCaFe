@@ -637,7 +637,7 @@ public class ThongKeBaoCaoJPanel extends javax.swing.JPanel {
                 throw new RuntimeException(e);
             }
 
-            File f = new File("D:\\Mon Hoc\\Xuong JAVA\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
+            File f = new File("C:\\Users\\NGHIA\\Documents\\HOC KY 4\\Du an 1 - PRO1041\\QuanLyCaFe\\BrotherCafe\\src\\com\\cafe\\connect\\thongke.xlsx");
             try {
                 FileOutputStream fis = new FileOutputStream(f);
                 workbook.write(fis);
